@@ -11,11 +11,12 @@
 // colours
 $lv-color-bg:				$color-white;
 
+$lv-color-slot-empty:		$color-gray-5;
 // sizes
 $height-lv-header:			$height-lv-header;
 
 
-// --------------
+// Main --------------
 
 body {
 	background: $lv-color-bg;
@@ -38,6 +39,7 @@ header {
 }
 
 
+// Specific ------------------------------
 #slot-wrapper {
 
 	height: calc( 100vh - #{$height-lv-header} );
@@ -46,15 +48,75 @@ header {
 }
 
 
+.slot {
 
+	height: 80px;
+	border-top: solid 1px $color-gray-6;
 
-.slot-container {
+	&.empty {
+		background: $lv-color-slot-empty;
 
+		.indicator {
+			background: $color-gray-6;
+		}
 
-	.slot {
+		.info {
+			display: flex;
+			align-items: center;
+			color: $color-font-disabled;
+			font-size: $font-size-small;
+			font-family: $font-family-mono;
+		}
 
-		height: 80px;
-		border-top: solid 1px $color-gray-4;
+		.use_btn {
+			position: absolute;
+			top: calc( 50% - 10px );
+			right: 20px;
+			width: 70px;
+		}
+	}
 
+	.indicator {
+		position: absolute;
+		width: 6px;
+		height: 6px;
+		left: 10px;
+		top: calc( 50% - 3px );
+		border: solid 1px $color-gray-6;
+		border-radius: 100px;
+	}
+
+	.number {
+		position: absolute;
+		font-family: $font-family-mono;
+		left: 20px;
+		top: 30px;
+	}
+
+	.info {
+		height: 100%;
+		position: absolute;
+		left: 125px;
+		right: 95px;
+	}
+
+	.use_btn {
+		position: absolute;
+		top: calc( 50% - 10px );
+		right: 40px;
 	}
 }
+
+
+// Overall fixes ----------------------
+
+#live-view section .separator:first-child {
+	border-top: none;
+}
+
+
+
+
+
+
+

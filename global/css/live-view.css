@@ -25,8 +25,48 @@ header {
   height: calc( 100vh - 90px );
   overflow-y: scroll; }
 
-.slot-container .slot {
+.slot {
   height: 80px;
-  border-top: solid 1px #f0f0f0; }
+  border-top: solid 1px #dcdcdc; }
+  .slot.empty {
+    background: #eaeaea; }
+    .slot.empty .indicator {
+      background: #dcdcdc; }
+    .slot.empty .info {
+      display: flex;
+      align-items: center;
+      color: #b3b3b3;
+      font-size: 11px;
+      font-family: "Roboto Mono", monospace; }
+    .slot.empty .use_btn {
+      position: absolute;
+      top: calc( 50% - 10px );
+      right: 20px;
+      width: 70px; }
+  .slot .indicator {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: 10px;
+    top: calc( 50% - 3px );
+    border: solid 1px #dcdcdc;
+    border-radius: 100px; }
+  .slot .number {
+    position: absolute;
+    font-family: "Roboto Mono", monospace;
+    left: 20px;
+    top: 30px; }
+  .slot .info {
+    height: 100%;
+    position: absolute;
+    left: 125px;
+    right: 95px; }
+  .slot .use_btn {
+    position: absolute;
+    top: calc( 50% - 10px );
+    right: 40px; }
+
+#live-view section .separator:first-child {
+  border-top: none; }
 
 /*# sourceMappingURL=live-view.css.map */

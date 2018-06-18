@@ -1,64 +1,75 @@
-/*
 
-// johnny five w/ electron bugfix
-
-var Readable = require("stream").Readable;  
-const util = require("util");  
-util.inherits(MyStream, Readable);  
-function MyStream(opt) {  
-  Readable.call(this, opt);
-}
-MyStream.prototype._read = function() {};  
-// hook in our stream
-process.__defineGetter__("stdin", function() {  
-  if (process.__stdin) return process.__stdin;
-  process.__stdin = new MyStream();
-  return process.__stdin;
-});
-
-
-// Node modules
-const {remote, ipcRenderer} = require('electron');
-
-const five = require("johnny-five");
-const pixel = require("../global/js/pixel.js");
-// setup board
-var board = new five.Board({
-  repl: false, // does not work with browser console
-  port: "/dev/tty.SNES-DevB"
-});
-
-*/
-
-// Functions ########################################
 
 
 function initSlots(){
 
-  console.log('run')
 
   const Slots = [2,3,4,5,6,7,8,'A0','A1','A2','A3'];
+  const Container = $('#slot-wrapper section');
 
-  const dContainer = $('#digital_slots');
+  Slots.forEach(function(slot){
 
+    var displaySlot = slot;
+    if (slot === parseInt(slot, 10)){
+      displaySlot = 'D'+slot;
+    }
 
-  var m = "<div class='slot'>";
+    var m = '<div class="slot empty" slot="'+slot+'">';
 
-  var c = "</div>";
+          m+= '<div class="indicator"></div>';
+          m+= '<div class="number">'+displaySlot+'</div>';
 
+          m+= '<div class="info">// Not Connected</div>';
 
-  dSlots.forEach(function(slot){
+          m+= '<div class="btn use_btn ghost-dark">Setup</div>';
 
-    dContainer.append(m);
+        m+= '</div>';
 
-    dContainer.append('D'+slot);
-
-    dContainer.append(c);
+    Container.append(m);
 
   });
 
 }
 
+
+function initBlokdotsConnectionIndicator(){
+
+  var m = '<div class="connection"></div>';
+  $('#grove_1 .separator').append(m);
+
+}
+
+function blokdotsConnectionIndicator( bool ){
+
+  const conn = $('#grove_1 .connection');
+
+  if( bool ){
+
+    conn.addClass('connected');
+    conn.text('board connected')
+
+  }else{
+
+    conn.removeClass('connected');
+    conn.text('device not found')
+
+  }
+
+}
+
+function connectSlot(){
+
+  $('.slot').on('click',function(){
+
+    // get slot number and check if int
+    var groveSlot = $(this).attr('slot');
+    if( groveSlot.indexOf('A') < 0 ){
+      groveSlot = parseInt(groveSlot);
+    }
+
+  });
+
+}
 
 
 
@@ -68,7 +79,12 @@ $(document).ready(function(){
 
   // Layout Functions
   initSeparators();
+  initBlokdotsConnectionIndicator();
 
+  // Slots
   initSlots();
+  connectSlot();
+
+  blokdotsConnectionIndicator( connected );
 
 });

@@ -3,6 +3,7 @@
 	position: relative;
 	box-sizing: border-box;
 	user-select: none;
+	cursor: default;
 }
 
 
@@ -21,13 +22,41 @@ section .separator {
 	height: $height-separator;
 	background: $color-gray-1;
 	border-top: solid 1px $color-gray-6;
+	color: $color-font-med;
 
 	.name {
-		
-		color: $color-font-med;
 
-		margin-left: 10px;
+		position: absolute;
+		left: 10px;
+		top: calc( 50% - 0.7em );
 
+	}
+
+
+	.connection {
+		position: absolute;
+		font-size: $font-size-small;
+		right: 10px;
+		padding-right: 10px;
+		top: calc( 50% - 0.7em );
+
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			right: 0;
+			top: 4px;
+			width: 6px;
+			height: 6px;
+			border-radius: 10px;
+			background: $color-red;
+		}
+
+		&.connected {
+			&:after {
+				background: $color-green;
+			}
+		}
 	}
 
 	section & {

@@ -2,5 +2,47 @@
 
 
 input {
-	
+
 }
+
+
+
+
+.btn {
+
+	border-radius: $border-radius-reg;
+	background: $color-white;
+	border: solid 1px $color-gray-3;
+	padding: 2px 4px;
+	text-align: center;
+
+	&:hover {
+		background: $color-gray-1;
+	}
+	&:active {
+		background: $color-brand-interactive;
+	}
+
+
+	&.ghost {
+		background: none;
+
+		&:hover {
+			background: $color-gray-1;
+		}
+	}
+	&.ghost-dark {
+		background: none;
+		border-color: $color-gray-7;
+		color: $color-gray-7;
+
+		&:hover {
+			background: $color-gray-4;
+		}
+		&:active {
+			background: $color-gray-1;
+		}
+	}
+}
+
+

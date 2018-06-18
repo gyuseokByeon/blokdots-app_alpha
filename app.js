@@ -9,15 +9,15 @@ const path = require('path');
 const url = require('url');
 
 
-// start code when app is ready
 
+// init electron windows
 app.on('ready', function(){
 
 
 	// init Live View window
 	var lvWindow = new BrowserWindow({
 		width: 400,
-		height: 700,
+		height: 680,
 		minHeight: 500,
   		minWidth: 350,
 		titleBarStyle: 'hidden'
@@ -72,3 +72,14 @@ app.on('ready', function(){
 */
 
 });
+
+
+
+
+
+
+
+
+
+
+

@@ -9,6 +9,7 @@
   },
   "repository": {
     "type": "git",
+    "rebuild": "./node_modules/.bin/electron-rebuild",
     "url": "git+https://github.com/olivierbrcknr/blokdots-app.git"
   },
   "keywords": [
@@ -28,7 +29,10 @@
   "dependencies": {
     "electron": "^2.0.2",
     "electron-ipc": "^0.3.0",
+    "electron-rebuild": "^1.7.3",
     "johnny-five": "^0.15.0",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "serialport": "^6.2.0",
+    "usb": "git+https://git@github.com/tessel/node-usb.git"
   }
 }
