@@ -1,0 +1,28 @@
+{
+  "name": "blokdots-app",
+  "version": "0.0.1",
+  "description": "A software to programm hardware using the IFTTT principle",
+  "main": "app.js",
+  "scripts": {
+    "test": "test",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olivierbrcknr/blokdots-app.git"
+  },
+  "keywords": [
+    "blokdots",
+    "hardware",
+    "arduino",
+    "ifttt",
+    "node",
+    "electron"
+  ],
+  "author": "Olivier Brückner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olivierbrcknr/blokdots-app/issues"
+  },
+  "homepage": "http://blokdots.com"
+}
