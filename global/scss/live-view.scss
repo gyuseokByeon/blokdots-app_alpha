@@ -1,0 +1,60 @@
+
+
+// live view layourt
+@import "variables";
+
+
+
+// special live-view vars: --------------
+
+
+// colours
+$lv-color-bg:				$color-white;
+
+// sizes
+$height-lv-header:			$height-lv-header;
+
+
+// --------------
+
+body {
+	background: $lv-color-bg;
+}
+
+header {
+    -webkit-app-region:drag;
+
+	width: 100%;
+	height: $height-lv-header;
+
+	background: $lv-color-bg;
+	border-bottom: solid 1px $color-gray-6;
+
+	.title {
+		padding: 3px 0 6px 70px;
+		padding-left: 0;
+		text-align: center;
+	}
+}
+
+
+#slot-wrapper {
+
+	height: calc( 100vh - #{$height-lv-header} );
+	overflow-y: scroll;
+
+}
+
+
+
+
+.slot-container {
+
+
+	.slot {
+
+		height: 80px;
+		border-top: solid 1px $color-gray-4;
+
+	}
+}

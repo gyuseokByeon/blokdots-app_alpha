@@ -24,5 +24,11 @@
   "bugs": {
     "url": "https://github.com/olivierbrcknr/blokdots-app/issues"
   },
-  "homepage": "http://blokdots.com"
+  "homepage": "http://blokdots.com",
+  "dependencies": {
+    "electron": "^2.0.2",
+    "electron-ipc": "^0.3.0",
+    "johnny-five": "^0.15.0",
+    "jquery": "^3.3.1"
+  }
 }

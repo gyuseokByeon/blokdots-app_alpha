@@ -1,0 +1,16 @@
+
+// reset regular layout
+@import "reset";
+
+// include scss variables 
+@import "variables";
+
+// overall styles
+@import "overall";
+@import "basic-inputs";
+
+// card layout
+@import "ifttt";
+
+// setup layout
+@import "setup";

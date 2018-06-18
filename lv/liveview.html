@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Live View</title>
+
+
+	<meta content="width=device-width,initial-scale=1.0, minimum-scale=1, maximum-scale=1" name="viewport">
+
+	<!-- Prevent load bugs -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+	<!-- Load node elements -->
+	<script>window.$ = window.jQuery = require('jquery');</script>
+	<script>if (window.module) module = window.module;</script>
+	
+
+	<script type="text/javascript" src="../global/js/layout_functions.js"></script>
+
+
+	<script type="text/javascript" src="liveview.js"></script>
+
+	
+	<link rel="stylesheet" type="text/css" href="../global/css/style.css">
+	<link rel="stylesheet" type="text/css" href="../global/css/live-view.css">
+
+
+</head>
+<body id="live-view">
+
+<header>
+	<div class="title">Live View</div>
+
+
+</header>
+	
+
+<div id="slot-wrapper">
+
+
+	<section id="grove_1" sep-name="Grove">
+		<section id="digital_slots" class="slot-container" sep-name="digital">
+			
+		</section>
+		<section id="analogue_slots" class="slot-container" sep-name="analogue">
+		
+		</section>
+	</section>
+
+
+</div>
+
+
+</body>
+</html>

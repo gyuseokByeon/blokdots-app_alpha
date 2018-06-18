@@ -1,0 +1,41 @@
+
+* {
+	position: relative;
+	box-sizing: border-box;
+	user-select: none;
+}
+
+
+
+// Main Styles ---------------------------
+html, body {
+	font-family: $font-family-reg;
+	font-size: $font-size-reg;
+}
+
+
+// Elements -------------------------------
+section .separator {
+	
+	width: 100%;
+	height: $height-separator;
+	background: $color-gray-1;
+	border-top: solid 1px $color-gray-6;
+
+	.name {
+		
+		color: $color-font-med;
+
+		margin-left: 10px;
+
+	}
+
+	section & {
+		
+		height: $height-separator-small;
+
+		.name {
+			font-size: $font-size-small;
+		}
+	}
+}

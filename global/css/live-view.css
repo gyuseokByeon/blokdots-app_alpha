@@ -1,0 +1,32 @@
+/*
+
+variable naming:
+Type - Specific - Nuance
+E.g. $color-ifttt-blue
+
+1 = light -> 10 = dark
+
+*/
+body {
+  background: #FFFFFF; }
+
+header {
+  -webkit-app-region: drag;
+  width: 100%;
+  height: 90px;
+  background: #FFFFFF;
+  border-bottom: solid 1px #dcdcdc; }
+  header .title {
+    padding: 3px 0 6px 70px;
+    padding-left: 0;
+    text-align: center; }
+
+#slot-wrapper {
+  height: calc( 100vh - 90px );
+  overflow-y: scroll; }
+
+.slot-container .slot {
+  height: 80px;
+  border-top: solid 1px #f0f0f0; }
+
+/*# sourceMappingURL=live-view.css.map */
