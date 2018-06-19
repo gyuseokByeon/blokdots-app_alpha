@@ -1,0 +1,3 @@
+component;type;dir;image-url
+Button;digital;in;button
+LED;digital;out;led

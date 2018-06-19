@@ -10,10 +10,7 @@ Just use the [grove setup](https://www.seeedstudio.com/category/Grove-c-1003.htm
 To install the software (alpha) download the package, open it in terminal and hit ```$ npm install```
 
 ## API
-```
-button.blokdots('press');
-```
-
+Currently blokdots is running with the powerful [Johnny-Five](http://johnny-five.io) framework, so after setting up your project in few simple steps using blokdots, you can easily continue working on it by changing the generated javascript. This way, you projects can get more advanced even after building you prototype using the simple IFTTT interface.
 
 ### Together With
 [Nikolas Klein](http://nikolasklein.de)  

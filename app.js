@@ -20,6 +20,7 @@ app.on('ready', function(){
 		height: 680,
 		minHeight: 500,
   		minWidth: 350,
+  		maxHeight: 1000,
 		titleBarStyle: 'hidden'
 	});
 	lvWindow.loadURL('file://' + __dirname + '/lv/liveview.html')

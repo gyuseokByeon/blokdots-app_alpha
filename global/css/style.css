@@ -74,7 +74,8 @@ E.g. $color-ifttt-blue
 
 html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  font-size: 13px; }
+  font-size: 13px;
+  letter-spacing: 0.01em; }
 
 section .separator {
   width: 100%;
@@ -131,5 +132,14 @@ section .separator {
       background: #f0f0f0; }
     .btn.ghost-dark:active {
       background: #f8f8f8; }
+  .btn.ghost-light {
+    background: none;
+    border-color: #FFFFFF;
+    color: #FFFFFF; }
+    .btn.ghost-light:hover {
+      background: #FFFFFF;
+      color: #1ABC9C; }
+    .btn.ghost-light:active {
+      background: rgba(255, 255, 255, 0.9); }
 
 /*# sourceMappingURL=style.css.map */

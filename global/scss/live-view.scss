@@ -12,8 +12,19 @@
 $lv-color-bg:				$color-white;
 
 $lv-color-slot-empty:		$color-gray-5;
+
+
+$lv-color-comp-list:		$color-gray-1;
+
+
 // sizes
 $height-lv-header:			$height-lv-header;
+
+$height-lv-slot:			80px;
+
+$margin-lv-from-left:		125px;
+$margin-lv-from-right:		95px;
+$height-lv-component-li:	$height-lv-slot / 2;
 
 
 // Main --------------
@@ -50,7 +61,7 @@ header {
 
 .slot {
 
-	height: 80px;
+	height: $height-lv-slot;
 	border-top: solid 1px $color-gray-6;
 
 	&.empty {
@@ -76,6 +87,25 @@ header {
 		}
 	}
 
+	&.setup {
+		background: $color-brand-interactive;
+		color: $color-font-light;
+
+		.info {
+			display: flex;
+			align-items: center;
+		}
+		.use_btn {
+			position: absolute;
+			top: calc( 50% - 10px );
+			right: 20px;
+			width: 70px;
+		}
+		.indicator {
+			border-color: $color-white;
+		}
+	}
+
 	.indicator {
 		position: absolute;
 		width: 6px;
@@ -96,14 +126,43 @@ header {
 	.info {
 		height: 100%;
 		position: absolute;
-		left: 125px;
-		right: 95px;
+		left: $margin-lv-from-left;
+		right: $margin-lv-from-right;
 	}
 
 	.use_btn {
 		position: absolute;
 		top: calc( 50% - 10px );
 		right: 40px;
+	}
+
+	img.component-icon {
+		position: absolute;
+		width: 70px;
+		height: 70px;
+		left: 42px;
+		top: calc( 50% - 35px );
+	}
+
+	.type-indicator {
+		display: none;
+	}
+}
+
+
+.setup-component-list {
+	width: 100%;
+	background: $lv-color-comp-list;
+
+	// list of components
+	ul {
+		
+		li {
+			
+			height: $height-lv-component-li;
+			border-top: solid 1px $color-gray-6;
+
+		}
 	}
 }
 
