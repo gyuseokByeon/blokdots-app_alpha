@@ -20,11 +20,13 @@ $font-family-headline:		$font-family-reg;
 
 $font-size-reg:				13px;
 $font-size-small:			11px;
+$font-size-med:				20px;
 
 
 
 
 $font-weight-reg:			400;
+$font-weight-thin:			300;
 
 
 
@@ -41,7 +43,7 @@ $color-gray-5:				#eaeaea;
 $color-gray-6:				#dcdcdc;
 $color-gray-7:				#c1c1c1;
 $color-gray-8:				#a8a8a8;
-$color-gray-8:				#606060;
+$color-gray-9:				#606060;
 
 $color-font: 				#000000;
 $color-font-med:			lighten( $color-font , 50% );
@@ -89,7 +91,7 @@ $height-separator-small:	24px;
 
 // Timings ----------------------------------------
 
-
+$time-lv-valuebar:			0.1s;
 
 
 

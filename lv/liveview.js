@@ -30,10 +30,12 @@ function initSlots(){
     }
 
     var m = '<div class="slot" slot="'+slot+'">';
-        m+= '<div class="indicator"></div>';
-        m+= '<div class="number">'+displaySlot+'</div>';
-        m+= '<div class="info">// Not Connected</div>';
-        m+= '<div class="btn use_btn ghost-dark">Setup</div>';
+          m+= '<div class="controls">';
+            m+= '<div class="indicator"></div>';
+            m+= '<div class="number">'+displaySlot+'</div>';
+            m+= '<div class="info">// Not Connected</div>';
+            m+= '<div class="btn use_btn ghost-dark">Setup</div>';
+          m+= '</div>';
         m+= '</div>';
 
     Container.append(m);
@@ -157,7 +159,7 @@ function slotState( slot , state ){
       slot.find('.use_btn').removeClass('ghost-light').text('Use');
 
       setupSlotControls( slot , slotObj.comp );
-
+      buildLiveViewDisplayListener( slotObj );
 
     break;
 
@@ -194,14 +196,16 @@ function appendSetupComponentList( slotObj , slotNum ){
     this.comp = component["component"];
     this.type = component["type"];
     this.dir  = component["dir"];
-    this.img  = component["image-url"];
+    this.img  = component["image_url"];
 
     // just list if suitable for slot
     if( slotType == this.type ){
   
       m+= '<li comp="'+this.comp+'">';
 
-      m+= this.comp;
+        m+= '<img class="component-icon" src="../global/img/comp/'+this.img+'.svg"/>';
+
+        m+= '<div class="name">'+this.comp+'</div>';
 
       m+= '</li>';
 
@@ -212,7 +216,7 @@ function appendSetupComponentList( slotObj , slotNum ){
   m+= '</div>';
 
   // add list to slot
-  slotObj.after(m);
+  slotObj.append(m);
 
 }
 // Input events
@@ -264,7 +268,7 @@ function setupComponent( slot , comp ){
       componentTypeObject = curr;
     }
   }
-  
+
   // generate a variable for the slot
   var varname = 'slot'+slot;
 
@@ -324,21 +328,27 @@ function setupSlotControls( slot , comp ){
     }
   }
 
-  console.log( componentTypeObject );
-
   var img = '<img class="component-icon" src="../global/img/comp/'+componentTypeObject.image_url+'.svg"/>';
-  slot.append( img );
+  slot.find('.controls').append( img );
 
   var typeIndicator = '<div class="type-indicator '+comp.type+' '+comp.dir+'">'+comp.type+'</div>';
-  slot.append( typeIndicator );
+  slot.find('.controls').append( typeIndicator );
 
 
-  var m = 'yay';
+  var m = '';
 
   switch( comp ){
 
     case 'Button':
+    case 'Potentiometer':
 
+      m+= '<div class="value-container">';
+        m+= '<div class="value">10</div>'
+      m+= '</div>';
+      m+= '<div class="value-bar-container">';
+        m+= '<div class="value-bar"></div>';
+      m+= '</div>';
+      m+= '<div class="real-value"></div>';
 
     break;
 
@@ -347,19 +357,90 @@ function setupSlotControls( slot , comp ){
 
     break;
 
-    case 'Potentiometer':
-
-
-    break;
-
     default:
 
+      m+= 'not ready yet…';
 
     break;
   }
 
 
   slot.find('.info').append(m);
+
+  
+}
+
+
+function buildLiveViewDisplayListener( slotObj ){
+
+  switch( slotObj.comp ){
+
+    case 'Button':
+    
+      window[ slotObj.var ] = new five.Button( slotObj.slot );
+
+      button_LiveViewDisplayListener( 0 , slotObj.slot );
+
+      window[ slotObj.var ].on("down", function() {
+        button_LiveViewDisplayListener( 1 , slotObj.slot );
+      });
+      window[ slotObj.var ].on("up", function() {
+        button_LiveViewDisplayListener( 0 , slotObj.slot );
+      });
+
+    break;
+
+    case 'Potentiometer':
+
+      window[ slotObj.var ] = new five.Sensor( slotObj.slot );
+
+      window[ slotObj.var ].on("change", function(val) {
+        potentiometer_LiveViewDisplayListener( val , slotObj.slot );
+      });
+
+    break;
+
+    default:
+
+      console.log('not ready yet…');
+
+    break;
+  }
+}
+
+
+// Functions for different component types -------------------------------------
+
+function button_LiveViewDisplayListener( val , slot ){
+
+  var slotDOM;
+  $('.slot').each(function(){
+    if( $(this).attr('slot') == slot ){
+      slotDOM = $(this);
+    }
+  });
+
+  slotDOM.find('.value').html( val );
+  slotDOM.find('.real-value').html( val );
+  slotDOM.find('.value-bar').css( 'width' , (val / 1)*100+'%' );
+  
+}
+
+function potentiometer_LiveViewDisplayListener( val , slot ){
+
+  var slotDOM;
+  $('.slot').each(function(){
+    if( $(this).attr('slot') == slot ){
+      slotDOM = $(this);
+    }
+  });
+
+  val = 1023 - val;
+  var valPercentage = Math.round( 100 * (val/1024) ) +"%";
+
+  slotDOM.find('.value').html( valPercentage );
+  slotDOM.find('.real-value').html( val );
+  slotDOM.find('.value-bar').css( 'width' , valPercentage );
   
 }
 

@@ -19,7 +19,7 @@ app.on('ready', function(){
 		width: 400,
 		height: 680,
 		minHeight: 500,
-  		minWidth: 350,
+  		minWidth: 400,
   		maxHeight: 1000,
 		titleBarStyle: 'hidden'
 	});
@@ -75,7 +75,7 @@ app.on('ready', function(){
 });
 
 
-
+app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 
 
 

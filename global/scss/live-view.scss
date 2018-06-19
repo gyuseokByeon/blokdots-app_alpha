@@ -61,112 +61,201 @@ header {
 
 .slot {
 
-	height: $height-lv-slot;
-	border-top: solid 1px $color-gray-6;
+	overflow: hidden;
 
-	&.empty {
-		background: $lv-color-slot-empty;
+	.controls {
+
+		height: $height-lv-slot;
+		border-top: solid 1px $color-gray-6;
 
 		.indicator {
-			background: $color-gray-6;
+			position: absolute;
+			width: 6px;
+			height: 6px;
+			left: 10px;
+			top: calc( 50% - 3px );
+			border: solid 1px $color-gray-6;
+			border-radius: 100px;
+		}
+
+		.number {
+			position: absolute;
+			font-family: $font-family-mono;
+			left: 20px;
+			top: 30px;
 		}
 
 		.info {
-			display: flex;
-			align-items: center;
-			color: $color-font-disabled;
-			font-size: $font-size-small;
-			font-family: $font-family-mono;
+			height: 100%;
+			position: absolute;
+			left: $margin-lv-from-left;
+			right: $margin-lv-from-right;
 		}
 
 		.use_btn {
 			position: absolute;
 			top: calc( 50% - 10px );
-			right: 20px;
+			right: 40px;
+		}
+
+		img.component-icon {
+			position: absolute;
 			width: 70px;
+			height: 70px;
+			left: 42px;
+			top: calc( 50% - 35px );
+		}
+
+		.type-indicator {
+			display: none;
+		}
+	}
+
+	&.empty {
+			
+		.controls {
+
+			background: $lv-color-slot-empty;
+
+			.indicator {
+				background: $color-gray-6;
+			}
+
+			.info {
+				display: flex;
+				align-items: center;
+				color: $color-font-disabled;
+				font-size: $font-size-small;
+				font-family: $font-family-mono;
+			}
+
+			.use_btn {
+				position: absolute;
+				top: calc( 50% - 10px );
+				right: 20px;
+				width: 70px;
+			}
 		}
 	}
 
 	&.setup {
-		background: $color-brand-interactive;
-		color: $color-font-light;
 
-		.info {
-			display: flex;
-			align-items: center;
+		.controls {
+
+			background: $color-brand-interactive;
+			color: $color-font-light;
+
+			.info {
+				display: flex;
+				align-items: center;
+			}
+			.use_btn {
+				position: absolute;
+				top: calc( 50% - 10px );
+				right: 20px;
+				width: 70px;
+			}
+			.indicator {
+				border-color: $color-white;
+			}
 		}
-		.use_btn {
-			position: absolute;
-			top: calc( 50% - 10px );
-			right: 20px;
-			width: 70px;
-		}
-		.indicator {
-			border-color: $color-white;
-		}
 	}
 
-	.indicator {
-		position: absolute;
-		width: 6px;
-		height: 6px;
-		left: 10px;
-		top: calc( 50% - 3px );
-		border: solid 1px $color-gray-6;
-		border-radius: 100px;
-	}
+	// The list to select the new hardware component
+	.setup-component-list {
+		width: 100%;
+		background: $lv-color-comp-list;
 
-	.number {
-		position: absolute;
-		font-family: $font-family-mono;
-		left: 20px;
-		top: 30px;
-	}
-
-	.info {
-		height: 100%;
-		position: absolute;
-		left: $margin-lv-from-left;
-		right: $margin-lv-from-right;
-	}
-
-	.use_btn {
-		position: absolute;
-		top: calc( 50% - 10px );
-		right: 40px;
-	}
-
-	img.component-icon {
-		position: absolute;
-		width: 70px;
-		height: 70px;
-		left: 42px;
-		top: calc( 50% - 35px );
-	}
-
-	.type-indicator {
-		display: none;
-	}
-}
-
-
-.setup-component-list {
-	width: 100%;
-	background: $lv-color-comp-list;
-
-	// list of components
-	ul {
-		
-		li {
+		// list of components
+		ul {
 			
-			height: $height-lv-component-li;
-			border-top: solid 1px $color-gray-6;
+			li {
 
+				height: $height-lv-component-li;
+				border-top: solid 1px $color-gray-6;
+
+				img.component-icon {
+					opacity: 0.85;
+					width: 34px;
+					height: 34px;
+					position: absolute;
+					top: calc( 50% - 18px );
+					left: 42px;
+				}
+
+				.name {
+					position: absolute;
+					left: 82px;
+					top: calc( 50% - 0.7em );
+				}
+				
+				&:hover {
+					background: $color-white;
+				}
+			}
 		}
 	}
+
+	// bonus controls
 }
 
 
+// Controls -------------------------------------------------
+
+.slot .controls .info {
+
+	.value-container {
+		
+		.value {
+
+			font-size: $font-size-med;
+			text-align: center;
+			
+			position: absolute;
+			top: 16px;
+			width: 100%;
+
+			font-weight: $font-weight-thin;
+		}
+	}
+
+	.value-bar-container {
+		
+		position: absolute;
+		top: calc( 60% - 1px );
+		width: 100%;
+		height: 2px;
+		background: $color-gray-7;
+		border-radius: 4px;
+
+		overflow: hidden;
+
+		.value-bar {
+			height: 100%;
+			width: 20%;
+			background: $color-brand-interactive;
+
+			transition: width $time-lv-valuebar;
+		}
+	}
+
+	.real-value {
+		
+		font-family: $font-family-mono;
+		font-size: $font-size-small;
+		color: $color-font-med;
+
+		position: absolute;
+		width: 100%;
+		bottom: 8px;
+	
+		text-align: center;
+
+		&:before {
+			content: 'current value: ';
+		}
+	}
+}
 // Overall fixes ----------------------
 
 #live-view section .separator:first-child {

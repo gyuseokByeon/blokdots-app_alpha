@@ -26,73 +26,118 @@ header {
   overflow-y: scroll; }
 
 .slot {
-  height: 80px;
-  border-top: solid 1px #dcdcdc; }
-  .slot.empty {
+  overflow: hidden; }
+  .slot .controls {
+    height: 80px;
+    border-top: solid 1px #dcdcdc; }
+    .slot .controls .indicator {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      left: 10px;
+      top: calc( 50% - 3px );
+      border: solid 1px #dcdcdc;
+      border-radius: 100px; }
+    .slot .controls .number {
+      position: absolute;
+      font-family: "Roboto Mono", monospace;
+      left: 20px;
+      top: 30px; }
+    .slot .controls .info {
+      height: 100%;
+      position: absolute;
+      left: 125px;
+      right: 95px; }
+    .slot .controls .use_btn {
+      position: absolute;
+      top: calc( 50% - 10px );
+      right: 40px; }
+    .slot .controls img.component-icon {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      left: 42px;
+      top: calc( 50% - 35px ); }
+    .slot .controls .type-indicator {
+      display: none; }
+  .slot.empty .controls {
     background: #eaeaea; }
-    .slot.empty .indicator {
+    .slot.empty .controls .indicator {
       background: #dcdcdc; }
-    .slot.empty .info {
+    .slot.empty .controls .info {
       display: flex;
       align-items: center;
       color: #b3b3b3;
       font-size: 11px;
       font-family: "Roboto Mono", monospace; }
-    .slot.empty .use_btn {
+    .slot.empty .controls .use_btn {
       position: absolute;
       top: calc( 50% - 10px );
       right: 20px;
       width: 70px; }
-  .slot.setup {
+  .slot.setup .controls {
     background: #1ABC9C;
     color: #FFFFFF; }
-    .slot.setup .info {
+    .slot.setup .controls .info {
       display: flex;
       align-items: center; }
-    .slot.setup .use_btn {
+    .slot.setup .controls .use_btn {
       position: absolute;
       top: calc( 50% - 10px );
       right: 20px;
       width: 70px; }
-    .slot.setup .indicator {
+    .slot.setup .controls .indicator {
       border-color: #FFFFFF; }
-  .slot .indicator {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    left: 10px;
-    top: calc( 50% - 3px );
-    border: solid 1px #dcdcdc;
-    border-radius: 100px; }
-  .slot .number {
-    position: absolute;
-    font-family: "Roboto Mono", monospace;
-    left: 20px;
-    top: 30px; }
-  .slot .info {
-    height: 100%;
-    position: absolute;
-    left: 125px;
-    right: 95px; }
-  .slot .use_btn {
-    position: absolute;
-    top: calc( 50% - 10px );
-    right: 40px; }
-  .slot img.component-icon {
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    left: 42px;
-    top: calc( 50% - 35px ); }
-  .slot .type-indicator {
-    display: none; }
+  .slot .setup-component-list {
+    width: 100%;
+    background: #f8f8f8; }
+    .slot .setup-component-list ul li {
+      height: 40px;
+      border-top: solid 1px #dcdcdc; }
+      .slot .setup-component-list ul li img.component-icon {
+        opacity: 0.85;
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        top: calc( 50% - 18px );
+        left: 42px; }
+      .slot .setup-component-list ul li .name {
+        position: absolute;
+        left: 82px;
+        top: calc( 50% - 0.7em ); }
+      .slot .setup-component-list ul li:hover {
+        background: #FFFFFF; }
 
-.setup-component-list {
+.slot .controls .info .value-container .value {
+  font-size: 20px;
+  text-align: center;
+  position: absolute;
+  top: 16px;
   width: 100%;
-  background: #f8f8f8; }
-  .setup-component-list ul li {
-    height: 40px;
-    border-top: solid 1px #dcdcdc; }
+  font-weight: 300; }
+.slot .controls .info .value-bar-container {
+  position: absolute;
+  top: calc( 60% - 1px );
+  width: 100%;
+  height: 2px;
+  background: #c1c1c1;
+  border-radius: 4px;
+  overflow: hidden; }
+  .slot .controls .info .value-bar-container .value-bar {
+    height: 100%;
+    width: 20%;
+    background: #1ABC9C;
+    transition: width 0.1s; }
+.slot .controls .info .real-value {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: gray;
+  position: absolute;
+  width: 100%;
+  bottom: 8px;
+  text-align: center; }
+  .slot .controls .info .real-value:before {
+    content: 'current value: '; }
 
 #live-view section .separator:first-child {
   border-top: none; }

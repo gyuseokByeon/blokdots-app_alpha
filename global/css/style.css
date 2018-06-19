@@ -119,7 +119,7 @@ section .separator {
   .btn:hover {
     background: #f8f8f8; }
   .btn:active {
-    background: #1ABC9C; }
+    background: #f2f2f2; }
   .btn.ghost {
     background: none; }
     .btn.ghost:hover {

@@ -101,7 +101,7 @@ function initPort(){
 					baudRate: 9600
 				});
 				*/
-				console.log('%cSerialPort is set ✔️','color: #1abc9c;');
+				console.log('%cSerialPort is set ✔️','color: #c1c1c1;');
 				
 				initBoard();
 				return;
@@ -123,12 +123,9 @@ function initBoard(){
 		});
 	}
 
+
 	board.on("ready", function() {
-	  // Create a standard `led` component instance
-	  var led = new five.Led(3);
-	  // "blink" the led in 500ms
-	  // on-off phase periods
-	  led.blink(500);
+	  console.log('%cBoard is ready to go 🚀','color: #1abc9c;')
 	});
 
 	ipcRenderer.send('attached');
