@@ -19,7 +19,8 @@ $font-family-headline:		$font-family-reg;
 
 
 $font-size-reg:				13px;
-$font-size-small:			11px;
+$font-size-small:			10px;
+$font-size-tiny:			8px;
 $font-size-med:				20px;
 
 
@@ -76,10 +77,14 @@ $color-ifttt-string:		#5D9BC5;
 $color-ifttt-integer:		#9F63B7;
 $color-ifttt-default:		#9F63B7;
 
+// menus
+$opacity-dropwdown-bg:		0.93;
+
 
 // Sizes ------------------------------------------
 
 $border-radius-reg: 		2px;
+$border-radius-dropdown: 	3px;
 
 
 // Live View
@@ -92,7 +97,13 @@ $height-separator-small:	24px;
 // Timings ----------------------------------------
 
 $time-lv-valuebar:			0.1s;
+$time-lv-slot:				0.3s;
+$time-lv-more-arrow:		0.3s;
 
+
+// Shadows ----------------------------------------
+/* Rectangle 17: */
+$shadow-dropdown:			0 2px 4px 0 rgba(0,0,0,0.30);
 
 
 

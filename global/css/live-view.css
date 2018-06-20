@@ -7,6 +7,7 @@ E.g. $color-ifttt-blue
 1 = light -> 10 = dark
 
 */
+/* Rectangle 17: */
 body {
   background: #FFFFFF; }
 
@@ -26,7 +27,9 @@ header {
   overflow-y: scroll; }
 
 .slot {
-  overflow: hidden; }
+  overflow: hidden;
+  height: 80px;
+  transition: height 0.3s; }
   .slot .controls {
     height: 80px;
     border-top: solid 1px #dcdcdc; }
@@ -38,6 +41,13 @@ header {
       top: calc( 50% - 3px );
       border: solid 1px #dcdcdc;
       border-radius: 100px; }
+    .slot .controls .pwm-indicator {
+      font-family: "Roboto Mono", monospace;
+      color: #b3b3b3;
+      font-size: 8px;
+      position: absolute;
+      left: 20px;
+      top: 10px; }
     .slot .controls .number {
       position: absolute;
       font-family: "Roboto Mono", monospace;
@@ -58,8 +68,47 @@ header {
       height: 70px;
       left: 42px;
       top: calc( 50% - 35px ); }
+    .slot .controls .close {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-family: "Roboto Mono", monospace;
+      color: gray;
+      font-size: 10px; }
+    .slot .controls .more {
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      right: 14px;
+      top: calc( 50% - 6px );
+      background: url("../img/misc/fold_out.svg");
+      background-size: contain;
+      background-position: center center;
+      background-repeat: no-repeat;
+      transform-origin: 50% 50%;
+      transition: transform 0.3s; }
     .slot .controls .type-indicator {
-      display: none; }
+      font-family: "Roboto Mono", monospace;
+      color: gray;
+      font-size: 8px;
+      position: absolute;
+      left: 17px;
+      top: 50px; }
+      .slot .controls .type-indicator:before {
+        content: '';
+        width: 7px;
+        height: 3px;
+        display: inline-block;
+        margin-right: 2px;
+        background-size: 100% 100%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        vertical-align: 1px;
+        opacity: 0.5; }
+      .slot .controls .type-indicator.analog:before {
+        background-image: url("../img/icons/analog_indicator.svg"); }
+      .slot .controls .type-indicator.digital:before {
+        background-image: url("../img/icons/digital_indicator.svg"); }
   .slot.empty .controls {
     background: #eaeaea; }
     .slot.empty .controls .indicator {
@@ -68,7 +117,7 @@ header {
       display: flex;
       align-items: center;
       color: #b3b3b3;
-      font-size: 11px;
+      font-size: 10px;
       font-family: "Roboto Mono", monospace; }
     .slot.empty .controls .use_btn {
       position: absolute;
@@ -88,6 +137,10 @@ header {
       width: 70px; }
     .slot.setup .controls .indicator {
       border-color: #FFFFFF; }
+    .slot.setup .controls .pwm-indicator {
+      color: inherit; }
+  .slot.settings-shown .more {
+    transform: rotate(180deg); }
   .slot .setup-component-list {
     width: 100%;
     background: #f8f8f8; }
@@ -107,6 +160,15 @@ header {
         top: calc( 50% - 0.7em ); }
       .slot .setup-component-list ul li:hover {
         background: #FFFFFF; }
+  .slot .extra-settings {
+    background: #f8f8f8;
+    min-height: 60px;
+    padding: 20px 15px 20px 130px; }
+    .slot .extra-settings select {
+      position: absolute;
+      left: 10px;
+      top: 20px;
+      width: 105px; }
 
 .slot .controls .info .value-container .value {
   font-size: 20px;
@@ -130,7 +192,7 @@ header {
     transition: width 0.1s; }
 .slot .controls .info .real-value {
   font-family: "Roboto Mono", monospace;
-  font-size: 11px;
+  font-size: 10px;
   color: gray;
   position: absolute;
   width: 100%;

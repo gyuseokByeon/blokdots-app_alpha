@@ -15,6 +15,7 @@ $lv-color-slot-empty:		$color-gray-5;
 
 
 $lv-color-comp-list:		$color-gray-1;
+$lv-color-extra-settings:	$color-gray-1;
 
 
 // sizes
@@ -62,6 +63,8 @@ header {
 .slot {
 
 	overflow: hidden;
+	height: $height-lv-slot;
+	transition: height $time-lv-slot;
 
 	.controls {
 
@@ -76,6 +79,15 @@ header {
 			top: calc( 50% - 3px );
 			border: solid 1px $color-gray-6;
 			border-radius: 100px;
+		}
+
+		.pwm-indicator {
+			font-family: $font-family-mono;
+			color: $color-font-disabled;
+			font-size: $font-size-tiny;
+			position: absolute;
+			left: 20px;
+			top: 10px;
 		}
 
 		.number {
@@ -106,8 +118,61 @@ header {
 			top: calc( 50% - 35px );
 		}
 
+		.close {
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			font-family: $font-family-mono;
+			color: $color-font-med;
+			font-size: $font-size-small;
+		}
+
+		.more {
+			width: 12px;
+			height: 12px;
+			position: absolute;
+			right: 14px;
+			top: calc( 50% - 6px );
+			background: url('../img/misc/fold_out.svg');
+			background-size: contain;
+			background-position: center center;
+			background-repeat: no-repeat;
+
+    		transform-origin: 50% 50%;
+    		transition: transform $time-lv-more-arrow;
+		}
+
 		.type-indicator {
-			display: none;
+			font-family: $font-family-mono;
+			color: $color-font-med;
+			font-size: $font-size-tiny;
+			position: absolute;
+			left: 17px;
+			top: 50px;
+
+			&:before {
+				content: '';
+				width: 7px;
+				height: 3px;
+				display: inline-block;
+				margin-right: 2px;
+				background-size: 100% 100%;
+				background-position: center center;
+				background-repeat: no-repeat;
+				vertical-align: 1px;
+				opacity: 0.5;
+			}
+
+			&.analog {
+				&:before {
+					background-image: url('../img/icons/analog_indicator.svg');
+				}
+			}
+			&.digital {
+				&:before {
+					background-image: url('../img/icons/digital_indicator.svg');
+				}
+			}
 		}
 	}
 
@@ -158,7 +223,14 @@ header {
 			.indicator {
 				border-color: $color-white;
 			}
+			.pwm-indicator {
+				color: inherit;
+			}
 		}
+	}
+
+	&.settings-shown .more {
+		transform: rotate(180deg);
 	}
 
 	// The list to select the new hardware component
@@ -197,6 +269,25 @@ header {
 	}
 
 	// bonus controls
+	.extra-settings {
+
+		background: $lv-color-extra-settings;
+		// border-top: solid 1px $color-gray-6;
+		
+		min-height: 60px;
+
+		padding: 20px 15px 20px 130px;
+
+
+		select { // dropdown
+
+			position: absolute;
+			left: 10px;
+			top: 20px;
+			width: 105px;
+
+		}
+	}
 }
 
 
