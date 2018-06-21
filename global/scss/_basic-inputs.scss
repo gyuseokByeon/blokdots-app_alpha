@@ -3,9 +3,36 @@
 
 input {
 
+	
+
 }
 
 
+input[type=range] {
+	
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	width: 100%;
+	height: 2px;
+	background: $color-gray-7;
+	border-radius: 4px;
+
+	&:webkit-slider-thumb {
+
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		width: 10px;
+		height: 10px;
+		margin-top: -5px;
+		border-radius: 1000px;
+		background: $color-brand-interactive;
+
+	}
+}
 
 
 .btn {

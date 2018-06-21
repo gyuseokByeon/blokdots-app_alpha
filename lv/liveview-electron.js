@@ -125,10 +125,16 @@ function initBoard(){
 
 
 	board.on("ready", function() {
-	  console.log('%cBoard is ready to go 🚀','color: #1abc9c;')
+
+		ipcRenderer.send('attached');
+		connected = true;
+		blokdotsConnectionIndicator( connected );
+		console.log('%cBoard is ready to go 🚀','color: #1abc9c;');
+
 	});
 
-	ipcRenderer.send('attached');
-	connected = true;
-	blokdotsConnectionIndicator( connected );
+	board.on("close", function () {
+		console.log('Board closed')
+	})
+	
 }

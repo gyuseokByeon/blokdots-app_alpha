@@ -1,3 +1,7 @@
-component;type;dir;image-url
-Button;digital;in;button
-LED;digital;out;led
+component;type;dir;image-url;presets;pwm
+Button;digital;in;button;Data;0
+LED;digital;out;led;Data, Brightness;0
+Potentiometer;analog;in;rotary-potentiometer;Data, Percentage, Angle;0
+Touch Sensor;digital;in;touch;Data;0
+Brightness Sensor;analog;in;brightness;Data, Lumen;0
+Servo Motor;analog;out;servo;Data, Angle;1

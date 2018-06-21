@@ -196,6 +196,8 @@ function appendSetupComponentList( slotObj , slotNum ){
     slotType = 'analog';
   }
 
+  var slotPwm = parseInt( slotObj.attr('pwm') );
+
   var m = '<div class="setup-component-list">';
       m+= '<ul>';
   
@@ -209,10 +211,16 @@ function appendSetupComponentList( slotObj , slotNum ){
     this.type = component["type"];
     this.dir  = component["dir"];
     this.img  = component["image_url"];
+    this.pwm  = component["pwm"];
 
     // just list if suitable for slot
-    if( slotType == this.type ){
-  
+    if( 
+         ( slotType == this.type  && this.pwm === 0 )  
+      || ( this.pwm === slotPwm   && slotPwm  === 1 )  
+      || ( slotType === this.type && this.type == 'digital' && this.pwm == 1 )
+    
+    ){
+
       m+= '<li comp="'+this.comp+'">';
 
         m+= '<img class="component-icon" src="../global/img/comp/'+this.img+'.svg"/>';
@@ -423,7 +431,36 @@ function setupSlotControls( slot , comp ){
     break;
 
     case 'LED':
+    case 'Servo Motor':
 
+      m+= '<div class="value-container">';
+        m+= '<div class="value">10</div>'
+      m+= '</div>';
+
+      /*
+      m+= '<div class="value-bar-container controlable">';
+        m+= '<div class="value-bar">';
+          m+= '<div class="knob"></div>';
+        m+='</div>';
+      m+= '</div>';
+
+      */
+
+      m+= '<input type="range" min="0" max="1000" value="500">'
+
+      m+= '<div class="real-value"></div>';
+
+    break;
+
+    case 'Buzzer':
+
+      m+= '<div class="value-container">';
+        m+= '<div class="value">10</div>'
+      m+= '</div>';
+
+      m+= '<div class="button">Sound</div>'
+
+      m+= '<div class="real-value"></div>';
 
     break;
 
@@ -437,67 +474,49 @@ function setupSlotControls( slot , comp ){
 
   slot.find('.info').append(m);
 
-
-  // include menus for control
-  /*
-  var a = '<div class="extra-settings">';
-        a+= '<div class="dropdown presets">';
-          
-          a+= '<div class="selection">';
-          a+= '</div>';
-
-          a+= '<ul>';
-          a+= '</ul>';
-
-        a+= '</div>';
-
-      a+= '</div>';
-
-  */
   var a = '<div class="extra-settings">';
         a+= '<select>';
         a+= '</select>';
-
       a+= '</div>';
 
   slot.append( a );
 
 
   // insert content into menus
-  var presetsList;
-
-  switch( comp ){
-
-    case 'Potentiometer':
-
-      presetsList = ['Data','Angle'];
-
-    break;
-
-    default:
-
-      a+= 'not ready yet…';
-
-    break;
-  }
-
+  var presetsList = componentTypeObject.presets;
  
-  var presetsDOM = slot.find('.presets');
 
   presetsList.forEach(function( pre ){
-
-    //var li = '<li>'+pre+'</li>';
-    //presetsDOM.find('ul').append(li);
 
     var li = '<option>'+pre+'</option>';
     slot.find('select').append(li);
 
   });
 
-  //presetsDOM.find('li').eq(0).addClass('selected');
-  //presetsDOM.find('.selection').text( presetsList[0] );
+}
 
 
+function getSlotControlSelection(){
+  $(document).on("change",'.extra-settings select',function(){
+
+      var slotDOM = $(this).closest('.slot');
+      var valueSelected = this.value;
+
+      slotDOM.attr( 'mode' , valueSelected );
+
+      /*
+      var slotObj;
+      for(var i = 0; i < allSlots.length; i++){
+        var curr = allSlots[i];
+        if(curr.slot == slotDOM.attr('slot') ){
+          slotObj = curr;
+        }
+      }
+
+      window[ slotObj.var ].trigger('change');
+      */
+
+  });
 }
 
 
@@ -528,6 +547,31 @@ function buildLiveViewDisplayListener( slotObj ){
       window[ slotObj.var ].on("change", function(val) {
         potentiometer_LiveViewDisplayListener( val , slotObj.slot );
       });
+
+    break;
+
+    // Outputs 
+
+    case 'LED':
+
+      window[ slotObj.var ] = new five.Led( slotObj.slot );
+
+      led_LiveViewDisplayControl( slotObj );
+
+    break;
+
+    case 'Servo Motor':
+
+      window[ slotObj.var ] = new five.Servo( slotObj.slot );
+
+      servo_LiveViewDisplayControl( slotObj );
+
+    break;
+
+    case 'Buzzer':
+
+      window[ slotObj.var ] = new five.Piezo( slotObj.slot );
+      buzzer_LiveViewDisplayControl( slotObj );
 
     break;
 
@@ -566,15 +610,186 @@ function potentiometer_LiveViewDisplayListener( val , slot ){
     }
   });
 
-  val = 1023 - val;
-  var valPercentage =  100 * (val/1024);
+  var mode = slotDOM.attr('mode');
 
-  slotDOM.find('.value').html( Math.round( valPercentage ) +"%" );
+  var valMax = 1023;
+  var maxDeg = 270;
+
+  val = valMax - val;
+
+  var valPercentage =  100 * (val/valMax);
   slotDOM.find('.real-value').html( val );
   slotDOM.find('.value-bar').css( 'width' , valPercentage+"%" );
+
+  switch(mode){
+
+    case 'Data':
+    default:
+      slotDOM.find('.value').html( val );
+    break;
+
+    case 'Percentage':
+      slotDOM.find('.value').html( Math.round( valPercentage ) +"%" );
+    break;
+
+    case 'Angle':
+      var rotationVal = Math.round( val/1023 * maxDeg );///10;
+      slotDOM.find('.value').html( rotationVal + '°' );
+    break;
+
+  }
+}
+
+
+// Actuators -----------------
+
+function led_LiveViewDisplayControl( slotObj , pwm ){
+  
+  var slotDOM;
+  $('.slot').each(function(){
+    if( $(this).attr('slot') == slotObj.slot ){
+      slotDOM = $(this);
+    }
+  });
+
+
+  var valMax = 255;
+
+  updateVal( Math.round( valMax/2 ) );
+
+  function updateVal( val ){
+
+    var valPercentage =  100 * (val/valMax);
+
+    slotDOM.find('.value').html( val );
+    slotDOM.find('.real-value').html( val );
+    slotDOM.find('.value-bar').css( 'width' , valPercentage+'%' );
+
+    window[ slotObj.var ].brightness(val);
+
+  }
+
+  $(document).on('input', 'input[type=range]' , function() {
+
+    var currVal = Math.round( $(this).val()/1000 * valMax );
+
+    updateVal(currVal);
+  });
+
+
+  /*
+  var newPos = 0;
+  const knob = slotDOM.find('.knob');
+
+  slotDOM.on('mousedown','.knob',function(){
+
+    newPos = parseInt(knob.css('left')) + 2;
+
+    knob.css( 'left' , newPos );
+
+  });
+  slotDOM.on('mouseup','.knob',function(){
+
+    var barWidth = $('.value-bar').outerWidth();
+
+    var newVal = Math.round( (newPos/barWidth)*valMax );
+
+    updateVal( newVal );
+
+  });
+  */
   
 }
 
+function buzzer_LiveViewDisplayControl( slotObj  ){
+  
+  var slotDOM;
+  $('.slot').each(function(){
+    if( $(this).attr('slot') == slotObj.slot ){
+      slotDOM = $(this);
+    }
+  });
+
+  $(document).on('click', '.button' , function() {
+
+    window[ slotObj.var ].play({
+      tempo: 150, // Beats per minute, default 150
+      song: [ // An array of notes that comprise the tune
+        [ "c4", 1 ], // Each element is an array in which 
+                     // [0] is the note to play and 
+                     // [1] is the duration in "beats" (tempo, above)
+        [ "e4", 2 ],
+        [ "g4", 3 ],
+        [ null, 4 ] // null indicates "no tone" for the beats indicated
+      ]
+    });
+
+  });
+  
+}
+
+
+
+
+function servo_LiveViewDisplayControl( slotObj , pwm ){
+  
+  var slotDOM;
+  $('.slot').each(function(){
+    if( $(this).attr('slot') == slotObj.slot ){
+      slotDOM = $(this);
+    }
+  });
+
+
+  var valMax = 180;
+  var maxDeg = 180;
+
+  updateVal( Math.round( valMax/2 ) );
+
+  function updateVal( val ){
+
+    var valPercentage =  100 * (val/valMax);
+
+    slotDOM.find('.real-value').html( val );
+    // slotDOM.find('.value-bar').css( 'width' , valPercentage+'%' );
+
+    window[ slotObj.var ].to(val);
+
+    var mode = slotDOM.attr('mode');
+    switch(mode){
+
+      case 'Data':
+      default:
+        slotDOM.find('.value').html( val );
+      break;
+
+      case 'Percentage':
+        slotDOM.find('.value').html( Math.round( valPercentage ) +"%" );
+      break;
+
+      case 'Angle':
+        var rotationVal = Math.round( val/valMax * maxDeg*10 )/10;
+        slotDOM.find('.value').html( rotationVal + '°' );
+      break;
+
+    }
+
+  }
+
+  $(document).on('input', 'input[type=range]' , function() {
+
+    var currVal = Math.round( $(this).val()/1000 * valMax );
+
+    updateVal(currVal);
+  });
+
+
+}
+
+
+
+
+// Animation parts -----------------------------------------
 
 function slotHeightAdjust( slot , dir ){
 
@@ -610,6 +825,7 @@ $(document).ready(function(){
   // Slots
   initSlots();
   buttonEventsLiveViewSlots();
+  getSlotControlSelection();
 
   blokdotsConnectionIndicator( connected );
 

@@ -319,7 +319,7 @@ header {
 		background: $color-gray-7;
 		border-radius: 4px;
 
-		overflow: hidden;
+		//overflow: hidden;
 
 		.value-bar {
 			height: 100%;
@@ -327,7 +327,28 @@ header {
 			background: $color-brand-interactive;
 
 			transition: width $time-lv-valuebar;
+
+			.knob {
+				position: absolute;
+				width: 10px;
+				height: 10px;
+				border-radius: 1000px;
+				background: $color-brand-interactive;
+				top: calc( 50% - 5px );
+				margin-left: -5px;
+				left: 0;
+			}
 		}
+
+		&.controlable {
+
+		}
+	}
+
+	input[type=range] {
+		
+		position: absolute;
+		top: calc( 60% - 1px );
 	}
 
 	.real-value {
