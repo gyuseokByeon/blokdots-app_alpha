@@ -32,6 +32,13 @@ var connected = false;
 
 
 
+var consoleColors = {
+  'system'    : '#c1c1c1',
+  'alert'     : '#E74C3C',
+  'good'      : '#1abc9c'
+}
+
+
 // board setup ------------------------------------------- 
 
 var vID = '2a03'; 	// Vendor ID of Arduino -> USB
@@ -61,7 +68,7 @@ usb.on('attach', function( device ) {
 	blokdots = usb.findByIds('0x'+vID, '0x'+pID);
 
 	if ( device == blokdots ){
-		console.log('%cblokdots Connected 🎛','color: #1abc9c;');
+		console.log('%cblokdots Connected 🎛','color: '+consoleColors.good+';');
 		//if ( MYport == null ) { 
 			initPort(); 
 		//}
@@ -72,10 +79,9 @@ usb.on('attach', function( device ) {
 // Do sth when blokdots gets detached
 usb.on('detach', function( device ) { 
 	if ( device == blokdots ){
-		console.log('%cblokdots Disconnected 🔌','color: #E74C3C;');
+		console.log('%cblokdots Disconnected 🔌','color: '+consoleColors.alert+';');
 		// io.emit('blokdotsDisconnect');
 	}
-
 	ipcRenderer.send('detached');
 	connected = false;
 	blokdotsConnectionIndicator( connected );
@@ -94,14 +100,14 @@ function initPort(){
 			if(sPort.vendorId == vID){
 				
 				MYport = sPort.comName.toString();
-				console.log('%cFound it -> '+MYport,'color: #c1c1c1;');
+				console.log('%cFound it -> '+MYport,'color: '+consoleColors.system+';');
 								
 				/*
 				port = new SerialPort( MYport, {
 					baudRate: 9600
 				});
 				*/
-				console.log('%cSerialPort is set ✔️','color: #c1c1c1;');
+				console.log('%cSerialPort is set ✔️','color: '+consoleColors.system+';');
 				
 				initBoard();
 				return;
@@ -114,6 +120,8 @@ function initPort(){
 function initBoard(){
 
 	if( board ){
+
+		// board.io.reset();
 
 	}else{
 		// setup board
@@ -129,8 +137,7 @@ function initBoard(){
 		ipcRenderer.send('attached');
 		connected = true;
 		blokdotsConnectionIndicator( connected );
-		console.log('%cBoard is ready to go 🚀','color: #1abc9c;');
-
+		console.log('%cBoard is ready to go 🚀','color: '+consoleColors.good+';');
 	});
 
 	board.on("close", function () {

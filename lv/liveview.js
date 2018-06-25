@@ -6,8 +6,8 @@ var allSlots = [];
 function initSlots(){
 
 
-  const Slots = [2,3,4,5,6,7,8,'A0','A1','A2','A3'];
-  const pwmSlots = [3,5,6];
+  const Slots = boardList['Grove Arduino Uno'].Slots;
+  const pwmSlots = boardList['Grove Arduino Uno'].pwm;
   const Container = $('#slot-wrapper section');
 
 
@@ -58,6 +58,36 @@ function initSlots(){
 
 }
 
+
+function findSlotDOM( slotNum ){
+
+  var slotDOM;
+  $('.slot').each(function(){
+    if( $(this).attr('slot') == slotNum ){
+      slotDOM = $(this);
+    }
+  });
+
+  return slotDOM;
+}
+
+
+function findSlotObj( slotDOM ){
+
+  var slotObj;
+  //  find the equivalent slot object
+
+  for(var i = 0; i < allSlots.length; i++){
+    var curr = allSlots[i];
+    if(curr.slot == slotDOM.attr('slot') ){
+      slotObj = curr;
+    }
+  }
+
+  return slotObj;
+}
+
+
 // displays if board is connected ----------------------------
 
 
@@ -86,34 +116,33 @@ function blokdotsConnectionIndicator( bool ){
 
 // apply new components to board ------------------------------------
 
-function connectSlot( slot ){
+function connectSlot( slotDOM ){
 
 
   // get slot number and check if int
-  var groveSlot = slot.attr('slot');
+  var groveSlot = slotDOM.attr('slot');
   if( groveSlot.indexOf('A') < 0 ){
     groveSlot = parseInt(groveSlot);
   }
 
-  slotState( slot , 'setup' );
+  slotState( slotDOM , 'setup' );
 
-  appendSetupComponentList( slot , groveSlot );
+  appendSetupComponentList( slotDOM , groveSlot );
 
-  slotHeightAdjust( slot , 'open' );
+  slotHeightAdjust( slotDOM , 'open' );
 }
 
 
 
-function disconnectSlot(slot){
+function disconnectSlot( slotDOM ){
 
-  slotState( slot , 'empty' );
-
+  slotState( slotDOM , 'empty' );
 
   // clear database again
   for(var i = 0; i < allSlots.length; i++){
 
     var curr = allSlots[i];
-    if(curr.slot == slot){
+    if(curr.slot == slotDOM.attr('slot')){
       
       curr.state  = 'empty';
       curr.var    = null;
@@ -128,10 +157,12 @@ function disconnectSlot(slot){
 
 // Slot states
 
-function slotState( slot , state ){
+function slotState( slotDOM , state ){
 
-  slotHeightAdjust( slot , 'close' );
-  slot.removeClass('empty setup inUse');
+  var hadComponent = slotDOM.hasClass('inUse');
+
+  slotHeightAdjust( slotDOM , 'close' );
+  slotDOM.removeClass('empty setup inUse');
   $('.setup-component-list').remove();
 
   switch (state){
@@ -139,9 +170,16 @@ function slotState( slot , state ){
     case 'empty':
 
       // remove possible other elements
-      slot.find('.info').html('// Not Connected');
-      slot.find('.use_btn').addClass('ghost-dark').removeClass('ghost-light').text('Setup');
-      slot.find('.close').remove();
+      slotDOM.find('.info').html('// Not Connected');
+      slotDOM.find('.use_btn').addClass('ghost-dark').removeClass('ghost-light').text('Setup');
+      slotDOM.find('.close').remove();
+
+      if( hadComponent ){
+        slotDOM.find('.component-icon').remove();
+        slotDOM.find('.type-indicator').remove();
+        slotDOM.find('.more').remove();
+        slotDOM.find('.extra-settings').remove();
+      }
 
     break;
     case 'setup':
@@ -149,37 +187,29 @@ function slotState( slot , state ){
       // just allow one slot to be in setup mode
       slotState( $('.slot.setup') , 'empty' );
 
-      slot.find('.info').text('Select component from list');
-      slot.find('.use_btn').text('Cancel');
-      slot.find('.use_btn').removeClass('ghost-dark').addClass('ghost-light');
+      slotDOM.find('.info').text('Select component from list');
+      slotDOM.find('.use_btn').text('Cancel');
+      slotDOM.find('.use_btn').removeClass('ghost-dark').addClass('ghost-light');
 
     break;
     case 'inUse':
 
-      var slotObj;
+      var slotObj = findSlotObj( slotDOM );
 
-      // find the equivalent slot object
-      for(var i = 0; i < allSlots.length; i++){
-        var curr = allSlots[i];
-        if(curr.slot == slot.attr('slot') ){
-          slotObj = curr;
-        }
-      }
+      slotDOM.find('.info').empty();
+      slotDOM.find('.use_btn').removeClass('ghost-light').text('Use');
 
-      slot.find('.info').empty();
-      slot.find('.use_btn').removeClass('ghost-light').text('Use');
+      var close = '<div class="close"></div>'
+      slotDOM.find('.controls').append(close);
 
-      var close = '<div class="close">x</div>'
-      slot.find('.controls').append(close);
-
-      setupSlotControls( slot , slotObj.comp );
+      setupSlotControls( slotDOM , slotObj.comp );
       buildLiveViewDisplayListener( slotObj );
 
     break;
 
   }
 
-  slot.addClass(state);
+  slotDOM.addClass(state);
 
 }
 
@@ -246,12 +276,12 @@ function buttonEventsLiveViewSlots(){
   // use button within 
   $('.slot').on('click','.use_btn',function(){
 
-    const slot = $(this).closest('.slot');
+    const slotDOM = $(this).closest('.slot');
 
-    if( slot.hasClass('empty') ){
-      connectSlot( slot );
-    }else if( slot.hasClass('setup') ){
-      disconnectSlot( slot );
+    if( slotDOM.hasClass('empty') ){
+      connectSlot( slotDOM );
+    }else if( slotDOM.hasClass('setup') ){
+      disconnectSlot( slotDOM );
     }
 
   });
@@ -307,7 +337,7 @@ function buttonEventsLiveViewSlots(){
 // bind slot to johnny-five object
 function setupComponent( slot , comp ){
 
-  console.log('%c'+slot + ' -> ' + comp , 'color: #c1c1c1;' );
+  console.log('%c'+slot + ' -> ' + comp , 'color: '+consoleColors.system+';' );
   
   // build correct value for slot
   if ( $.isNumeric( slot ) ){
@@ -324,34 +354,6 @@ function setupComponent( slot , comp ){
 
   // generate a variable for the slot
   var varname = 'slot'+slot;
-
-  switch( comp ){
-
-    case 'Button':
-
-      window[varname] = new five.Button( slot );
-
-    break;
-
-    case 'LED':
-
-      window[varname] = new five.Led( slot );
-
-    break;
-
-    case 'Potentiometer':
-
-      window[varname] = new five.Sensor( slot );
-
-    break;
-
-    default:
-
-      console.log('sorry, does not exist yet…');
-
-    break;
-  }
-
 
   for(var i = 0; i < allSlots.length; i++){
 
@@ -371,28 +373,31 @@ function setupComponent( slot , comp ){
 function disconnectComponent( slotNum ){
 
   // find the equivalent slot object
-  var slotObj;
-  for(var i = 0; i < allSlots.length; i++){
-    var curr = allSlots[i];
-    if(curr.slot == slotNum ){
-      slotObj = curr;
+  var slotDOM = findSlotDOM( slotNum );
+  var slotObj = findSlotObj( slotDOM );
+
+  // console.log( window[ slotObj.var ] )
+
+  if( window[ slotObj.var ] ){
+
+    /*
+    if( slotObj.dir == 'in' ){
+      window[ slotObj.var ].disable()
     }
+    */
+    delete window[ slotObj.var ];
+
   }
 
-  console.log( window[ slotObj.var ] )
+  console.log('%cdisconnected slot '+slotNum,'color: '+consoleColors.system+';');
 
-  window[ slotObj.var ].disable()
-
-  delete window[ slotObj.var ];
-
-  console.log( window[ slotObj.var ] )
-  console.log('disconnected slot '+slotNum);
+  disconnectSlot( slotDOM );
 
 }
 
 
 // build html markup to insert in slot -> returns string
-function setupSlotControls( slot , comp ){
+function setupSlotControls( slotDOM , comp ){
 
   // find the values for this component type
   var componentTypeObject;
@@ -404,13 +409,13 @@ function setupSlotControls( slot , comp ){
   }
 
   var img = '<img class="component-icon" src="../global/img/comp/'+componentTypeObject.image_url+'.svg"/>';
-  slot.find('.controls').append( img );
+  slotDOM.find('.controls').append( img );
 
   var typeIndicator = '<div class="type-indicator '+componentTypeObject.type+' '+componentTypeObject.dir+'">'+componentTypeObject.dir+'</div>';
-  slot.find('.controls').append( typeIndicator );
+  slotDOM.find('.controls').append( typeIndicator );
 
   var moreArrow = '<div class="more"></div>';
-  slot.find('.controls').append( moreArrow );
+  slotDOM.find('.controls').append( moreArrow );
 
   var m = '';
 
@@ -430,27 +435,45 @@ function setupSlotControls( slot , comp ){
 
     break;
 
-    case 'LED':
+    //  'LED':
     case 'Servo Motor':
 
       m+= '<div class="value-container">';
         m+= '<div class="value">10</div>'
       m+= '</div>';
 
-      /*
-      m+= '<div class="value-bar-container controlable">';
-        m+= '<div class="value-bar">';
-          m+= '<div class="knob"></div>';
-        m+='</div>';
-      m+= '</div>';
-
-      */
+      
+      // m+= '<div class="value-bar-container range-slider"></div>';
 
       m+= '<input type="range" min="0" max="1000" value="500">'
 
       m+= '<div class="real-value"></div>';
 
     break;
+
+    case 'LED':
+
+      if ( parseInt( slotDOM.attr('pwm') ) ) {
+
+        // if is pwm pin
+
+        m+= '<div class="value-container">';
+        m+= '<div class="value">10</div>'
+        m+= '</div>';
+
+        m+= '<input type="range" min="0" max="1000" value="500">'
+
+        m+= '<div class="real-value"></div>';
+
+      }else{
+
+        m+= 'no PWM';
+
+      }
+
+
+    break;
+
 
     case 'Buzzer':
 
@@ -472,14 +495,14 @@ function setupSlotControls( slot , comp ){
   }
 
 
-  slot.find('.info').append(m);
+  slotDOM.find('.info').append(m);
 
   var a = '<div class="extra-settings">';
         a+= '<select>';
         a+= '</select>';
       a+= '</div>';
 
-  slot.append( a );
+  slotDOM.append( a );
 
 
   // insert content into menus
@@ -489,7 +512,7 @@ function setupSlotControls( slot , comp ){
   presetsList.forEach(function( pre ){
 
     var li = '<option>'+pre+'</option>';
-    slot.find('select').append(li);
+    slotDOM.find('select').append(li);
 
   });
 
@@ -556,7 +579,9 @@ function buildLiveViewDisplayListener( slotObj ){
 
       window[ slotObj.var ] = new five.Led( slotObj.slot );
 
-      led_LiveViewDisplayControl( slotObj );
+      var slotDOM = findSlotDOM( slotObj.slot );
+
+      led_LiveViewDisplayControl( slotObj , parseInt( slotDOM.attr('pwm') ) );
 
     break;
 
@@ -586,14 +611,9 @@ function buildLiveViewDisplayListener( slotObj ){
 
 // Functions for different component types -------------------------------------
 
-function button_LiveViewDisplayListener( val , slot ){
+function button_LiveViewDisplayListener( val , slotNum ){
 
-  var slotDOM;
-  $('.slot').each(function(){
-    if( $(this).attr('slot') == slot ){
-      slotDOM = $(this);
-    }
-  });
+  var slotDOM = findSlotDOM( slotNum );
 
   slotDOM.find('.value').html( val );
   slotDOM.find('.real-value').html( val );
@@ -645,36 +665,38 @@ function potentiometer_LiveViewDisplayListener( val , slot ){
 
 function led_LiveViewDisplayControl( slotObj , pwm ){
   
-  var slotDOM;
-  $('.slot').each(function(){
-    if( $(this).attr('slot') == slotObj.slot ){
-      slotDOM = $(this);
+  var slotDOM = findSlotDOM( slotObj.slot );
+
+  if( pwm ){
+
+    var valMax = 255;
+
+    updateVal( Math.round( valMax/2 ) );
+
+    function updateVal( val ){
+
+      var valPercentage =  100 * (val/valMax);
+
+      slotDOM.find('.value').html( val );
+      slotDOM.find('.real-value').html( val );
+      slotDOM.find('.value-bar').css( 'width' , valPercentage+'%' );
+
+      window[ slotObj.var ].brightness(val);
+
     }
-  });
 
+    slotDOM.on('input', 'input[type=range]' , function() {
 
-  var valMax = 255;
+      var currVal = Math.round( $(this).val()/1000 * valMax );
+      updateVal(currVal);
+      
+    });
 
-  updateVal( Math.round( valMax/2 ) );
+  }else{
 
-  function updateVal( val ){
-
-    var valPercentage =  100 * (val/valMax);
-
-    slotDOM.find('.value').html( val );
-    slotDOM.find('.real-value').html( val );
-    slotDOM.find('.value-bar').css( 'width' , valPercentage+'%' );
-
-    window[ slotObj.var ].brightness(val);
+    window[ slotObj.var ].on();
 
   }
-
-  $(document).on('input', 'input[type=range]' , function() {
-
-    var currVal = Math.round( $(this).val()/1000 * valMax );
-
-    updateVal(currVal);
-  });
 
 
   /*
@@ -733,13 +755,8 @@ function buzzer_LiveViewDisplayControl( slotObj  ){
 
 function servo_LiveViewDisplayControl( slotObj , pwm ){
   
-  var slotDOM;
-  $('.slot').each(function(){
-    if( $(this).attr('slot') == slotObj.slot ){
-      slotDOM = $(this);
-    }
-  });
-
+  var slotDOM = findSlotDOM( slotObj.slot );
+  var slider  = slotDOM.find('input[type=range]');
 
   var valMax = 180;
   var maxDeg = 180;
@@ -776,13 +793,16 @@ function servo_LiveViewDisplayControl( slotObj , pwm ){
 
   }
 
-  $(document).on('input', 'input[type=range]' , function() {
+
+  slotDOM.on('input', 'input[type=range]' , function() {
 
     var currVal = Math.round( $(this).val()/1000 * valMax );
 
     updateVal(currVal);
   });
 
+
+  // initRangeSlider( slotDOM.find('.range-slider') );
 
 }
 
@@ -791,25 +811,70 @@ function servo_LiveViewDisplayControl( slotObj , pwm ){
 
 // Animation parts -----------------------------------------
 
-function slotHeightAdjust( slot , dir ){
+function slotHeightAdjust( slotDOM , dir ){
 
-  var newHeight = slot.find('.controls').outerHeight();
+  var newHeight = slotDOM.find('.controls').outerHeight();
   
   if( dir == 'open' ){
 
     var obj;
 
-    if( slot.hasClass('setup') ){
-      obj = slot.find('.setup-component-list');
-    }else if( slot.hasClass('inUse') ){
-      obj = slot.find('.extra-settings');
+    if( slotDOM.hasClass('setup') ){
+      obj = slotDOM.find('.setup-component-list');
+    }else if( slotDOM.hasClass('inUse') ){
+      obj = slotDOM.find('.extra-settings');
     }
 
     newHeight += obj.outerHeight();
 
   }
 
-  slot.css('height',newHeight);
+  slotDOM.css('height',newHeight);
+
+}
+
+
+
+// inputs
+function initRangeSlider( sliderDOM ){
+
+  var m = '<div class="value-bar">';
+        m+= '<div class="knob"></div>';
+      m+= '</div>';
+
+  sliderDOM.append(m);
+
+  const knob = sliderDOM.find('.knob');
+  const valueBar = sliderDOM.find('.value-bar');
+
+  var value = 0;
+  var sliderWidth = sliderDOM.outerWidth();
+
+  var isDown = false
+
+  sliderDOM.on('mousedown',knob,function( evt ){
+    isDown = true;
+  });
+  sliderDOM.on('mouseup',knob,function( evt ){
+    isDown = false;
+  });
+  sliderDOM.on('mousemove',knob,function( evt ){
+
+    if(isDown){
+      var offsetX = sliderDOM.offset().left;
+      sliderWidth = sliderDOM.outerWidth();
+      var newVal = offsetX - evt.pageX;
+    
+      value = (newVal/sliderWidth) *-100;
+
+      if ( value >= 100 ) { value=100; }
+      if ( value <= 0 ) { value=0; }
+
+      valueBar.css('width',value+'%');  
+      return value;
+    }
+
+  });
 
 }
 

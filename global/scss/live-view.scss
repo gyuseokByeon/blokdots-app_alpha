@@ -87,7 +87,7 @@ header {
 			font-size: $font-size-tiny;
 			position: absolute;
 			left: 20px;
-			top: 10px;
+			top: 22px;
 		}
 
 		.number {
@@ -122,9 +122,17 @@ header {
 			position: absolute;
 			top: 5px;
 			right: 5px;
-			font-family: $font-family-mono;
-			color: $color-font-med;
-			font-size: $font-size-small;
+			width: 10px;
+			height: 10px;
+			background: url('../img/icons/close.svg');
+			background-size: contain;
+			background-position: center center;
+			background-repeat: no-repeat;
+			opacity: 0.3;
+
+			&:hover {
+				opacity: 1;
+			}
 		}
 
 		.more {
@@ -335,13 +343,15 @@ header {
 				border-radius: 1000px;
 				background: $color-brand-interactive;
 				top: calc( 50% - 5px );
-				margin-left: -5px;
-				left: 0;
+				margin-right: -5px;
+				right: 0;
 			}
 		}
 
-		&.controlable {
-
+		&.range-slider {
+			.value-bar {
+				transition: none;
+			}	
 		}
 	}
 
@@ -371,7 +381,7 @@ header {
 // Overall fixes ----------------------
 
 #live-view section .separator:first-child {
-	border-top: none;
+	border: none;
 }
 
 

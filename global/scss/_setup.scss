@@ -1,0 +1,219 @@
+
+#setup {
+
+	border-right: 1px solid $color-gray-6;
+	width: $width-project-setup;
+	height: 100vh;
+
+}
+
+
+header {
+    -webkit-app-region:drag;
+
+	width: 100%;
+	height: $height-project-header;
+	background: $project-setup-color-bg;
+	
+	.title {
+		padding: 3px 0 6px 70px;
+		padding-left: 0;
+		text-align: center;
+	}
+}
+
+
+
+// Slots
+#setup #components #slots {
+	height: calc( 100vh - #{$height-project-header} - 30px );
+	overflow-y: scroll;
+}
+
+
+.slot {
+
+	overflow: hidden;
+	height: $height-project-slot;
+	transition: height $time-project-slot;
+
+	&:first-child {
+		.controls {
+			border-top: none;
+		}
+	}
+
+	.controls {
+
+		height: $height-project-slot;
+		border-top: solid 1px $color-gray-6;
+
+		.indicator {
+			position: absolute;
+			width: 6px;
+			height: 6px;
+			left: 10px;
+			top: calc( 50% - 3px );
+			border: solid 1px $color-gray-6;
+			border-radius: 100px;
+		}
+
+		.pwm-indicator {
+			font-family: $font-family-mono;
+			color: $color-font-disabled;
+			font-size: $font-size-tiny;
+			position: absolute;
+			left: 20px;
+			top: 22px;
+		}
+
+		.number {
+			position: absolute;
+			font-family: $font-family-mono;
+			left: 20px;
+			top: 40px;
+		}
+
+		.info {
+			height: 100%;
+			position: absolute;
+			left: $margin-project-slot-from-left;
+			right: $margin-project-slot-from-right;
+		}
+
+		.use_btn {
+			position: absolute;
+			top: calc( 50% - 10px );
+			right: 40px;
+		}
+
+		img.component-icon {
+			position: absolute;
+			width: 70px;
+			height: 70px;
+			left: 42px;
+			top: calc( 50% - 35px );
+		}
+
+		.close {
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			width: 10px;
+			height: 10px;
+			background: url('../img/icons/close.svg');
+			background-size: contain;
+			background-position: center center;
+			background-repeat: no-repeat;
+			opacity: 0.3;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+
+		.type-indicator {
+			font-family: $font-family-mono;
+			color: $color-font-med;
+			font-size: $font-size-tiny;
+			position: absolute;
+			left: 17px;
+			top: 50px;
+
+			&:before {
+				content: '';
+				width: 7px;
+				height: 3px;
+				display: inline-block;
+				margin-right: 2px;
+				background-size: 100% 100%;
+				background-position: center center;
+				background-repeat: no-repeat;
+				vertical-align: 1px;
+				opacity: 0.5;
+			}
+
+			&.analog {
+				&:before {
+					background-image: url('../img/icons/analog_indicator.svg');
+				}
+			}
+			&.digital {
+				&:before {
+					background-image: url('../img/icons/digital_indicator.svg');
+				}
+			}
+		}
+	}
+
+	&.empty {
+			
+		.controls {
+
+			background: $project-color-slot-empty;
+
+			.indicator {
+				background: $color-gray-6;
+			}
+
+			.info {
+				display: flex;
+				align-items: center;
+				color: $color-font-disabled;
+				font-size: $font-size-small;
+				font-family: $font-family-mono;
+			}
+
+			.use_btn {
+				position: absolute;
+				top: calc( 50% - 10px );
+				right: 20px;
+				width: 70px;
+			}
+		}
+	}
+
+	&.setup {
+
+		.controls {
+
+			background: $color-brand-interactive;
+			color: $color-font-light;
+
+			.info {
+				display: flex;
+				align-items: center;
+			}
+			.use_btn {
+				position: absolute;
+				top: calc( 50% - 10px );
+				right: 20px;
+				width: 70px;
+			}
+			.indicator {
+				border-color: $color-white;
+			}
+			.pwm-indicator {
+				color: inherit;
+			}
+		}
+	}
+
+	&.settings-shown .more {
+		transform: rotate(180deg);
+	}
+
+
+}
+
+
+
+// Change basic stuff
+#setup section .separator {
+	background: $color-white;
+}
+
+
+
+

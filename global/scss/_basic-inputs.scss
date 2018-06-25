@@ -15,24 +15,27 @@ input[type=range] {
 	appearance: none;
 
 	width: 100%;
+}
+
+input[type=range]::-webkit-slider-thumb {
+
+	-webkit-appearance: none;
+	appearance: none;
+
+	width: 10px;
+	height: 10px;
+	margin-top: -4px;
+	border-radius: 1000px;
+	background: $color-brand-interactive;
+
+}
+input[type=range]::-webkit-slider-runnable-track {
 	height: 2px;
 	background: $color-gray-7;
 	border-radius: 4px;
-
-	&:webkit-slider-thumb {
-
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-
-		width: 10px;
-		height: 10px;
-		margin-top: -5px;
-		border-radius: 1000px;
-		background: $color-brand-interactive;
-
-	}
 }
+
+
 
 
 .btn {

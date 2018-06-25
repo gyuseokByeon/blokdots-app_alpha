@@ -1,0 +1,37 @@
+
+
+// live view layourt
+@import "variables";
+
+
+
+// special live-view vars: --------------
+
+
+// colours
+$project-setup-color-bg:			$color-gray-2;
+
+$project-color-slot-empty:			$color-gray-5;
+
+// sizes
+$width-project-setup:				300px;
+
+$height-project-header:				136px;			
+
+
+$height-project-slot:				100px;
+$margin-project-slot-from-left:		130px;
+$margin-project-slot-from-right: 	55px;
+//times
+$time-project-slot:					0.3s;
+
+
+
+
+body {
+	background: $color-white;
+}
+
+
+
+@import "setup";

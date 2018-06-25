@@ -47,7 +47,7 @@ header {
       font-size: 8px;
       position: absolute;
       left: 20px;
-      top: 10px; }
+      top: 22px; }
     .slot .controls .number {
       position: absolute;
       font-family: "Roboto Mono", monospace;
@@ -72,9 +72,15 @@ header {
       position: absolute;
       top: 5px;
       right: 5px;
-      font-family: "Roboto Mono", monospace;
-      color: gray;
-      font-size: 10px; }
+      width: 10px;
+      height: 10px;
+      background: url("../img/icons/close.svg");
+      background-size: contain;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0.3; }
+      .slot .controls .close:hover {
+        opacity: 1; }
     .slot .controls .more {
       width: 12px;
       height: 12px;
@@ -196,8 +202,10 @@ header {
       border-radius: 1000px;
       background: #1ABC9C;
       top: calc( 50% - 5px );
-      margin-left: -5px;
-      left: 0; }
+      margin-right: -5px;
+      right: 0; }
+  .slot .controls .info .value-bar-container.range-slider .value-bar {
+    transition: none; }
 .slot .controls .info input[type=range] {
   position: absolute;
   top: calc( 60% - 1px ); }
@@ -213,6 +221,6 @@ header {
     content: 'current value: '; }
 
 #live-view section .separator:first-child {
-  border-top: none; }
+  border: none; }
 
 /*# sourceMappingURL=live-view.css.map */
