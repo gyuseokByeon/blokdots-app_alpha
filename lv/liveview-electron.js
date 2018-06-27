@@ -145,3 +145,44 @@ function initBoard(){
 	})
 	
 }
+
+
+
+function ipcCommunicationInitLV(){
+
+	ipcRenderer.on('useProject', function(evt,slotNum) {
+
+		var slotObj;
+		for(var i = 0; i < allSlots.length; i++){
+			var curr = allSlots[i];
+			if(curr.slot == slotNum ){
+			  slotObj = curr;
+			}
+		}
+		ipcRenderer.send('use', slotObj );
+
+	});
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

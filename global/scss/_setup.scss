@@ -4,6 +4,7 @@
 	border-right: 1px solid $color-gray-6;
 	width: $width-project-setup;
 	height: 100vh;
+	background: $project-setup-color-bg;
 
 }
 
@@ -13,7 +14,6 @@ header {
 
 	width: 100%;
 	height: $height-project-header;
-	background: $project-setup-color-bg;
 	
 	.title {
 		padding: 3px 0 6px 70px;
@@ -71,7 +71,7 @@ header {
 			position: absolute;
 			font-family: $font-family-mono;
 			left: 20px;
-			top: 40px;
+			top: calc( 50% - 0.7em );
 		}
 
 		.info {
@@ -93,6 +93,7 @@ header {
 			height: 70px;
 			left: 42px;
 			top: calc( 50% - 35px );
+			opacity: 0.8;
 		}
 
 		.close {
@@ -117,21 +118,24 @@ header {
 			font-family: $font-family-mono;
 			color: $color-font-med;
 			font-size: $font-size-tiny;
+
 			position: absolute;
-			left: 17px;
-			top: 50px;
+			top: calc( 50% - 0.7em );
 
 			&:before {
-				content: '';
-				width: 7px;
-				height: 3px;
+				content: 'Type ';
+				width: 34px;
+				//height: 3px;
 				display: inline-block;
 				margin-right: 2px;
-				background-size: 100% 100%;
-				background-position: center center;
+				background-size: 7px 3px;
+				background-position: center right;
 				background-repeat: no-repeat;
 				vertical-align: 1px;
-				opacity: 0.5;
+
+				font-family: $font-family-reg;
+				color: $color-font;
+				font-style: italic;
 			}
 
 			&.analog {
@@ -144,6 +148,24 @@ header {
 					background-image: url('../img/icons/digital_indicator.svg');
 				}
 			}
+		}
+
+		.varLabel {
+			
+			font-family: $font-family-mono;
+			color: $color-font-disabled;
+			font-size: $font-size-tiny;
+
+			position: absolute;
+			top: calc( 50% + 8px );
+
+		}
+
+		.compName {
+			
+			position: absolute;
+			top: calc( 50% - 24px );
+
 		}
 	}
 
@@ -164,44 +186,69 @@ header {
 				font-size: $font-size-small;
 				font-family: $font-family-mono;
 			}
-
-			.use_btn {
-				position: absolute;
-				top: calc( 50% - 10px );
-				right: 20px;
-				width: 70px;
-			}
 		}
 	}
 
-	&.setup {
+	&.quickSetup {
 
 		.controls {
 
-			background: $color-brand-interactive;
-			color: $color-font-light;
+			background: $project-color-slot-empty;
 
 			.info {
 				display: flex;
 				align-items: center;
+				color: $color-font-disabled;
+				font-size: $font-size-small;
+				font-family: $font-family-mono;
 			}
 			.use_btn {
 				position: absolute;
 				top: calc( 50% - 10px );
-				right: 20px;
-				width: 70px;
+				right: 15px;
+				width: 36px;
 			}
 			.indicator {
-				border-color: $color-white;
+				background: $color-gray-6;
 			}
-			.pwm-indicator {
-				color: inherit;
+			img.component-icon {
+				opacity: 0.3;
 			}
 		}
 	}
 
-	&.settings-shown .more {
-		transform: rotate(180deg);
+	&.missing {
+		//background: linear-gradient(to right, $color-alert-high $width-project-slot-alert-bar, transparent $width-project-slot-alert-bar);
+
+		.controls {
+			.indicator {
+				border-color: $color-white;
+			}
+			.number {
+				color: $color-font-light;
+			}
+		}
+
+		&:before {
+			content: '';
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			width: $width-project-slot-alert-bar;
+			background: $color-alert-high;
+		}
+		&:after {
+			content: 'Missing';
+			display: block;
+			position: absolute;
+			right: 5px;
+			top: 5px;
+			color: $color-alert-high;
+			//font-size: $font-size-tiny;
+			font-weight: $font-weight-med;
+		}
 	}
 
 

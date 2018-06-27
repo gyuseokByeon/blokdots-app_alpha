@@ -1,5 +1,57 @@
 
-var allSlots = [];
+var allSlotsProject = [];
+
+
+function findSlotDOM( slotNum ){
+
+  var slotDOM;
+  $('.slot').each(function(){
+    if( $(this).attr('slot') == slotNum ){
+      slotDOM = $(this);
+    }
+  });
+
+  return slotDOM;
+}
+
+
+function findSlotObj( slotDOM ){
+
+  var slotObj;
+  //  find the equivalent slot object
+
+  for(var i = 0; i < allSlotsProject.length; i++){
+    var curr = allSlotsProject[i];
+    if(curr.slot == slotDOM.attr('slot') ){
+      slotObj = curr;
+    }
+  }
+
+  return slotObj;
+}
+
+
+function findComponentTypeObj( slotObj , type ){
+
+  var componentTypeObj;
+  //  find the equivalent slot object
+
+  if( !type ){
+    var type = slotObj.comp;
+  }
+
+  for(var i = 0; i < componentList.length; i++){
+    var curr = componentList[i];
+    if(curr.component == type){
+      componentTypeObj = curr;
+    }
+  }
+
+  return componentTypeObj;
+}
+
+// ------------------------------------------------------------
+
 
 function initSlots(){
 
@@ -14,11 +66,12 @@ function initSlots(){
   Slots.forEach(function(slot){
 
     // insert a JSON object for each slot
-    allSlots[ i ] = {
+    allSlotsProject[ i ] = {
       'slot'  : slot,
       'state' : 'empty',
       'var'   : null,
       'comp'  : null,
+      'name'  : null,
       'type'  : null,
       'dir'   : null
     }
@@ -56,51 +109,68 @@ function initSlots(){
 
 
 
-function slotState( slotDOM , state ){
+function slotState( slotDOM , state , slotObj ){
 
-  var hadComponent = slotDOM.hasClass('inUse');
+  var hadComponent = slotDOM.hasClass('connected');
+  
+  if( !slotObj ){
+    slotObj = findSlotObj( slotDOM );
+  }
 
   // slotHeightAdjust( slotDOM , 'close' );
-  slotDOM.removeClass('empty setup inUse');
+  slotDOM.removeClass('empty quickSetup missing wrong');
   $('.setup-component-list').remove();
 
   switch (state){
 
     case 'empty':
 
+      slotDOM.removeClass('connected');
+
       // remove possible other elements
       slotDOM.find('.info').html('// Not Defined');
-      slotDOM.find('.use_btn').addClass('ghost-dark').removeClass('ghost-light').text('Setup');
-      slotDOM.find('.close').remove();
+      slotDOM.find('.use_btn').remove();
+      slotDOM.find('.component-icon').remove();
 
       if( hadComponent ){
-        slotDOM.find('.component-icon').remove();
+        slotDOM.find('.close').remove();
         slotDOM.find('.type-indicator').remove();
-        slotDOM.find('.more').remove();
-        slotDOM.find('.extra-settings').remove();
       }
 
     break;
-    case 'setup':
+    case 'quickSetup':
+ 
+      var componentTypeObj = findComponentTypeObj( slotObj );
+      var img = '<img class="component-icon" src="../global/img/comp/'+componentTypeObj.image_url+'.svg"/>';
+      var useBtn = '<div class="btn use_btn ghost-dark">Use</div>';
 
-      // just allow one slot to be in setup mode
-      slotState( $('.slot.setup') , 'empty' );
-
-      slotDOM.find('.info').text('Select component from list');
-      slotDOM.find('.use_btn').text('Cancel');
-      slotDOM.find('.use_btn').removeClass('ghost-dark').addClass('ghost-light');
+      slotDOM.find('.controls').append( img ).append( useBtn );
+      slotDOM.attr('component-type',componentTypeObj.component);
 
     break;
-    case 'inUse':
+    case 'connected':
 
-      var slotObj = findSlotObj( slotDOM );
-
+      slotDOM.find('.use_btn').remove();
       slotDOM.find('.info').empty();
-      slotDOM.find('.use_btn').removeClass('ghost-light').text('Use');
 
-      var close = '<div class="close"></div>'
-      slotDOM.find('.controls').append(close);
+      var thisComponent = setupComponentForProject( slotDOM );
 
+      var close = '<div class="close"></div>';
+      var typeIndicator = '<div class="type-indicator '+thisComponent.type+' '+thisComponent.dir+'">'+thisComponent.dir+'</div>';
+      var varLabel = '<div class="varLabel">'+'variabel'+'</div>';
+      var compName = '<div class="compName">'+thisComponent.name+'</div>';
+      
+      slotDOM.find('.controls').append( close );
+      slotDOM.find('.info').append( typeIndicator ).append( varLabel ).append( compName );
+
+      
+
+    break;
+
+    case 'missing':
+    break;
+
+    case 'wrong':
     break;
 
   }
@@ -109,8 +179,130 @@ function slotState( slotDOM , state ){
 
 }
 
+function showQuicksetupSlot( slotObj ){
+
+  const slotDOM = findSlotDOM( slotObj.slot );
+  slotState( slotDOM , 'quickSetup' , slotObj );
+
+}
+
+function setSlot( slotObj ){
+
+  const slotDOM = findSlotDOM( slotObj.slot );
+
+  slotState( slotDOM , 'connected' );
+
+}
+
+function slotGotDetached( slotNum ){
+
+  const slotDOM = findSlotDOM( slotNum );
+
+  if( slotDOM.hasClass( 'empty' ) ){
+
+  }else if(slotDOM.hasClass( 'quickSetup' )){
+
+    slotState( slotDOM , 'empty' );
+
+  }else if(slotDOM.hasClass( 'connected' )){
+
+    slotState( slotDOM , 'missing' );
+
+  }
+
+}
+
+
+// Setup backend List ----------------------------------------------------
+function setupComponentForProject( slotDOM ){
+
+  // allSlotsProject
+
+  var componentTypeObj = findComponentTypeObj( null , slotDOM.attr('component-type') );
+
+  var currComponentObj;
+
+  var slotNum = slotDOM.attr('slot');
+  var varname = 'slot'+slotNum;
+
+  for(var i = 0; i < allSlotsProject.length; i++){
+
+    var curr = allSlotsProject[i];
+    if(curr.slot == slotNum){
+      
+      curr.state  = 'connected';
+      curr.var    = varname;
+      curr.comp   = componentTypeObj.component;
+      curr.name   = componentTypeObj.component;
+      curr.type   = componentTypeObj.type;
+      curr.dir    = componentTypeObj.dir;
+
+      currComponentObj = curr;
+
+    }
+  }
+
+  return currComponentObj;
+
+}
+function disconnectComponentForProject( slotDOM ){
+
+  // clear database again
+  for(var i = 0; i < allSlotsProject.length; i++){
+
+    var curr = allSlotsProject[i];
+    if(curr.slot == slotDOM.attr('slot')){
+      
+      curr.state  = 'empty';
+      curr.var    = null;
+      curr.comp   = null;
+      curr.name   = null;
+      curr.type   = null;
+      curr.dir    = null;
+    }
+  }
+
+}
+
+
+
+// Click Events
+function buttonClickEventsSetup(){
+
+  // if use button is clicked within setup 
+  $('#setup #components').on('click','.use_btn',function(){
+    var btn = $(this);
+    var slotDOM = btn.closest('.slot');
+    if ( slotDOM.hasClass('quickSetup') ) {
+      ipcRenderer.send('useProject', slotDOM.attr('slot') );
+    }
+  });
+
+}
 
 // Ready Call Functions
 $(document).ready(function(){
   initSlots();
+  buttonClickEventsSetup();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -28,6 +28,8 @@ function createLiveViewWindow(){
 	});
 	lvWindow.loadURL('file://' + __dirname + '/lv/liveview.html')
 
+	lvWindow.setPosition(100, 200 );
+
 
 	lvWindow.on('close', function (event) {
 
@@ -43,19 +45,21 @@ function createProjectWindow(){
 	// init main window
 	projWindow = new BrowserWindow({
 		width: 1150,
-		height: 766,
+		height: 806,
 		minHeight: 566,
 		minWidth: 650,
 		show: true,
 		titleBarStyle: 'hidden'
   	});
   	projWindow.loadURL('file://' + __dirname + '/projects/projects.html')
-  	//projWindow.openDevTools();
+  	projWindow.openDevTools();
   	
 	projWindow.on('close', function () {
 
 		projWindow = null
 	})
+
+	projWindow.setPosition(530, 200 );
 
   	// init communication between windows
 
@@ -89,7 +93,7 @@ function createProjectWindow(){
 	    projWindow.show();
 	});
 */
-
+	
 };
 
 
@@ -170,6 +174,31 @@ const menuTemplate = [
 	}
 ];
 
+
+function ipcCommunicationInit(){
+
+	// If Component is connected to LV
+	ipcMain.on('componentConnected', function( evt , slotObj ) {
+	    projWindow.webContents.send('componentConnected',slotObj);
+	});
+
+	// If Button Use is pressed in LV
+	ipcMain.on('use', function( evt , slotObj ) {
+	    projWindow.webContents.send('use',slotObj);
+	});
+	// If Button Use is pressed in Project
+	ipcMain.on('useProject', function( evt , slotNum ) {
+	    lvWindow.webContents.send('useProject',slotNum);
+	});
+
+	// If Comp is disconnected in LV
+	ipcMain.on('disconnectSlotLV', function( evt , slotNum ) {
+	    projWindow.webContents.send('disconnectSlotLV',slotNum);
+	});
+
+
+}
+
 const menu = Menu.buildFromTemplate(menuTemplate);
 
 app.on('ready', function(){
@@ -178,6 +207,7 @@ app.on('ready', function(){
 
 	createLiveViewWindow();
 	createProjectWindow();
+	ipcCommunicationInit();
 
 });
 

@@ -87,6 +87,22 @@ function findSlotObj( slotDOM ){
   return slotObj;
 }
 
+/*
+function componentTypeObj( slotDOM ){
+
+  var componentTypeObj;
+  //  find the equivalent slot object
+
+  for(var i = 0; i < allSlots.length; i++){
+    var curr = allSlots[i];
+    if(curr.slot == slotDOM.attr('slot') ){
+      componentTypeObj = curr;
+    }
+  }
+
+  return componentTypeObj;
+}
+*/
 
 // displays if board is connected ----------------------------
 
@@ -151,6 +167,8 @@ function disconnectSlot( slotDOM ){
       curr.dir    = null;
     }
   }
+
+  ipcRenderer.send('disconnectSlotLV', slotDOM.attr('slot') );
 
 }
 
@@ -282,6 +300,11 @@ function buttonEventsLiveViewSlots(){
       connectSlot( slotDOM );
     }else if( slotDOM.hasClass('setup') ){
       disconnectSlot( slotDOM );
+    }else if( slotDOM.hasClass('inUse') ){
+
+      const slotObj = findSlotObj( slotDOM );
+
+      ipcRenderer.send('use', slotObj );
     }
 
   });
@@ -515,6 +538,9 @@ function setupSlotControls( slotDOM , comp ){
     slotDOM.find('select').append(li);
 
   });
+
+
+  ipcRenderer.send('componentConnected',findSlotObj( slotDOM ));
 
 }
 
@@ -893,5 +919,7 @@ $(document).ready(function(){
   getSlotControlSelection();
 
   blokdotsConnectionIndicator( connected );
+
+  ipcCommunicationInitLV();
 
 });

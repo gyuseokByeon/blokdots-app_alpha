@@ -1,0 +1,131 @@
+
+
+
+
+.add-ifttt {
+
+	border: solid 1px $color-gray-5;
+	border-radius: $border-radius-reg;
+	height: 100px;
+
+	&:hover {
+
+		background: $color-gray-1;
+	
+	}
+
+}
+
+
+
+.ifttt {
+
+	border: solid 1px $color-gray-6;
+	border-radius: $border-radius-reg;
+	overflow: hidden;
+
+	.title {
+
+		height: 24px;
+		border-bottom: solid 1px $color-gray-6;
+		background: $color-gray-3;
+
+		.id {
+			display: inline-block;
+			margin-left: 10px;
+			margin-top: 2px;
+			font-family: $font-family-mono;
+			color: $color-font-disabled;
+
+			&:before {
+				content: '#';
+			}
+		}
+		.name {
+			margin-left: 6px;
+			display: inline-block;
+			color: $color-font-med;
+		}
+	}
+
+	.program {
+
+		padding: 10px;
+		font-family: $font-family-mono;
+
+		.if, .then {
+			
+			min-height: 1em;
+
+			padding-left: 40px;
+
+			&:before {
+				position: absolute;
+				display: block;
+				left: 0;
+				top: 2px;
+			}
+		}
+		.if {
+			
+			margin-bottom: 6px;
+
+			&:before {
+				content: 'If';
+			}
+		}
+		.then {
+			
+			&:before {
+				content: 'Then';
+			}
+		}
+	}
+}
+
+
+.choose {
+
+	background: $color-ifttt-default;
+	border-radius: $border-radius-reg;
+	padding: 2px 4px;
+	font-family: $font-family-mono;
+	font-size: $font-size-reg;
+
+	border: none;
+
+	&.string {
+		background: $color-ifttt-string;
+		color: $color-font-light;
+	}
+	&.int {
+		background: $color-ifttt-integer;
+		color: $color-font-light;
+	}
+	&.comp {
+		background: $color-ifttt-component;
+		color: $color-font-light;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

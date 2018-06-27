@@ -19,9 +19,16 @@ $width-project-setup:				300px;
 $height-project-header:				136px;			
 
 
-$height-project-slot:				100px;
+$height-project-slot:				80px;
 $margin-project-slot-from-left:		130px;
 $margin-project-slot-from-right: 	55px;
+
+$height-project-searchbar:			120px;
+$padding-project-main-side:			50px;
+
+
+$width-project-slot-alert-bar:		46px;
+
 //times
 $time-project-slot:					0.3s;
 
@@ -33,5 +40,36 @@ body {
 }
 
 
+#setup {
+	float: left;
+}
+
+#projcet-wrapper {
+
+	float: left;
+
+	width: calc( 100vw - #{$width-project-setup} );
+	height: 100vh;
+
+
+	#searchbar {
+
+		height: $height-project-searchbar;
+		padding: $padding-project-main-side;
+
+	}
+	
+	#programm-container {
+
+		height: calc( 100vh - #{$height-project-searchbar} );
+		overflow-y: scroll;
+		padding: $padding-project-main-side;
+
+	}
+
+}
+
 
 @import "setup";
+
+@import "ifttt";

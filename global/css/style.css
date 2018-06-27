@@ -73,6 +73,9 @@ E.g. $color-ifttt-blue
   user-select: none;
   cursor: default; }
 
+.clear {
+  clear: both; }
+
 html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 13px;
@@ -221,5 +224,67 @@ select {
     position: absolute;
     bottom: 0;
     min-width: 100%; }
+
+.add-ifttt {
+  border: solid 1px #eaeaea;
+  border-radius: 2px;
+  height: 100px; }
+  .add-ifttt:hover {
+    background: #f8f8f8; }
+
+.ifttt {
+  border: solid 1px #dcdcdc;
+  border-radius: 2px;
+  overflow: hidden; }
+  .ifttt .title {
+    height: 24px;
+    border-bottom: solid 1px #dcdcdc;
+    background: #f2f2f2; }
+    .ifttt .title .id {
+      display: inline-block;
+      margin-left: 10px;
+      margin-top: 2px;
+      font-family: "Roboto Mono", monospace;
+      color: #b3b3b3; }
+      .ifttt .title .id:before {
+        content: '#'; }
+    .ifttt .title .name {
+      margin-left: 6px;
+      display: inline-block;
+      color: gray; }
+  .ifttt .program {
+    padding: 10px;
+    font-family: "Roboto Mono", monospace; }
+    .ifttt .program .if, .ifttt .program .then {
+      min-height: 1em;
+      padding-left: 40px; }
+      .ifttt .program .if:before, .ifttt .program .then:before {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 2px; }
+    .ifttt .program .if {
+      margin-bottom: 6px; }
+      .ifttt .program .if:before {
+        content: 'If'; }
+    .ifttt .program .then:before {
+      content: 'Then'; }
+
+.choose {
+  background: #9F63B7;
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+  border: none; }
+  .choose.string {
+    background: #5D9BC5;
+    color: #FFFFFF; }
+  .choose.int {
+    background: #9F63B7;
+    color: #FFFFFF; }
+  .choose.comp {
+    background: #1ABC9C;
+    color: #FFFFFF; }
 
 /*# sourceMappingURL=style.css.map */
