@@ -217,7 +217,7 @@ header {
 		}
 	}
 
-	&.missing {
+	&.missing, &.wrong {
 		//background: linear-gradient(to right, $color-alert-high $width-project-slot-alert-bar, transparent $width-project-slot-alert-bar);
 
 		.controls {
@@ -244,10 +244,21 @@ header {
 			display: block;
 			position: absolute;
 			right: 5px;
-			top: 5px;
+			bottom: 5px;
 			color: $color-alert-high;
 			//font-size: $font-size-tiny;
 			font-weight: $font-weight-med;
+		}
+	}
+
+	&.wrong {
+
+		&:before {
+			background: $color-alert-medium;
+		}
+		&:after {
+			content: 'Wrong';
+			color: $color-alert-medium;
 		}
 	}
 

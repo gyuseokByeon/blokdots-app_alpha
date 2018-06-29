@@ -1,6 +1,4 @@
 
-
-
 // include node modules
 
 const {app, BrowserWindow, ipcMain, Menu} = require('electron');

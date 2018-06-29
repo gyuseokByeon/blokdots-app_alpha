@@ -94,17 +94,27 @@
 
 	border: none;
 
+	height: 22px;
+
 	&.string {
 		background: $color-ifttt-string;
 		color: $color-font-light;
 	}
-	&.int {
+	&.integer {
 		background: $color-ifttt-integer;
 		color: $color-font-light;
 	}
-	&.comp {
+	&.component {
 		background: $color-ifttt-component;
 		color: $color-font-light;
+	}
+
+	&.init {
+		display: inline-block;
+		text-align: center;
+		width: 24px;
+		letter-spacing: -0.27em;
+		padding-right: 1em;
 	}
 
 }

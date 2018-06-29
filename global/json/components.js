@@ -5,7 +5,10 @@ const componentList = [
     "dir": "in",
     "image_url": "button",
     "presets": ["Data"],
-    "pwm": 0
+    "pwm": 0,
+    "ifttt": {
+      "actions": ["pressed","released","held"]
+    }
   },
   {
     "component": "LED",

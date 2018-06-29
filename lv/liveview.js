@@ -8,7 +8,11 @@ function initSlots(){
 
   const Slots = boardList['Grove Arduino Uno'].Slots;
   const pwmSlots = boardList['Grove Arduino Uno'].pwm;
-  const Container = $('#slot-wrapper section');
+
+  var conMark = '<div class="slot-container"></div>';
+  $('#slot-wrapper section').append(conMark);
+
+  const Container = $('#slot-wrapper section .slot-container');
 
 
   var i = 0;
@@ -112,6 +116,8 @@ function initBlokdotsConnectionIndicator(){
   var m = '<div class="connection"></div>';
   $('#grove_1 .separator').append(m);
 
+  // toggleLiveViewControls( false );
+
 }
 
 function blokdotsConnectionIndicator( bool ){
@@ -127,6 +133,20 @@ function blokdotsConnectionIndicator( bool ){
     conn.removeClass('connected');
     conn.text('device not found')
   }
+
+  toggleLiveViewControls( bool );
+}
+
+// en / disable live view wether blokdots is connected
+function toggleLiveViewControls( bool ){
+
+  if( bool ){
+    $('#click-prevent').remove();  
+  }else{
+    var m = '<div id="click-prevent"></div>';
+    $('#slot-wrapper').append(m);  
+  }
+
 }
 
 
@@ -180,7 +200,7 @@ function slotState( slotDOM , state ){
   var hadComponent = slotDOM.hasClass('inUse');
 
   slotHeightAdjust( slotDOM , 'close' );
-  slotDOM.removeClass('empty setup inUse');
+  slotDOM.removeClass('empty setup inUse connected');
   $('.setup-component-list').remove();
 
   switch (state){
@@ -222,6 +242,12 @@ function slotState( slotDOM , state ){
 
       setupSlotControls( slotDOM , slotObj.comp );
       buildLiveViewDisplayListener( slotObj );
+
+    break;
+    case 'connected':
+
+
+      slotDOM.addClass('inUse');
 
     break;
 
@@ -296,15 +322,16 @@ function buttonEventsLiveViewSlots(){
 
     const slotDOM = $(this).closest('.slot');
 
-    if( slotDOM.hasClass('empty') ){
+    if(slotDOM.hasClass('connected')){
+      // Do not connect
+    }else if( slotDOM.hasClass('empty') ){
       connectSlot( slotDOM );
     }else if( slotDOM.hasClass('setup') ){
       disconnectSlot( slotDOM );
     }else if( slotDOM.hasClass('inUse') ){
-
       const slotObj = findSlotObj( slotDOM );
-
       ipcRenderer.send('use', slotObj );
+      slotState( slotDOM , 'connected' );
     }
 
   });

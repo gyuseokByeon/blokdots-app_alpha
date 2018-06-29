@@ -36,7 +36,7 @@ function buildIFTTTCard(){
 	var m = '<div class="program">';
 			m+= '<div class="if">';
 
-				m+= '<select class="choose comp"><option>default</option></select>';
+				//m+= '<select class="choose comp" type="component"><option>default</option></select>';
 
 			m+= '</div>';
 			m+= '<div class="then">';
@@ -46,12 +46,17 @@ function buildIFTTTCard(){
 
 	card.append( title ).append(m);
 
+	var iftttDOM = $('.ifttt').eq(iftttID);
 
-	addIFTTTentry();
+	addIFTTTChoiceSelection( iftttDOM , 'if' );
+
+	IFTTTChoiceOnClick( iftttDOM );
+
+	addIFTTTDBEntry();
 }
 
 
-function addIFTTTentry(){
+function addIFTTTDBEntry(){
 
 	iftttDB[ iftttID ] = {
       'id'  	: iftttID
@@ -59,6 +64,82 @@ function addIFTTTentry(){
 
 	iftttID++;
 }
+
+
+function addIFTTTChoiceSelection( iftttDOM , location , type ){
+
+	var choiceMarkup;
+
+	if( type ){
+
+		choiceMarkup = '<select class="choose '+type+'" type="'+type+'">';
+
+		switch( type ){
+
+			case 'component':
+
+				for(var i = 0; i < allSlotsProject.length; i++){
+
+					var componentType = allSlotsProject[i].comp;
+
+					if( componentType ){
+						choiceMarkup+= '<option slotID="'+allSlotsProject[i].slot+'">'+componentType+'</option>';
+					}
+				}
+
+
+			break;
+			case 'integer':
+
+			break;
+			case 'string':
+
+			break;
+
+			default: 
+
+
+
+			break;
+		}
+
+		choiceMarkup+= '</select>';
+	}else{
+
+		choiceMarkup = '<div class="choose init">...</div>';
+
+	}
+
+
+
+
+	iftttDOM.find('.'+location).append( choiceMarkup );
+
+}
+
+
+function IFTTTChoiceOnClick( iftttDOM ){
+
+	iftttDOM.on('click','.choose',function(){
+
+		var chooseDOM = $(this);
+
+		if( chooseDOM.hasClass('init') ){
+			
+		}
+
+
+	});
+
+}
+
+
+
+
+
+
+
+
 
 
 

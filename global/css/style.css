@@ -271,20 +271,27 @@ select {
       content: 'Then'; }
 
 .choose {
-  background: #9F63B7;
+  background: #f0f0f0;
   border-radius: 2px;
   padding: 2px 4px;
   font-family: "Roboto Mono", monospace;
   font-size: 13px;
-  border: none; }
+  border: none;
+  height: 22px; }
   .choose.string {
     background: #5D9BC5;
     color: #FFFFFF; }
-  .choose.int {
+  .choose.integer {
     background: #9F63B7;
     color: #FFFFFF; }
-  .choose.comp {
+  .choose.component {
     background: #1ABC9C;
     color: #FFFFFF; }
+  .choose.init {
+    display: inline-block;
+    text-align: center;
+    width: 24px;
+    letter-spacing: -0.27em;
+    padding-right: 1em; }
 
 /*# sourceMappingURL=style.css.map */

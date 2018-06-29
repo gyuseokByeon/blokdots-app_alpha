@@ -15,8 +15,7 @@ header {
   -webkit-app-region: drag;
   width: 100%;
   height: 90px;
-  background: #FFFFFF;
-  border-bottom: solid 1px #dcdcdc; }
+  background: #FFFFFF; }
   header .title {
     padding: 3px 0 6px 70px;
     padding-left: 0;
@@ -24,12 +23,26 @@ header {
 
 #slot-wrapper {
   height: calc( 100vh - 90px );
-  overflow-y: scroll; }
+  overflow: hidden; }
+  #slot-wrapper section .slot-container {
+    height: calc( 100vh - 90px - 30px );
+    overflow-y: scroll; }
+
+#click-prevent {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1000; }
 
 .slot {
   overflow: hidden;
   height: 80px;
   transition: height 0.3s; }
+  .slot:first-child .controls {
+    border-top: none; }
   .slot .controls {
     height: 80px;
     border-top: solid 1px #dcdcdc; }
@@ -145,6 +158,8 @@ header {
       border-color: #FFFFFF; }
     .slot.setup .controls .pwm-indicator {
       color: inherit; }
+  .slot.connected .use_btn {
+    opacity: 0.3; }
   .slot.settings-shown .more {
     transform: rotate(180deg); }
   .slot .setup-component-list {
@@ -219,8 +234,5 @@ header {
   text-align: center; }
   .slot .controls .info .real-value:before {
     content: 'current value: '; }
-
-#live-view section .separator:first-child {
-  border: none; }
 
 /*# sourceMappingURL=live-view.css.map */

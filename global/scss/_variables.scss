@@ -67,7 +67,7 @@ $color-yellow:				$color-brand;
 
 // system / buttn colours
 $color-alert-high:			$color-red;
-$color-alert-medium:		lighten( $color-red , 60% );
+$color-alert-medium:		lighten( $color-alert-high , 10% );
 $color-alert-low:			$color-yellow;
 $color-alert-success:		$color-green;
 
@@ -75,7 +75,7 @@ $color-alert-success:		$color-green;
 $color-ifttt-component:		$color-brand-interactive;
 $color-ifttt-string:		#5D9BC5;
 $color-ifttt-integer:		#9F63B7;
-$color-ifttt-default:		#9F63B7;
+$color-ifttt-default:		$color-gray-4;
 
 // menus
 $opacity-dropwdown-bg:		0.93;

@@ -41,7 +41,7 @@ header {
 	height: $height-lv-header;
 
 	background: $lv-color-bg;
-	border-bottom: solid 1px $color-gray-6;
+	// border-bottom: solid 1px $color-gray-6;
 
 	.title {
 		padding: 3px 0 6px 70px;
@@ -55,16 +55,41 @@ header {
 #slot-wrapper {
 
 	height: calc( 100vh - #{$height-lv-header} );
-	overflow-y: scroll;
+	overflow: hidden;
+
+	section {
+
+		.slot-container {
+			height: calc( 100vh - #{$height-lv-header} - #{$height-separator} );
+			overflow-y: scroll;
+		}
+
+	}
 
 }
 
+
+#click-prevent {
+	position: absolute; 
+	top: $height-separator;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(#000,0.1);
+	z-index: 1000;
+}
 
 .slot {
 
 	overflow: hidden;
 	height: $height-lv-slot;
 	transition: height $time-lv-slot;
+	
+	&:first-child {
+		.controls {
+			border-top: none;
+		}
+	}
 
 	.controls {
 
@@ -237,6 +262,12 @@ header {
 		}
 	}
 
+	&.connected {
+		.use_btn {
+			opacity: 0.3;
+		}
+	}
+
 	&.settings-shown .more {
 		transform: rotate(180deg);
 	}
@@ -381,7 +412,7 @@ header {
 // Overall fixes ----------------------
 
 #live-view section .separator:first-child {
-	border: none;
+	// border-top: none;
 }
 
 

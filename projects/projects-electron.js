@@ -10,7 +10,21 @@ const {remote, ipcRenderer} = require('electron');
 // If Component is connected to LV
 ipcRenderer.on('componentConnected', function(evt,slotObj) {
     
-	showQuicksetupSlot( slotObj );
+	const slotDOM = findSlotDOM( slotObj.slot );
+
+    if ( slotDOM.hasClass('connected') == false ) {
+		showQuicksetupSlot( slotObj );
+	}else if( slotDOM.hasClass('missing') ){
+
+		if( slotObj.comp == slotDOM.attr('component-type') ){
+
+			slotState( slotDOM , 'connected' );
+
+		}else{
+
+			slotState( slotDOM , 'wrong' );
+		}
+	}
 
 });
 

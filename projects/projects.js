@@ -139,6 +139,13 @@ function slotState( slotDOM , state , slotObj ){
 
     break;
     case 'quickSetup':
+
+      if( hadComponent ){
+        slotDOM.find('.component-icon').remove();
+        slotDOM.find('.close').remove();
+        slotDOM.find('.info').empty();
+        slotDOM.find('.info').html('// Not Defined');
+      }
  
       var componentTypeObj = findComponentTypeObj( slotObj );
       var img = '<img class="component-icon" src="../global/img/comp/'+componentTypeObj.image_url+'.svg"/>';
@@ -183,15 +190,18 @@ function showQuicksetupSlot( slotObj ){
 
   const slotDOM = findSlotDOM( slotObj.slot );
   slotState( slotDOM , 'quickSetup' , slotObj );
-
 }
 
 function setSlot( slotObj ){
 
   const slotDOM = findSlotDOM( slotObj.slot );
 
-  slotState( slotDOM , 'connected' );
-
+  // check if slot has been there before
+  if ( slotDOM.hasClass('missing') ) {
+    slotDOM.removeClass('missing');
+  }else{
+    slotState( slotDOM , 'connected' );
+  }
 }
 
 function slotGotDetached( slotNum ){
@@ -247,6 +257,12 @@ function setupComponentForProject( slotDOM ){
 }
 function disconnectComponentForProject( slotDOM ){
 
+  if( slotDOM.hasClass('missing') || slotDOM.hasClass('wrong') ){
+    slotState(slotDOM,'empty');
+  }else{
+    slotState(slotDOM,'quickSetup');
+  }
+
   // clear database again
   for(var i = 0; i < allSlotsProject.length; i++){
 
@@ -276,6 +292,14 @@ function buttonClickEventsSetup(){
     if ( slotDOM.hasClass('quickSetup') ) {
       ipcRenderer.send('useProject', slotDOM.attr('slot') );
     }
+  });
+
+  $('.slot').on('click','.close',function(){
+
+    var slotDOM = $(this).closest('.slot');
+
+    disconnectComponentForProject( slotDOM );
+
   });
 
 }
