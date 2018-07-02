@@ -67,13 +67,14 @@ function initSlots(){
 
     // insert a JSON object for each slot
     allSlotsProject[ i ] = {
-      'slot'  : slot,
-      'state' : 'empty',
-      'var'   : null,
-      'comp'  : null,
-      'name'  : null,
-      'type'  : null,
-      'dir'   : null
+      'slot'      : slot,
+      'state'     : 'empty',
+      'var'       : null,
+      'comp'      : null,
+      'name'      : null,
+      'type'      : null,
+      'dir'       : null,
+      'ifttt_ids' : []
     }
 
     var displaySlot = slot;
@@ -269,12 +270,13 @@ function disconnectComponentForProject( slotDOM ){
     var curr = allSlotsProject[i];
     if(curr.slot == slotDOM.attr('slot')){
       
-      curr.state  = 'empty';
-      curr.var    = null;
-      curr.comp   = null;
-      curr.name   = null;
-      curr.type   = null;
-      curr.dir    = null;
+      curr.state        = 'empty';
+      curr.var          = null;
+      curr.comp         = null;
+      curr.name         = null;
+      curr.type         = null;
+      curr.dir          = null;
+      curr.ifttt_ids    = [];
     }
   }
 

@@ -255,10 +255,10 @@ select {
   .ifttt .program {
     padding: 10px;
     font-family: "Roboto Mono", monospace; }
-    .ifttt .program .if, .ifttt .program .then {
+    .ifttt .program .program-part {
       min-height: 1em;
       padding-left: 40px; }
-      .ifttt .program .if:before, .ifttt .program .then:before {
+      .ifttt .program .program-part:before {
         position: absolute;
         display: block;
         left: 0;
@@ -269,6 +269,8 @@ select {
         content: 'If'; }
     .ifttt .program .then:before {
       content: 'Then'; }
+    .ifttt .program .filler {
+      display: inline; }
 
 .choose {
   background: #f0f0f0;
@@ -276,6 +278,7 @@ select {
   padding: 2px 4px;
   font-family: "Roboto Mono", monospace;
   font-size: 13px;
+  margin: 0 3px 3px 3px;
   border: none;
   height: 22px; }
   .choose.string {

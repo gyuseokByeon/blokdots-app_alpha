@@ -53,10 +53,10 @@
 		padding: 10px;
 		font-family: $font-family-mono;
 
-		.if, .then {
+		.program-part {
 			
 			min-height: 1em;
-
+			//line-height: 1;
 			padding-left: 40px;
 
 			&:before {
@@ -80,6 +80,10 @@
 				content: 'Then';
 			}
 		}
+
+		.filler {
+			display: inline;
+		}
 	}
 }
 
@@ -91,6 +95,8 @@
 	padding: 2px 4px;
 	font-family: $font-family-mono;
 	font-size: $font-size-reg;
+
+	margin: 0 3px 3px 3px;
 
 	border: none;
 

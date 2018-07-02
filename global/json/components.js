@@ -6,8 +6,33 @@ const componentList = [
     "image_url": "button",
     "presets": ["Data"],
     "pwm": 0,
-    "ifttt": {
-      "actions": ["pressed","released","held"]
+    "ifttt": { 
+      "actions" : [
+        {
+          "action" : "pressed",
+          "parameters" : {
+            "filler" : null,
+            "value"  : "integer",
+            "unit"   : ["times"]
+          }  
+        },
+        {
+          "action" : "released",
+          "parameters" : {
+            "filler" : null,
+            "value"  : "integer",
+            "unit"   : ["times"]
+          }
+        },
+        {
+          "action" : "held",
+          "parameters" : {
+            "filler" : "for",
+            "value"  : "integer",
+            "unit"   : ["seconds","minutes"]
+          }
+        }
+      ]
     }
   },
   {
