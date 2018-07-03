@@ -10,27 +10,41 @@ const componentList = [
       "actions" : [
         {
           "action" : "pressed",
-          "parameters" : {
-            "filler" : null,
-            "value"  : "integer",
-            "unit"   : ["times"]
-          }  
+          "parameters" : [
+            {
+              "filler"  : null,
+              "option"  : "integer"
+            },
+            {
+              "filler"  : null,
+              "option"  : ["times"]
+            }
+          ]  
         },
         {
           "action" : "released",
-          "parameters" : {
-            "filler" : null,
-            "value"  : "integer",
-            "unit"   : ["times"]
-          }
-        },
-        {
+          "parameters" : [
+            {
+              "filler"  : null,
+              "option"  : "integer"
+            },
+            {
+              "filler"  : null,
+              "option"  : ["times"]
+            }
+          ]  
+        },{
           "action" : "held",
-          "parameters" : {
-            "filler" : "for",
-            "value"  : "integer",
-            "unit"   : ["seconds","minutes"]
-          }
+          "parameters" : [
+            {
+              "filler"  : "for",
+              "option"  : "integer"
+            },
+            {
+              "filler"  : null,
+              "option"  : ["seconds","minutes"]
+            }
+          ]  
         }
       ]
     }

@@ -90,7 +90,12 @@ function addChoiceListeners( iftttDOM ){
 
 		var valueSelected = this.value;
 
+		//choiceDOM.find('option').attr('selected','');
+		//choiceDOM.find('option:contains('+valueSelected+')').attr('selected','selected');
+
 		choiceDOM.nextAll().remove();
+
+		programPartComponentDOM.attr( 'step' , programPartComponentDOM.find('.choose').length );
 
 		if( choiceDOM.hasClass('actions') ){
 			programPartComponentDOM.attr('action',valueSelected)
@@ -98,34 +103,50 @@ function addChoiceListeners( iftttDOM ){
 
 		if( choiceDOM.hasClass('component') ){
 
-			programPartComponentDOM.append( addFiller( ) );
+			programPartComponentDOM.append( addFiller( 'is' ) );
 
-			var slotNum = choiceDOM.children(":selected").attr("slotID");
-			var slotObj = findSlotObj( findSlotDOM( slotNum ) );
+			var slotObj;
+			
 
-			programPartComponentDOM.attr('component-type',slotObj.component);
+			for(var i = 0; i < allSlotsProject.length; i++){
+				var curr = allSlotsProject[i];
+				if(curr.comp == valueSelected ){
+					slotObj = curr;
+				}
+			}
+
+			programPartComponentDOM.attr('component-type',slotObj.comp).attr('slot',slotObj.slot);;
 
 			var newChoice = buildNewChoice( 'actions' , findComponentTypeObj(slotObj) );
 			programPartComponentDOM.append(newChoice);
 
 		}else{
-/*
 
-			## some weird shit 
-			## redo code
-			
-
-			programPartComponentDOM.append( addFiller( programPartComponentDOM.attr('component-type') ) );
+			var componentTypeObject = findComponentTypeObj( null , programPartComponentDOM.attr( 'component-type' ) );
 
 			var step = parseInt(programPartComponentDOM.attr( 'step' ));
+			var action = programPartComponentDOM.attr( 'action' );
+			var parameter; // = componentList[0].ifttt.actions[0].parameters[0];
 
-			var arr = ['value','unit']
+			// get correct parameter action from list
+			for(var i = 0; i < componentList.length; i++){
+				if( componentList[i].component == componentTypeObject.component ){
 
-			programPartComponentDOM.append( buildNewChoice( arr[step] ) );
-*/
+					for(var y = 0; y < componentList[i].ifttt.actions.length; y++){
+
+						if( componentList[i].ifttt.actions[y].action == action ){
+
+							parameter = componentList[i].ifttt.actions[y].parameters[step-2]; // -2 because of component and action
+						}
+					}
+				}
+			}
+
+			programPartComponentDOM.append( addFiller( parameter.filler ) );
+			programPartComponentDOM.append( buildNewChoice( parameter.option ) );
+
+
 		}
-
-		programPartComponentDOM.attr( 'step' , programPartComponentDOM.find('.choice').length );
 
 	});
 }
@@ -134,10 +155,10 @@ function addChoiceListeners( iftttDOM ){
 function buildNewChoice( type , componentTypeObj ){
 
 	var choiceType = type;
+	var options = type;
 
 	switch( type ){
 		case 'actions':
-		case 'unit':
 			choiceType = 'string';
 		break;
 		case 'value':
@@ -149,8 +170,14 @@ function buildNewChoice( type , componentTypeObj ){
 		break;
 	}
 
-	var choiceMarkup = '<select class="choose '+choiceType+' '+type+'" type="'+choiceType+'">';
-		choiceMarkup+= '<option disabled selected value>...</option>';
+
+	if( Array.isArray(options) ){
+		choiceType = 'string';
+		type = 'string';
+	}
+
+	var choiceMarkup = '<select class="choose '+choiceType+' '+type+'" type="'+choiceType+'">'; // 
+		choiceMarkup+= '<option disabled selected="selected">...</option>';
 
 	switch( type ){
 		case 'component':
@@ -168,6 +195,20 @@ function buildNewChoice( type , componentTypeObj ){
 			}
 
 		break;
+		case 'string':
+
+			for(var i = 0; i < options.length; i++){
+				choiceMarkup+= '<option>'+options[i]+'</option>';
+			}
+
+		break;
+		case 'integer':
+
+			for(var i = 0; i < 10; i++){
+				choiceMarkup+= '<option>'+i+'</option>';
+			}
+
+		break;
 	}
 
 
@@ -178,13 +219,18 @@ function buildNewChoice( type , componentTypeObj ){
 }
 
 
-function addFiller( compType ){
+function addFiller( filler ){
+
+	if( filler ){
 
 	var fillerMarkup = '<div class="filler">';
 		
 
-	if( compType ){
+	//if( filler != undefined ){
 
+		fillerMarkup+= filler;
+		
+		/*
 		var componentTypeObject = findComponentTypeObj( null , compType );
 		var action = programPartComponentDOM.attr('action');
 
@@ -201,13 +247,20 @@ function addFiller( compType ){
 				}
 			}
 		}
-	}else{
+		*/
+
+	//}
+	/*
+	else{
 		fillerMarkup += 'is';
 	}
+	*/
 
 	fillerMarkup += '</div>';
 
 	return fillerMarkup;
+	
+	}
 }
 
 
