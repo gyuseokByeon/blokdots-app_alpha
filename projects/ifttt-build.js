@@ -90,24 +90,30 @@ function addChoiceListeners( iftttDOM ){
 
 		var valueSelected = this.value;
 
-		//choiceDOM.find('option').attr('selected','');
-		//choiceDOM.find('option:contains('+valueSelected+')').attr('selected','selected');
+		// set flag if either 'if' or 'else'
+		var ifFlag = programPartComponentDOM.closest('.program-part').hasClass('if');
+		
 
 		choiceDOM.nextAll().remove();
 
+		// update steps 
 		programPartComponentDOM.attr( 'step' , programPartComponentDOM.find('.choose').length );
 
 		if( choiceDOM.hasClass('actions') ){
-			programPartComponentDOM.attr('action',valueSelected)
+			programPartComponentDOM.attr('action',valueSelected);
+		}else if( choiceDOM.hasClass('reactions') ){
+			programPartComponentDOM.attr('reaction',valueSelected);
 		}
 
 		if( choiceDOM.hasClass('component') ){
 
-			programPartComponentDOM.append( addFiller( 'is' ) );
-
-			var slotObj;
+			if( ifFlag ){
+				programPartComponentDOM.append( addFiller( 'is' ) );
+			}else{
+				programPartComponentDOM.append( addFiller( 'should' ) );
+			}
 			
-
+			var slotObj;
 			for(var i = 0; i < allSlotsProject.length; i++){
 				var curr = allSlotsProject[i];
 				if(curr.comp == valueSelected ){
@@ -117,35 +123,85 @@ function addChoiceListeners( iftttDOM ){
 
 			programPartComponentDOM.attr('component-type',slotObj.comp).attr('slot',slotObj.slot);;
 
-			var newChoice = buildNewChoice( 'actions' , findComponentTypeObj(slotObj) );
+			var newChoice;
+			if( ifFlag ){
+				newChoice = buildNewChoice( 'actions' , findComponentTypeObj(slotObj) );
+			}else{
+				newChoice = buildNewChoice( 'reactions' , findComponentTypeObj(slotObj) );
+			}
 			programPartComponentDOM.append(newChoice);
 
 		}else{
 
-			var componentTypeObject = findComponentTypeObj( null , programPartComponentDOM.attr( 'component-type' ) );
-
-			var step = parseInt(programPartComponentDOM.attr( 'step' ));
-			var action = programPartComponentDOM.attr( 'action' );
+			var action, reaction;
+			if( ifFlag ){
+				action = programPartComponentDOM.attr( 'action' );
+			}else{
+				reaction = programPartComponentDOM.attr( 'reaction' );
+			}
 			var parameter; // = componentList[0].ifttt.actions[0].parameters[0];
 
-			// get correct parameter action from list
-			for(var i = 0; i < componentList.length; i++){
-				if( componentList[i].component == componentTypeObject.component ){
+			var step = parseInt(programPartComponentDOM.attr( 'step' ));
+			var allSteps;
 
-					for(var y = 0; y < componentList[i].ifttt.actions.length; y++){
+			var componentTypeObject = findComponentTypeObj( null , programPartComponentDOM.attr( 'component-type' ) );
+			var currComponentTypeObject;
 
-						if( componentList[i].ifttt.actions[y].action == action ){
 
-							parameter = componentList[i].ifttt.actions[y].parameters[step-2]; // -2 because of component and action
+			if( ifFlag ){
+				// get correct parameter action from list
+				for(var i = 0; i < componentList.length; i++){
+					if( componentList[i].component == componentTypeObject.component ){
+
+						currComponentTypeObject = componentList[i];
+
+						for(var y = 0; y < currComponentTypeObject.ifttt.actions.length; y++){
+							if( currComponentTypeObject.ifttt.actions[y].action == action ){
+
+								allSteps = currComponentTypeObject.ifttt.actions[y].parameters.length+1;
+								parameter = currComponentTypeObject.ifttt.actions[y].parameters[step-2]; // -2 because of component and action
+							}
+						}
+					}
+				}
+			}else{
+				for(var i = 0; i < componentList.length; i++){
+					if( componentList[i].component == componentTypeObject.component ){
+
+						currComponentTypeObject = componentList[i];
+
+						for(var y = 0; y < currComponentTypeObject.ifttt.reactions.length; y++){
+							if( currComponentTypeObject.ifttt.reactions[y].reaction == reaction ){
+
+								allSteps = currComponentTypeObject.ifttt.reactions[y].parameters.length+1;
+								parameter = currComponentTypeObject.ifttt.reactions[y].parameters[step-2]; // -2 because of component and action
+							}
 						}
 					}
 				}
 			}
 
-			programPartComponentDOM.append( addFiller( parameter.filler ) );
-			programPartComponentDOM.append( buildNewChoice( parameter.option ) );
+			// if all steps are done -> new init
+			if( step <= allSteps ){
+				programPartComponentDOM.append( addFiller( parameter.filler ) );
+				programPartComponentDOM.append( buildNewChoice( parameter.option ) );
+			}else{
+				programPartComponentDOM.attr('progress','done')
+				console.log('new init')
+			}
+		}
 
 
+		var allParts = iftttDOM.find('.program-part-component').length;
+		var allPartsCheck = 0;
+		iftttDOM.find('.program-part-component').each(function(){
+			if( $(this).attr('progress') == 'done' ){
+				allPartsCheck++;
+			}
+		});
+
+		if (  allPartsCheck == allParts ) {
+			IFTTTCardDone( iftttDOM );
 		}
 
 	});
@@ -159,6 +215,7 @@ function buildNewChoice( type , componentTypeObj ){
 
 	switch( type ){
 		case 'actions':
+		case 'reactions':
 			choiceType = 'string';
 		break;
 		case 'value':
@@ -192,6 +249,13 @@ function buildNewChoice( type , componentTypeObj ){
 
 			for(var i = 0; i < componentTypeObj.ifttt.actions.length; i++){
 				choiceMarkup+= '<option>'+componentTypeObj.ifttt.actions[i].action+'</option>';
+			}
+
+		break;
+		case 'reactions':
+
+			for(var i = 0; i < componentTypeObj.ifttt.reactions.length; i++){
+				choiceMarkup+= '<option>'+componentTypeObj.ifttt.reactions[i].reaction+'</option>';
 			}
 
 		break;
@@ -271,6 +335,95 @@ function addIFTTTDBEntry(){
     }
 
 	iftttID++;
+}
+
+function IFTTTCardDone( iftttDOM ){
+
+	parseIFTTTCard( iftttDOM );
+
+	parseIFTTTDB();
+
+}
+
+// parse html into json obj
+function parseIFTTTCard( iftttDOM ){
+
+
+
+	var iftttID = parseInt( iftttDOM.attr('ifttt-id') );
+
+	var ifDOM = iftttDOM.find('.if').find('.program-part-component');
+	var thenDOM = iftttDOM.find('.then').find('.program-part-component')
+
+	var action = ifDOM.attr('action');
+	var ifSlotID = parseInt( ifDOM.attr('slot') );
+	var ifComponent = ifDOM.attr('component-type');
+
+	var ifComponentTypeObj = findComponentTypeObj( null , ifComponent );
+
+	var reaction = thenDOM.attr('reaction');
+	var thenSlotID = parseInt( thenDOM.attr('slot') );
+	var thenComponent = thenDOM.attr('component-type');
+
+	var thenComponentTypeObj = findComponentTypeObj( null , thenComponent );
+
+	
+	var db = iftttDB[iftttID];
+
+	db.ifttt = {
+		'if' 	: {
+			'slot' : ifSlotID,
+			'component' : ifComponent,
+			'action' : action,
+			'parameters' : []
+		},
+		'then'	: {
+			'slot' : thenSlotID,
+			'component' : thenComponent,
+			'action' : reaction,
+			'parameters' : []
+		}
+	}
+
+	// add the values (if)
+	for(var y = 0; y < ifComponentTypeObj.ifttt.actions.length; y++){
+		if( ifComponentTypeObj.ifttt.actions[y].action == action ){
+
+			for( var i = 0; i < ifComponentTypeObj.ifttt.actions[y].parameters.length; i++ ){
+
+				var chooseDOM = ifDOM.find('.choose').eq(i+2);
+				var value = chooseDOM.val();
+
+				if ( chooseDOM.hasClass('integer') ) {
+					value = parseInt( value );
+				}
+				db.ifttt.if.parameters[i] = {
+					'value' : value
+				}
+
+			}
+		}
+	}
+
+	// add the values (then))
+	for(var y = 0; y < thenComponentTypeObj.ifttt.reactions.length; y++){
+		if( thenComponentTypeObj.ifttt.reactions[y].reaction == reaction ){
+
+			for( var i = 0; i < thenComponentTypeObj.ifttt.reactions[y].parameters.length; i++ ){
+
+				var chooseDOM = thenDOM.find('.choose').eq(i+2);
+				var value = chooseDOM.val();
+
+				if ( chooseDOM.hasClass('integer') ) {
+					value = parseInt( value );
+				}
+				db.ifttt.then.parameters[i] = {
+					'value' : value
+				}
+
+			}
+		}
+	}
 }
 
 

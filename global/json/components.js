@@ -55,7 +55,52 @@ const componentList = [
     "dir": "out",
     "image_url": "led",
     "presets": ["Data","Brightness"],
-    "pwm": 1
+    "pwm": 1,
+    "ifttt": { 
+      "actions" : [
+        {
+          "action" : "switches",
+          "parameters" : [
+            {
+              "filler"  : null,
+              "option"  : ["on","off"]
+            },
+            {
+              "filler"  : null,
+              "option"  : "integer"
+            },
+            {
+              "filler"  : null,
+              "option"  : ["times"]
+            }
+          ]  
+        }
+      ],
+      "reactions" : [
+        {
+          "reaction" : "switch",
+          "parameters" : [
+            {
+              "filler"  : null,
+              "option"  : ["on","off"]
+            }
+          ]  
+        },
+        {
+          "reaction" : "blink",
+          "parameters" : [
+            {
+              "filler"  : "for",
+              "option"  : "integer"
+            },
+            {
+              "filler"  : null,
+              "option"  : ["seconds","minutes","times"]
+            }
+          ]  
+        }
+      ]
+    }
   },
   {
     "component": "Potentiometer",
