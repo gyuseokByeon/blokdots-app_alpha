@@ -331,7 +331,8 @@ function addFiller( filler ){
 function addIFTTTDBEntry(){
 
 	iftttDB[ iftttID ] = {
-      'id'  	: iftttID
+      'id'  	: iftttID,
+      'title'	: 'New Card'
     }
 
 	iftttID++;
@@ -426,16 +427,6 @@ function parseIFTTTCard( iftttDOM ){
 	}
 }
 
-
-
-
-function saveProjectToFile(){
-	fs.writeFile("test.txt", iftttDB, function(err) {
-	    if (err) {
-	        console.log(err);
-	    }
-	});
-}
 
 
 $(document).ready(function(){

@@ -165,7 +165,7 @@ function slotState( slotDOM , state , slotObj ){
 
       var close = '<div class="close"></div>';
       var typeIndicator = '<div class="type-indicator '+thisComponent.type+' '+thisComponent.dir+'">'+thisComponent.dir+'</div>';
-      var varLabel = '<div class="varLabel">'+'variabel'+'</div>';
+      var varLabel = '<div class="varLabel">var: ['+thisComponent.var+']</div>';
       var compName = '<div class="compName">'+thisComponent.name+'</div>';
       
       slotDOM.find('.controls').append( close );
