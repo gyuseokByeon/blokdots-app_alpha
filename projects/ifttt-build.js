@@ -8,11 +8,14 @@ var iftttDB = [];
 function initIFTTT(){
 
 	const container = $('#programm-container');
-	var addField = '<div class="add-ifttt"></div>';
-	container.append( addField );
+	var addField = '<div class="add-ifttt small"></div>';
+	container.prepend( addField );
 
+	setTimeout(function(){
+		$('.add-ifttt').removeClass('small');	
+	}, 10 );
 
-	container.on('click','.add-ifttt',function(){
+	container.off('click').on('click','.add-ifttt',function(){
 		buildIFTTTCard();
 	});
 
@@ -21,7 +24,7 @@ function initIFTTT(){
 
 function buildIFTTTCard(){
 
-	const card = $('.add-ifttt');
+	var card = $('.add-ifttt');
 	card.removeClass('add-ifttt').addClass('ifttt');
 
 	card.attr( 'ifttt-id' , iftttID );
@@ -29,7 +32,7 @@ function buildIFTTTCard(){
 	var title = '<div class="title">';
 
 			title+= '<div class="id">'+iftttID+'</div>';
-			title+= '<div class="name">New Card</div>';
+			title+= '<input type="text" class="name" value="New Card '+iftttID+'"">';
 
 		title+= '</div>';
 
@@ -53,7 +56,7 @@ function buildIFTTTCard(){
 
 	card.append( title ).append(m);
 
-	var iftttDOM = $('.ifttt').eq(iftttID);
+	var iftttDOM = card;//.eq(iftttID);
 
 	addChoiceListeners( iftttDOM );
 
@@ -83,9 +86,27 @@ function addChoiceListeners( iftttDOM ){
 		//}
 	});
 
+	// check again if all components are within list
+	iftttDOM.on('click','.choose.component',function(){
+
+		var choiceDOM = $(this);
+
+		if( choiceDOM.val() != '...' ){
+
+			updateComponentChoice( choiceDOM );
+
+		}
+
+	});
+
+
+	// setup element when selected
 	iftttDOM.on('change','.choose',function(){
 
 		var choiceDOM = $(this);
+
+		choiceDOM.find('.dummy').remove();
+
 		var programPartComponentDOM = choiceDOM.closest('.program-part-component');
 
 		var valueSelected = this.value;
@@ -116,12 +137,12 @@ function addChoiceListeners( iftttDOM ){
 			var slotObj;
 			for(var i = 0; i < allSlotsProject.length; i++){
 				var curr = allSlotsProject[i];
-				if(curr.comp == valueSelected ){
+				if(curr.name == valueSelected ){
 					slotObj = curr;
 				}
 			}
 
-			programPartComponentDOM.attr('component-type',slotObj.comp).attr('slot',slotObj.slot);;
+			programPartComponentDOM.attr('component-type',slotObj.comp).attr('slot',slotObj.slot);
 
 			var newChoice;
 			if( ifFlag ){
@@ -205,6 +226,22 @@ function addChoiceListeners( iftttDOM ){
 		}
 
 	});
+
+
+	// Change Name within iftttDB
+	iftttDOM.on('change','.title .name',function(){
+
+		var currIftttID = parseInt( iftttDOM.attr('ifttt-id') );
+		var value = $(this).val();
+
+		if( value == '' ){
+			value = 'Card '+currIftttID;
+		}
+
+		iftttDB[ currIftttID ].title = value;
+
+	});
+
 }
 
 
@@ -234,16 +271,22 @@ function buildNewChoice( type , componentTypeObj ){
 	}
 
 	var choiceMarkup = '<select class="choose '+choiceType+' '+type+'" type="'+choiceType+'">'; // 
-		choiceMarkup+= '<option disabled selected="selected">...</option>';
+		choiceMarkup+= '<option disabled selected="selected" class="dummy">...</option>';
 
 	switch( type ){
 		case 'component':
+			
+			/*
 			for(var i = 0; i < allSlotsProject.length; i++){
 				var componentType = allSlotsProject[i].comp;
 				if( componentType ){
 					choiceMarkup+= '<option slotID="'+allSlotsProject[i].slot+'">'+componentType+'</option>';
 				}
 			}
+			*/
+
+			// build trhough updateComponentChoice( choiceDOM );
+
 		break;
 		case 'actions':
 
@@ -283,46 +326,72 @@ function buildNewChoice( type , componentTypeObj ){
 }
 
 
+function updateComponentChoice( choiceDOM ){
+
+	var thenFlag = choiceDOM.closest('.program-part').hasClass('then');
+
+
+	for(var i = 0; i < allSlotsProject.length; i++){
+		
+
+		// var componentType = allSlotsProject[i].comp;
+		var componentName = allSlotsProject[i].name;
+		var projectSlot = allSlotsProject[i].slot;
+
+		// only list output in "then" part
+		if ( thenFlag ) {
+			if( allSlotsProject[i].dir == 'in' ){
+				componentName = null;
+			}
+		}
+
+		if( componentName ){
+
+			var alreadyInFlag = false;
+			// var notInUseAnymoreFlag = false;
+			
+			// check if already in options
+			choiceDOM.find('option').each(function(){
+
+				var optionSlot = $(this).attr('slotID');
+
+				if( projectSlot == optionSlot ){
+					alreadyInFlag = true;
+				}
+
+			});
+
+			// if not ther append new option
+			if( alreadyInFlag == false ){
+				choiceMarkup = '<option slotID="'+allSlotsProject[i].slot+'">'+componentName+'</option>';
+				choiceDOM.append(choiceMarkup);
+			}	
+		}else{
+
+			// remove old ones
+			choiceDOM.find('option').each(function(){
+				var optionSlot = $(this).attr('slotID');
+				if( projectSlot == optionSlot ){
+					$(this).remove();
+				}
+
+			});
+		}
+	}
+}
+
+
 function addFiller( filler ){
 
 	if( filler ){
 
-	var fillerMarkup = '<div class="filler">';
-		
-
-	//if( filler != undefined ){
-
+		var fillerMarkup = '<div class="filler">';
+			
 		fillerMarkup+= filler;
-		
-		/*
-		var componentTypeObject = findComponentTypeObj( null , compType );
-		var action = programPartComponentDOM.attr('action');
 
-		for(var i = 0; i < componentList.length; i++){
-			if( componentList[i].component == componentTypeObject ){
+		fillerMarkup += '</div>';
 
-
-				for(var y = 0; y < componentList[i].ifttt.actions.length; y++){
-
-					if( componentList[i].ifttt.actions[y] == action ){
-
-						fillerMarkup += componentList[i].ifttt.actions[y].parameters.filler;
-					}
-				}
-			}
-		}
-		*/
-
-	//}
-	/*
-	else{
-		fillerMarkup += 'is';
-	}
-	*/
-
-	fillerMarkup += '</div>';
-
-	return fillerMarkup;
+		return fillerMarkup;
 	
 	}
 }
@@ -340,10 +409,16 @@ function addIFTTTDBEntry(){
 
 function IFTTTCardDone( iftttDOM ){
 
+	// parse html to json
 	parseIFTTTCard( iftttDOM );
 
+	// parse json to js
 	parseIFTTTDB();
 
+	// add new card
+	if( $('.add-ifttt') <= 0 ){
+		initIFTTT();
+	}
 }
 
 // parse html into json obj

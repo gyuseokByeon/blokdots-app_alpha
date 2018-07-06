@@ -103,7 +103,13 @@ function initSlots(){
   });
 
   $('.slot').each(function(){
-    slotState( $(this) , 'empty' );
+
+    var slotDOM = $(this);
+    
+    slotState( slotDOM , 'empty' );
+
+    addSlotListeners( slotDOM );
+
   });
 
 }
@@ -164,9 +170,16 @@ function slotState( slotDOM , state , slotObj ){
       var thisComponent = setupComponentForProject( slotDOM );
 
       var close = '<div class="close"></div>';
-      var typeIndicator = '<div class="type-indicator '+thisComponent.type+' '+thisComponent.dir+'">'+thisComponent.dir+'</div>';
-      var varLabel = '<div class="varLabel">var: ['+thisComponent.var+']</div>';
-      var compName = '<div class="compName">'+thisComponent.name+'</div>';
+      var typeIndicator = '<div class="type-indicator '+thisComponent.type+' '+thisComponent.dir+'">'+thisComponent.comp+'</div>';
+      var varLabel = '<div class="varLabel">'+thisComponent.var+'</div>';
+      /*
+      var varLabel = '<div class="varLabel">';
+            varLabel += 'var:<input type="text" value="'+thisComponent.var+'">';
+          varLabel += '</div>';
+      */
+      //var compName = '<div class="compName">';
+      var compName = '<input class="compName" type="text" value="'+thisComponent.name+'">';
+        //compName+= '</div>';
       
       slotDOM.find('.controls').append( close );
       slotDOM.find('.info').append( typeIndicator ).append( varLabel ).append( compName );
@@ -186,6 +199,61 @@ function slotState( slotDOM , state , slotObj ){
   slotDOM.addClass(state);
 
 }
+
+
+String.prototype.allReplace = function(obj) {
+    var retStr = this;
+    for (var x in obj) {
+        retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
+    }
+    return retStr;
+};
+
+function buildVarNameString( value ){
+
+  value = value.toLowerCase();
+  value = value.allReplace({
+    ' ': '_',
+    '-': '_',
+    'ä': 'a',
+    'ö': 'o',
+    'ü': 'u',
+    'ß': 'ss'
+  });
+
+  return value;
+}
+
+
+function addSlotListeners( slotDOM ){
+
+  slotDOM.on('change','.compName',function(){
+
+    var value = $(this).val();
+    var i = slotDOM.index();
+    
+    // update name
+    allSlotsProject[i].name = value;
+    var varName = buildVarNameString( value );
+
+    // update var
+    allSlotsProject[i].var = varName;
+    $('.varLabel').text(varName);
+  });
+
+  /*
+  slotDOM.on('change','.varLabel input',function(){
+
+    var value = $(this).val();
+    var i = slotDOM.index();
+
+    allSlotsProject[i].var = value;
+
+  });
+  */
+
+}
+
 
 function showQuicksetupSlot( slotObj ){
 
@@ -234,9 +302,21 @@ function setupComponentForProject( slotDOM ){
   var currComponentObj;
 
   var slotNum = slotDOM.attr('slot');
-  var varname = 'slot'+slotNum;
+  //var varname = 'slot'+slotNum;
 
   for(var i = 0; i < allSlotsProject.length; i++){
+
+    var name = componentTypeObj.component;
+    var counter = 1;
+
+    for(var y = 0; y < allSlotsProject.length; y++){
+      if( allSlotsProject[y].name == name ){
+        name = componentTypeObj.component+' '+counter;
+        counter++;
+      }
+    }
+
+    var varname = buildVarNameString( name );
 
     var curr = allSlotsProject[i];
     if(curr.slot == slotNum){
@@ -244,7 +324,7 @@ function setupComponentForProject( slotDOM ){
       curr.state  = 'connected';
       curr.var    = varname;
       curr.comp   = componentTypeObj.component;
-      curr.name   = componentTypeObj.component;
+      curr.name   = name;
       curr.type   = componentTypeObj.type;
       curr.dir    = componentTypeObj.dir;
 
@@ -310,6 +390,7 @@ function buttonClickEventsSetup(){
 $(document).ready(function(){
   initSlots();
   buttonClickEventsSetup();
+  changeIFTTTColumns();
 });
 
 

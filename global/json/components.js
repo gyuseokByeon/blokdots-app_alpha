@@ -1,4 +1,4 @@
-const componentList = [
+var componentList = [
   {
     "component": "Button",
     "type": "digital",

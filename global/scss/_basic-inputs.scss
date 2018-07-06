@@ -7,11 +7,31 @@ input {
 
 }
 
+input[type=text]{
+
+	-webkit-appearance: none;
+	appearance: none;
+
+	border: none;
+	background: none;
+	padding: 0;
+
+	font-family: $font-family-reg;
+	font-size: $font-size-reg;
+	color: $color-font;
+
+	transition: color $time-input;
+
+	&:hover, &:focus {
+		color: lighten( $color-font , 30% ) !important;
+	}
+}
+
+
 
 input[type=range] {
 	
 	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 
 	width: 100%;

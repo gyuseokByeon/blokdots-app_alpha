@@ -35,6 +35,7 @@ $time-project-slot:					0.3s;
 
 
 
+
 body {
 	background: $color-white;
 }
@@ -50,6 +51,7 @@ body {
 
 	width: calc( 100vw - #{$width-project-setup} );
 	height: 100vh;
+	overflow-y: scroll;
 
 
 	#searchbar {
@@ -61,13 +63,38 @@ body {
 	
 	#programm-container {
 
-		height: calc( 100vh - #{$height-project-searchbar} );
-		overflow-y: scroll;
+		min-height: calc( 100vh - #{$height-project-searchbar} );
 		padding: $padding-project-main-side;
+		column-count: 2;
+    	column-gap: $column-gap-ifttt;
 
 	}
 
 }
 
 
+
+
+
+
+
+
+
 @import "setup";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

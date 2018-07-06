@@ -56,6 +56,7 @@ header {
 			top: calc( 50% - 3px );
 			border: solid 1px $color-gray-6;
 			border-radius: 100px;
+			background-color: $color-white;
 		}
 
 		.pwm-indicator {
@@ -116,36 +117,51 @@ header {
 
 		.type-indicator {
 			font-family: $font-family-mono;
-			color: $color-font-med;
 			font-size: $font-size-tiny;
+			//font-weight: $font-weight-thin;
 
 			position: absolute;
-			top: calc( 50% - 0.7em );
+			top: calc( 50% - 0.6em );
 
-			&:before {
-				content: 'Type ';
-				width: 34px;
+			font-style: italic;
+
+			&:after {
+				//content: 'Type ';
+				//width: 34px;
 				//height: 3px;
 				display: inline-block;
-				margin-right: 2px;
+				margin-left: 5px;
+				padding-left: 9px;
 				background-size: 7px 3px;
-				background-position: center right;
+				background-position: center left;
 				background-repeat: no-repeat;
-				vertical-align: 1px;
-
+				//vertical-align: 1px;
+				text-align: right;
 				font-family: $font-family-reg;
 				color: $color-font;
-				font-style: italic;
+				font-weight: 500;
+				font-style: normal;
+				opacity: 0.4;
 			}
 
 			&.analog {
-				&:before {
+				&:after {
 					background-image: url('../img/icons/analog_indicator.svg');
 				}
 			}
 			&.digital {
-				&:before {
+				&:after {
 					background-image: url('../img/icons/digital_indicator.svg');
+				}
+			}
+			&.in {
+				&:after {
+					content: 'in';
+				}
+			}
+			&.out {
+				&:after {
+					content: 'out';
 				}
 			}
 		}
@@ -159,6 +175,24 @@ header {
 			position: absolute;
 			top: calc( 50% + 8px );
 
+			&:before {
+				content: 'var: [';
+			}
+			&:after {
+				content: ']';
+			}
+
+			/*
+			input {
+				margin-left: 2px;
+				display: inline;
+				font-family: $font-family-mono;
+				color: $color-font-disabled;
+				font-size: $font-size-tiny;
+				width: calc(100% - 25px);
+			}
+			*/
+
 		}
 
 		.compName {
@@ -166,6 +200,9 @@ header {
 			position: absolute;
 			top: calc( 50% - 24px );
 
+			input {
+				
+			}
 		}
 	}
 

@@ -15,3 +15,22 @@ function initSeparators(){
 	});
 
 }
+
+
+function changeIFTTTColumns(){
+
+	var minCardWidth = 280;
+
+	$(window).on('resize',function(){
+
+		var containerWidth = $('#programm-container').width();
+
+		var columnCount = parseInt( containerWidth / minCardWidth );
+
+		$('#programm-container').css({
+			'column-count' : columnCount
+		});
+	});
+
+	$(window).trigger('resize');
+}

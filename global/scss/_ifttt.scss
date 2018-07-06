@@ -8,11 +8,27 @@
 	border-radius: $border-radius-reg;
 	height: 100px;
 
+	margin-bottom: $column-gap-ifttt - 2px;
+	display: inline-block;
+	width: 100%;
+
+	transition: all $time-ifttt-add-animation;
+
+	background-image: url(../img/misc/addRelation.svg);
+	background-position: center center;
+	background-repeat: no-repeat;
+
 	&:hover {
 
-		background: $color-gray-1;
+		background-color: $color-gray-1;
 	
 	}
+
+	&.small {
+		height: 0;
+		margin-bottom: 0;
+	}
+
 
 }
 
@@ -23,6 +39,10 @@
 	border: solid 1px $color-gray-6;
 	border-radius: $border-radius-reg;
 	overflow: hidden;
+
+	display: inline-block;
+	width: 100%;
+	margin-bottom: $column-gap-ifttt - 2px;
 
 	.title {
 
@@ -45,6 +65,7 @@
 			margin-left: 6px;
 			display: inline-block;
 			color: $color-font-med;
+			width: calc( 100% - 90px );
 		}
 	}
 
