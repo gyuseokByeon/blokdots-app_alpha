@@ -4,6 +4,7 @@ const fs = require('fs');
 
 var iftttID = 0;
 var iftttDB = [];
+var projectTitle = 'new_project'
 
 function initIFTTT(){
 
@@ -416,7 +417,7 @@ function IFTTTCardDone( iftttDOM ){
 	parseIFTTTDB();
 
 	// add new card
-	if( $('.add-ifttt') <= 0 ){
+	if( $('.add-ifttt').length <= 0 ){
 		initIFTTT();
 	}
 }

@@ -16,9 +16,10 @@ header {
 	height: $height-project-header;
 	
 	.title {
-		padding: 3px 0 6px 70px;
-		padding-left: 0;
+		padding: 3px 35px 6px 70px;
+		//padding-left: 35px;
 		text-align: center;
+		width: 100%;
 	}
 }
 

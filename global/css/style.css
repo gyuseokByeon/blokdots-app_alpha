@@ -178,6 +178,13 @@ input[type=range]::-webkit-slider-runnable-track {
       color: #1ABC9C; }
     .btn.ghost-light:active {
       background: rgba(255, 255, 255, 0.9); }
+  .btn.icon-btn {
+    width: 34px;
+    height: 24px;
+    border: none;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px; }
 
 /*
 .dropdown {

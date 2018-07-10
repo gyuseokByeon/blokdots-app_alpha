@@ -10,6 +10,7 @@ var componentList = [
       "actions" : [
         {
           "action" : "pressed",
+          "jhonny5" :  "down",
           "parameters" : [
             {
               "filler"  : null,
@@ -23,6 +24,7 @@ var componentList = [
         },
         {
           "action" : "released",
+          "jhonny5" :  "up",
           "parameters" : [
             {
               "filler"  : null,
@@ -35,6 +37,7 @@ var componentList = [
           ]  
         },{
           "action" : "held",
+          "jhonny5" :  "hold",
           "parameters" : [
             {
               "filler"  : "for",

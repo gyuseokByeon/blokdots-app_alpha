@@ -3,8 +3,17 @@
 const {remote, ipcRenderer} = require('electron');
 
 
+/*
+// include all component files
 
+var normalizedPath = require("path").join(__dirname, "../global/components");
 
+require("fs").readdirSync(normalizedPath).forEach(function(file) {
+  require("./global/components/" + file);
+
+  console.log(file)
+});
+*/
 
 
 // If Component is connected to LV

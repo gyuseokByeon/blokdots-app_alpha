@@ -17,6 +17,20 @@ function initSeparators(){
 }
 
 
+function fillBtnIcons(){
+
+	$('.icon-btn').each(function(){
+
+		var iconName = $(this).attr('btn-icon');
+
+		$(this).css({
+			'background-image' : 'url(../global/img/btn/'+iconName+'.svg)'
+		});
+
+	});
+}
+
+
 function changeIFTTTColumns(){
 
 	var minCardWidth = 280;

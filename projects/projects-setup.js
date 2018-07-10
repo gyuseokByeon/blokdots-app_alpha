@@ -15,20 +15,37 @@ function findSlotDOM( slotNum ){
 }
 
 
+// SlotDOM or slotNum
 function findSlotObj( slotDOM ){
 
   var slotObj;
   //  find the equivalent slot object
 
-  for(var i = 0; i < allSlotsProject.length; i++){
-    var curr = allSlotsProject[i];
-    if(curr.slot == slotDOM.attr('slot') ){
-      slotObj = curr;
+  var type = typeof slotDOM;
+
+  if( type === 'string' || type === 'number' ){
+
+    for(var i = 0; i < allSlotsProject.length; i++){
+      var curr = allSlotsProject[i];
+      if(curr.slot == slotDOM ){
+        slotObj = curr;
+      }
     }
+
+  }else{
+
+    for(var i = 0; i < allSlotsProject.length; i++){
+      var curr = allSlotsProject[i];
+      if(curr.slot == slotDOM.attr('slot') ){
+        slotObj = curr;
+      }
+    }
+
   }
 
   return slotObj;
 }
+
 
 
 function findComponentTypeObj( slotObj , type ){
@@ -391,6 +408,7 @@ $(document).ready(function(){
   initSlots();
   buttonClickEventsSetup();
   changeIFTTTColumns();
+  fillBtnIcons();
 });
 
 

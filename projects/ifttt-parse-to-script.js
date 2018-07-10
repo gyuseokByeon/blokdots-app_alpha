@@ -5,7 +5,7 @@ function parseIFTTTDB(){
 	console.log('Do some fancy code parsing 🤖');
 
 	// get projectname to save file
-	var projectName = 'projectName';
+	var projectName = buildVarNameString( projectTitle );
 
 	// Setup vars to save code
 	var code = '';
@@ -17,7 +17,8 @@ function parseIFTTTDB(){
 	setupCode+= '// Include node components\n';
 	setupCode+= 'const five = require("johnny-five");\n';
 	setupCode+= 'const board = new five.Board();\n';
-	setupCode+= '\n// Functions -------------------------------------------\n\n '
+	setupCode+= '\n\n// Build vars for components --------- \n\n';
+	
 
 	runFunctions+= 'board.on("ready", function() {\n\n';
 
@@ -29,8 +30,10 @@ function parseIFTTTDB(){
 		if( slotObj.state != 'empty' ){
 
 			// build new j5objects and connect them to the pins
-			initBoardCode+= '\t// '+slotObj.name+'\n';
-			initBoardCode+= '\tconst '+slotObj.var+' = new five.';
+			initBoardCode+= '\t// '+slotObj.name+';\n';
+			initBoardCode+= '\t'+slotObj.var+' = new five.';
+
+			setupCode+= 'var '+slotObj.var+'\n';
 
 			switch( slotObj.comp ){
 
@@ -66,6 +69,9 @@ function parseIFTTTDB(){
 		}
 	}
 
+
+	setupCode+= '\n// Functions -------------------------------------------\n\n ';
+
 	// Append elements to board.ready
 	runFunctions+= initBoardCode;
 	runFunctions+= '\n\t// Run the functions ----------------------\n\n';
@@ -77,11 +83,12 @@ function parseIFTTTDB(){
 		code+= '// '+iftttDB[i].title+'\n';
 		code+= 'function iftttCard_'+iftttDB[i].id+'(){\n';
 
-		for(var x = 0; x < iftttDB[i].ifttt.length; x++){
+		// only one ifttt atm -----------------------------------------------------------------
+		//for(var x = 0; x < iftttDB[i].ifttt.length; x++){
 
-			code+= parseComponent( iftttDB[i].ifttt[x] );
+			code+= parseComponent( iftttDB[i].ifttt );
 
-		}
+		//}
 
 
 		// close function
@@ -102,22 +109,70 @@ function parseIFTTTDB(){
 }
 
 
+
+// need allSlotsProject for var name
+
 function parseComponent( iftttObj ){
+
+	var slotObjIf = findSlotObj( iftttObj.if.slot );
+	
 
 	var code = '';
 
-
-
+	// get if condition
+	code+= parseIf( iftttObj , slotObjIf ); 
 
 	return code;
 }
 
 
 
+function parseIf( iftttObj , slotObj ){
+
+	var code = '';
+	var componentType = findComponentTypeObj( slotObj );
+	var actionObj;
+
+	for (var i = 0; i < componentType.ifttt.actions.length ; i++) {
+		if( componentType.ifttt.actions[i].action == iftttObj.if.action ){
+
+			actionObj = componentType.ifttt.actions[i];
+		}
+	}
+
+	code+= eval( 'parse_'+componentType.image_url+'( slotObj , actionObj , iftttObj )' );
+
+	return code;
+
+}
+
+
+// Will be parsed within the parseIf Fns
+function parseThen( iftttObj ){
+
+	var slotObj = findSlotObj( iftttObj.then.slot );
+	var componentType = findComponentTypeObj( slotObj );
+
+	var code = '';
+	var componentType = findComponentTypeObj( slotObj );
+	var reactionObj;
+
+	for (var i = 0; i < componentType.ifttt.reactions.length ; i++) {
+		if( componentType.ifttt.reactions[i].reaction == iftttObj.then.action ){
+
+			reactionObj = componentType.ifttt.reactions[i];
+		}
+	}
+
+	code+= eval( 'parse_'+componentType.image_url+'( slotObj , reactionObj , iftttObj , true )' );
+
+	return code;
+
+}
 
 
 function saveProjectToFile( filename , code ){
-	fs.writeFile(filename+'.js', code, function(err) {
+	fs.writeFile('./builtProjects/'+filename+'.js', code, function(err) {
 	    if (err) {
 	        console.log(err);
 	    }
