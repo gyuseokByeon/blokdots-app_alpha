@@ -313,13 +313,15 @@ select {
   font-size: 13px;
   margin: 0 2px 3px 2px;
   border: none;
-  height: 22px; }
+  height: 22px;
+  transition: opacity 0.3s; }
   .choose.string {
     background: #5D9BC5;
     color: #FFFFFF; }
   .choose.integer {
     background: #9F63B7;
-    color: #FFFFFF; }
+    color: #FFFFFF;
+    width: 36px; }
   .choose.component {
     background: #1ABC9C;
     color: #FFFFFF; }
@@ -329,5 +331,17 @@ select {
     width: 24px;
     letter-spacing: -0.27em;
     padding-right: 1em; }
+  .choose:hover {
+    opacity: 0.93; }
+
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url(../img/misc/choice-number-arrows.svg);
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 10px;
+  height: 14px; }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,3 +1,32 @@
+
+
+const fs = require('fs');
+
+var componentList = [];
+
+import { component_setup } from '../global/components/button.js';
+
+const folder = './global/components/'
+
+// get all components from folder and append to list
+fs.readdir(folder, (err, files) => {
+  
+  files.forEach(file => {
+    
+    file = file.replace('.js','');
+    let component_setup = require('../global/components/'+file).setup;
+
+    componentList.push(component_setup);
+
+  });
+
+});
+
+
+
+
+
+/*
 var componentList = [
   {
     "component": "Button",
@@ -146,3 +175,5 @@ var componentList = [
     "pwm": 0
   }
 ]
+
+*/

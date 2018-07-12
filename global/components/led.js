@@ -1,6 +1,6 @@
 
 // Setup DB for component
-/*
+
 const component_setup = {
     "component": "LED",
     "type": "digital",
@@ -54,7 +54,7 @@ const component_setup = {
       ]
     }
   };
-*/
+
 
 // Parse function for component
 
@@ -109,6 +109,9 @@ function parse_led( slotObj , actionObj , iftttObj , reactionFlag ){
 
 
 
+module.exports = {
+  setup: component_setup
+}
 
 
 

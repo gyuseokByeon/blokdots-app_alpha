@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="9px" height="11px" viewBox="0 0 9 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Action-/-Card-v8-/-PopUp-/-Integer" transform="translate(-20.000000, -3.000000)" stroke="#FFFFFF" stroke-width="1.5">
+            <g id="Group" transform="translate(21.000000, 4.000000)">
+                <polyline id="Arrow" points="0.5 3.09802451 3.5 0.0980245094 6.5 3.09802451"></polyline>
+                <polyline id="Arrow-Copy" transform="translate(3.500000, 7.598025) scale(1, -1) translate(-3.500000, -7.598025) " points="0.5 9.09802451 3.5 6.09802451 6.5 9.09802451"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>

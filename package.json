@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "rebuild": "./node_modules/.bin/electron-rebuild",
+    "rebuild": "./node_modules/.bin/electron-rebuild --version=2.0.4",
     "url": "git+https://github.com/olivierbrcknr/blokdots-app.git"
   },
   "keywords": [
@@ -27,12 +27,17 @@
   },
   "homepage": "http://blokdots.com",
   "dependencies": {
-    "electron": "^2.0.2",
+    "electron": "^2.0.4",
+    "electron-compile": "^6.4.3",
     "electron-ipc": "^0.3.0",
-    "electron-rebuild": "^1.7.3",
     "johnny-five": "^0.15.0",
     "jquery": "^3.3.1",
-    "serialport": "^6.2.0",
+    "node-pre-gyp": "^0.10.3",
+    "serialport": "^6.2.1",
     "usb": "git+https://git@github.com/tessel/node-usb.git"
+  },
+  "devDependencies": {
+    "electron-prebuilt-compile": "^2.0.4",
+    "electron-rebuild": "^1.8.1"
   }
 }

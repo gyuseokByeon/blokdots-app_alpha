@@ -123,6 +123,8 @@
 
 	height: 22px;
 
+	transition: opacity $time-reg;
+
 	&.string {
 		background: $color-ifttt-string;
 		color: $color-font-light;
@@ -130,6 +132,9 @@
 	&.integer {
 		background: $color-ifttt-integer;
 		color: $color-font-light;
+		
+		width: 36px;
+
 	}
 	&.component {
 		background: $color-ifttt-component;
@@ -144,9 +149,23 @@
 		padding-right: 1em;
 	}
 
+	&:hover {
+		opacity: 0.93;
+	}
+
 }
 
+input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	appearance: none;
+	background-image: url(../img/misc/choice-number-arrows.svg);
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
 
+	width: 10px;
+	height: 14px;
+}
 
 
 

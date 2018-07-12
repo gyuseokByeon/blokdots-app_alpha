@@ -277,15 +277,19 @@ function appendSetupComponentList( slotObj , slotNum ){
   
 
   // list all components available in library
-  for( i=0 ; i < componentList.length ; i++ ){
+  for( var i=0 ; i < componentList.length ; i++ ){
     
     const component = componentList[i];
     
-    this.comp = component["component"];
-    this.type = component["type"];
-    this.dir  = component["dir"];
-    this.img  = component["image_url"];
-    this.pwm  = component["pwm"];
+    console.log( component.dir )
+
+    /*
+
+    this.comp = component.["component"];
+    this.type = component.["type"];
+    this.dir  = component.["dir"];
+    this.img  = component.["image_url"];
+    this.pwm  = component.["pwm"];
 
     // just list if suitable for slot
     if( 
@@ -304,6 +308,27 @@ function appendSetupComponentList( slotObj , slotNum ){
       m+= '</li>';
 
     }
+
+    */
+
+    if( 
+         ( slotType == component.type  && component.pwm === 0 )  
+      || ( component.pwm === slotPwm   && slotPwm  === 1 )  
+      || ( slotType === component.type && component.type == 'digital' && component.pwm == 1 )
+    
+    ){
+
+      m+= '<li comp="'+component.component+'">';
+
+        m+= '<img class="component-icon" src="../global/img/comp/'+component.image_url+'.svg"/>';
+
+        m+= '<div class="name">'+component.component+'</div>';
+
+      m+= '</li>';
+
+    }
+
+
   }
 
   m+= '</ul>';

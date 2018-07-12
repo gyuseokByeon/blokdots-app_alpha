@@ -115,8 +115,11 @@ function addChoiceListeners( iftttDOM ){
 		// set flag if either 'if' or 'else'
 		var ifFlag = programPartComponentDOM.closest('.program-part').hasClass('if');
 		
+		if( choiceDOM.hasClass('integer') == false ){
 
-		choiceDOM.nextAll().remove();
+			choiceDOM.nextAll().remove();
+
+		}
 
 		// update steps 
 		programPartComponentDOM.attr( 'step' , programPartComponentDOM.find('.choose').length );
@@ -312,15 +315,23 @@ function buildNewChoice( type , componentTypeObj ){
 		break;
 		case 'integer':
 
+			/*
 			for(var i = 0; i < 10; i++){
 				choiceMarkup+= '<option>'+i+'</option>';
 			}
+			*/
 
 		break;
 	}
 
 
 		choiceMarkup+= '</select>';
+
+
+	// Build different Markup for integer Values
+	if( type == 'integer' ){
+		choiceMarkup = '<input class="choose '+choiceType+' '+type+'" type="number" value="1" min="1" step="1">';
+	}
 
 	return choiceMarkup;
 

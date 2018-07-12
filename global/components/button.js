@@ -101,11 +101,12 @@ function parse_button( slotObj , actionObj , iftttObj ){
 
 
 
+//export { parse_button, component_setup };
 
 
-
-
-
+module.exports = {
+  setup: component_setup
+}
 
 
 
