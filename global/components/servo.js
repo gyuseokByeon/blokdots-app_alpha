@@ -2,11 +2,11 @@
 // Setup DB for component
 
 const component_setup = {
-  "component": "LED",
-  "type": "digital",
+  "component": "Servo Motor",
+  "type": "analog",
   "dir": "out",
-  "image_url": "led",
-  "presets": ["Data","Brightness"],
+  "image_url": "servo",
+  "presets": ["Data", "Angle"],
   "pwm": 1,
   "ifttt": { 
     "actions" : [
@@ -37,19 +37,6 @@ const component_setup = {
             "option"  : ["on","off"]
           }
         ]  
-      },
-      {
-        "reaction" : "blink",
-        "parameters" : [
-          {
-            "filler"  : "for",
-            "option"  : "integer"
-          },
-          {
-            "filler"  : null,
-            "option"  : ["seconds","minutes","times"]
-          }
-        ]  
       }
     ]
   }
@@ -68,36 +55,6 @@ module.exports = {
 
     // if is reaction
     if( reactionFlag ){
-
-
-      switch( iftttObj.then.action ){
-
-        case 'switch':
-
-          switch( iftttObj.then.parameters[0].value ){
-
-            case 'on':
-
-              code+= slotObj.var + '.on();';
-
-            break;
-            case 'off':
-
-              code+= slotObj.var + '.off();';
-
-            break;
-
-          }
-
-        break;
-
-        case 'blink':
-
-
-
-        break;
-
-      }
 
     // if is action
     }else{

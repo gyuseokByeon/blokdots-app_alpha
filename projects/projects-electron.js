@@ -1,20 +1,7 @@
 
 // Node modules
 const {remote, ipcRenderer} = require('electron');
-
-
-/*
-// include all component files
-
-var normalizedPath = require("path").join(__dirname, "../global/components");
-
-require("fs").readdirSync(normalizedPath).forEach(function(file) {
-  require("./global/components/" + file);
-
-  console.log(file)
-});
-*/
-
+const fs = require('fs');
 
 // If Component is connected to LV
 ipcRenderer.on('componentConnected', function(evt,slotObj) {

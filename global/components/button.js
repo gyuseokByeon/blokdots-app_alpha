@@ -56,56 +56,52 @@ const component_setup = {
 };
 
 
-// Parse function for component
-
-function parse_button( slotObj , actionObj , iftttObj ){
-
-  var code = '';
-
-
-  code+= '\t// counter for times pressed / released\n';
-  code+= '\tvar i = 0;\n';
-
-  // append var name and action init handler
-  code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", function(){\n';
-
-
-  switch( iftttObj.if.action ){
-
-    case 'pressed':
-    case 'released':
-
-      code+= '\t\tif( i === '+iftttObj.if.parameters[0].value+' ){\n';
-
-        code+= '\t\t\t' + parseThen( iftttObj );
-
-      code+= '\t\t}\n';
-
-      code+= '\t\ti++;\n';
-
-    break;
-
-    case 'held':
-
-
-
-    break;
-
-  }
-
-  // close .on
-  code+= '\t});\n';
-
-  return code;
-}
-
-
-
-//export { parse_button, component_setup };
-
+// Export function and vars
 
 module.exports = {
-  setup: component_setup
+  setup: component_setup,
+
+  // Parse function for IFTTT
+  parse: function( slotObj , actionObj , iftttObj ){
+
+    var code = '';
+
+
+    code+= '\t// counter for times pressed / released\n';
+    code+= '\tvar i = 0;\n';
+
+    // append var name and action init handler
+    code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", function(){\n';
+
+
+    switch( iftttObj.if.action ){
+
+      case 'pressed':
+      case 'released':
+
+        code+= '\t\tif( i === '+iftttObj.if.parameters[0].value+' ){\n';
+
+          code+= '\t\t\t' + parseThen( iftttObj );
+
+        code+= '\t\t}\n';
+
+        code+= '\t\ti++;\n';
+
+      break;
+
+      case 'held':
+
+
+
+      break;
+
+    }
+
+    // close .on
+    code+= '\t});\n';
+
+    return code;
+  }
 }
 
 

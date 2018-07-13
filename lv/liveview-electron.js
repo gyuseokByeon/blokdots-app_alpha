@@ -27,10 +27,12 @@ const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
 const usb = require('usb');
 
+const fs = require('fs');
+
+
+
 
 var connected = false;
-
-
 
 var consoleColors = {
   'system'    : '#c1c1c1',

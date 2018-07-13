@@ -110,8 +110,6 @@ function parseIFTTTDB(){
 
 
 
-
-
 // need allSlotsProject for var name
 
 function parseComponent( iftttObj ){
@@ -142,11 +140,7 @@ function parseIf( iftttObj , slotObj ){
 		}
 	}
 
-	// code+= eval( 'parse_'+componentType.image_url+'( slotObj , actionObj , iftttObj )' );
-
-	console.log(componentType.image_url);
-
-	code+= window[ componentType.image_url ].parse( slotObj , actionObj , iftttObj );
+	code+= eval( 'parse_'+componentType.image_url+'( slotObj , actionObj , iftttObj )' );
 
 	return code;
 
@@ -170,9 +164,7 @@ function parseThen( iftttObj ){
 		}
 	}
 
-	// code+= eval( 'parse_'+componentType.image_url+'( slotObj , reactionObj , iftttObj , true )' );
-
-	code+= window[ componentType.image_url ].parse( slotObj , reactionObj , iftttObj , true );
+	code+= eval( 'parse_'+componentType.image_url+'( slotObj , reactionObj , iftttObj , true )' );
 
 	return code;
 
@@ -186,6 +178,13 @@ function saveProjectToFile( filename , code ){
 	    }
 	});
 }
+
+
+
+
+
+
+
 
 
 

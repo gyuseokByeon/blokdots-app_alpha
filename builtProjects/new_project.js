@@ -5,8 +5,7 @@ const board = new five.Board();
 
 // Build vars for components --------- 
 
-var button
-var touch_sensor
+var button_1
 var led
 
 // Functions -------------------------------------------
@@ -15,7 +14,7 @@ var led
 function iftttCard_0(){
 	// counter for times pressed / released
 	var i = 0;
-	button.on("up", function(){
+	button_1.on("down", function(){
 		if( i === 3 ){
 			led.on();		}
 		i++;
@@ -24,12 +23,10 @@ function iftttCard_0(){
 
 board.on("ready", function() {
 
-	// Button;
-	button = new five.Button(2);
-	// Touch Sensor;
-	touch_sensor = new five.Button(3);
+	// Button 1;
+	button_1 = new five.Button(2);
 	// LED;
-	led = new five.Led(4);
+	led = new five.Led(3);
 
 	// Run the functions ----------------------
 

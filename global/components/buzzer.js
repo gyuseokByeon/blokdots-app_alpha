@@ -2,12 +2,12 @@
 // Setup DB for component
 
 const component_setup = {
-  "component": "LED",
+  "component": "Buzzer",
   "type": "digital",
   "dir": "out",
-  "image_url": "led",
-  "presets": ["Data","Brightness"],
-  "pwm": 1,
+  "image_url": "buzzer",
+  "presets": ["Data", "Note"],
+  "pwm": 0,
   "ifttt": { 
     "actions" : [
       {
@@ -37,19 +37,6 @@ const component_setup = {
             "option"  : ["on","off"]
           }
         ]  
-      },
-      {
-        "reaction" : "blink",
-        "parameters" : [
-          {
-            "filler"  : "for",
-            "option"  : "integer"
-          },
-          {
-            "filler"  : null,
-            "option"  : ["seconds","minutes","times"]
-          }
-        ]  
       }
     ]
   }
@@ -68,36 +55,6 @@ module.exports = {
 
     // if is reaction
     if( reactionFlag ){
-
-
-      switch( iftttObj.then.action ){
-
-        case 'switch':
-
-          switch( iftttObj.then.parameters[0].value ){
-
-            case 'on':
-
-              code+= slotObj.var + '.on();';
-
-            break;
-            case 'off':
-
-              code+= slotObj.var + '.off();';
-
-            break;
-
-          }
-
-        break;
-
-        case 'blink':
-
-
-
-        break;
-
-      }
 
     // if is action
     }else{

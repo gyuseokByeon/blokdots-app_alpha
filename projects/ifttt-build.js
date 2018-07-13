@@ -1,5 +1,5 @@
 
-const fs = require('fs');
+
 
 
 var iftttID = 0;
@@ -373,9 +373,9 @@ function updateComponentChoice( choiceDOM ){
 
 			});
 
-			// if not ther append new option
+			// if not there append new option
 			if( alreadyInFlag == false ){
-				choiceMarkup = '<option slotID="'+allSlotsProject[i].slot+'">'+componentName+'</option>';
+				var choiceMarkup = '<option slotID="'+allSlotsProject[i].slot+'">'+componentName+'</option>';
 				choiceDOM.append(choiceMarkup);
 			}	
 		}else{
