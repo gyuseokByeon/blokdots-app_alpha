@@ -91,9 +91,17 @@ header {
       background-size: contain;
       background-position: center center;
       background-repeat: no-repeat;
-      opacity: 0.3; }
+      opacity: 0.3;
+      top: 3px;
+      right: 3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      background-size: 10px 10px;
+      opacity: 0.5; }
       .slot .controls .close:hover {
-        opacity: 1; }
+        opacity: 1;
+        background-color: #f0f0f0; }
     .slot .controls .more {
       width: 12px;
       height: 12px;

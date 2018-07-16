@@ -33,7 +33,7 @@ function parseIFTTTDB(){
 			initBoardCode+= '\t// '+slotObj.name+';\n';
 			initBoardCode+= '\t'+slotObj.var+' = new five.';
 
-			setupCode+= 'var '+slotObj.var+'\n';
+			setupCode+= 'var '+slotObj.var+';\n';
 
 			switch( slotObj.comp ){
 
@@ -144,7 +144,7 @@ function parseIf( iftttObj , slotObj ){
 
 	// code+= eval( 'parse_'+componentType.image_url+'( slotObj , actionObj , iftttObj )' );
 
-	console.log(componentType.image_url);
+	// console.log(componentType.image_url);
 
 	code+= window[ componentType.image_url ].parse( slotObj , actionObj , iftttObj );
 

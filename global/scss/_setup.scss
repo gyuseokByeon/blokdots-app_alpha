@@ -38,16 +38,16 @@ header {
 	height: $height-project-slot;
 	transition: height $time-project-slot;
 
-	&:first-child {
+	&:last-child {
 		.controls {
-			border-top: none;
+			border-bottom: none;
 		}
 	}
 
 	.controls {
 
 		height: $height-project-slot;
-		border-top: solid 1px $color-gray-6;
+		border-bottom: solid 1px $color-gray-6;
 
 		.indicator {
 			position: absolute;
@@ -110,8 +110,20 @@ header {
 			background-repeat: no-repeat;
 			opacity: 0.3;
 
+			// v2
+			
+			top: 3px;
+			right: 3px;
+			width: 14px;
+			height: 14px;
+			border-radius: 2px;
+			background-size: 10px 10px;
+			opacity: 0.5;
+
+
 			&:hover {
 				opacity: 1;
+				background-color: $color-gray-6;
 			}
 		}
 

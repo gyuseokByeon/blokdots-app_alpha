@@ -255,7 +255,7 @@ function addSlotListeners( slotDOM ){
 
     // update var
     allSlotsProject[i].var = varName;
-    $('.varLabel').text(varName);
+    slotDOM.find('.varLabel').text(varName);
   });
 
   /*

@@ -23,6 +23,33 @@ const component_setup = {
             "option"  : ["times"]
           }
         ]  
+      },
+      {
+        "action" : "released",
+        "jhonny5" :  "up",
+        "parameters" : [
+          {
+            "filler"  : null,
+            "option"  : "integer"
+          },
+          {
+            "filler"  : null,
+            "option"  : ["times"]
+          }
+        ]  
+      },{
+        "action" : "held",
+        "jhonny5" :  "hold",
+        "parameters" : [
+          {
+            "filler"  : "for",
+            "option"  : "integer"
+          },
+          {
+            "filler"  : null,
+            "option"  : ["seconds","minutes"]
+          }
+        ]  
       }
     ]
   }
@@ -39,17 +66,43 @@ module.exports = {
 
     var code = '';
 
-    // close .on of if
+
+    code+= '\t// counter for times pressed / released\n';
+    code+= '\tvar i = 0;\n\n';
+
+    // append var name and action init handler
+    code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", function(){\n';
+
+
+    switch( iftttObj.if.action ){
+
+      case 'pressed':
+      case 'released':
+
+        code+= '\t\tif( i == '+iftttObj.if.parameters[0].value+' ){\n';
+
+          code+= '\t\t\t' + parseThen( iftttObj );
+
+        code+= '\t\t}\n';
+
+        code+= '\t\ti++;\n';
+
+      break;
+
+      case 'held':
+
+
+
+      break;
+
+    }
+
+    // close .on
     code+= '\t});\n';
 
     return code;
   }
 }
-
-
-
-
-
 
 
 

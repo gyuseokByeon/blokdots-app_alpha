@@ -79,7 +79,7 @@ module.exports = {
       case 'pressed':
       case 'released':
 
-        code+= '\t\tif( i === '+iftttObj.if.parameters[0].value+' ){\n';
+        code+= '\t\tif( i == '+iftttObj.if.parameters[0].value+' ){\n';
 
           code+= '\t\t\t' + parseThen( iftttObj );
 

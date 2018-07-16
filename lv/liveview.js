@@ -281,8 +281,6 @@ function appendSetupComponentList( slotObj , slotNum ){
     
     const component = componentList[i];
     
-    console.log( component.dir )
-
     /*
 
     this.comp = component.["component"];

@@ -148,6 +148,15 @@ function initBoard(){
 	
 }
 
+function closeBoard(){
+
+	console.log('board closing')
+
+	board.exit(function (err) {
+	    console.log('port closed', err);
+	});
+
+}
 
 
 function ipcCommunicationInitLV(){
@@ -163,6 +172,13 @@ function ipcCommunicationInitLV(){
 		}
 		ipcRenderer.send('use', slotObj );
 
+	});
+
+	ipcRenderer.on('closeBoard', function() {
+		closeBoard();
+	});
+	ipcRenderer.on('initBoard', function() {
+		initBoard();
 	});
 
 }

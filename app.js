@@ -195,6 +195,14 @@ function ipcCommunicationInit(){
 	});
 
 
+	ipcMain.on('closeBoard', function() {
+	    lvWindow.webContents.send('closeBoard');
+	});
+	ipcMain.on('initBoard', function() {
+	    lvWindow.webContents.send('initBoard');
+	});
+
+
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate);
