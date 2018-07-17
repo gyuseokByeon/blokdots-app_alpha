@@ -13,11 +13,18 @@ function parseIFTTTDB(){
 	var setupCode = '';
 	var initBoardCode = '';
 
+	// code for demo
+	var moduleCode = '';
+
 	// Include johnny 5
 	setupCode+= '// Include node components\n';
 	setupCode+= 'const five = require("johnny-five");\n';
 	setupCode+= 'const board = new five.Board();\n';
 	setupCode+= '\n\n// Build vars for components --------- \n\n';
+
+
+	// demo init
+	moduleCode+= 'module.exports = {\n\trun: function(){';
 	
 
 	runFunctions+= 'board.on("ready", function() {\n\n';
@@ -96,20 +103,35 @@ function parseIFTTTDB(){
 
 		// append call to board.ready
 		runFunctions+= '\tiftttCard_'+iftttDB[i].id+'();\n';
+		moduleCode+= '\tiftttCard_'+iftttDB[i].id+'();\n';
 	}
 
 	// end board ready
 	runFunctions+= '});'
+	moduleCode+= '}\n}'
 
 	// combine snippets 
 	var completeCode = setupCode + code + runFunctions;
 
-	// save code into file
+
+	var fullDemoCode = code + moduleCode;
+
+	// change var names for demo
+	for(var i = 0; i < allSlotsProject.length; i++){
+
+		let oldVarName = allSlotsProject[i].var+'.';
+		let newVarName = 'slot'+allSlotsProject[i].slot+'.';
+		let regex = new RegExp(oldVarName, "g");
+
+		fullDemoCode = fullDemoCode.replace(regex, newVarName);
+	}
+
+	// save code into file -> regular js
 	saveProjectToFile( projectName , completeCode );
+
+	// save code into file -> regular js
+	saveProjectToFile( 'current-demo' , fullDemoCode );
 }
-
-
-
 
 
 // need allSlotsProject for var name
@@ -118,7 +140,6 @@ function parseComponent( iftttObj ){
 
 	var slotObjIf = findSlotObj( iftttObj.if.slot );
 	
-
 	var code = '';
 
 	// get if condition

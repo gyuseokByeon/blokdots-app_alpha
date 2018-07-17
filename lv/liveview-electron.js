@@ -129,7 +129,8 @@ function initBoard(){
 		// setup board
 		board = new five.Board({
 		  repl: false, // does not work with browser console
-		  port: MYport
+		  port: MYport,
+		  sigint: true
 		});
 	}
 
@@ -152,9 +153,25 @@ function closeBoard(){
 
 	console.log('board closing')
 
+	/*
 	board.exit(function (err) {
 	    console.log('port closed', err);
 	});
+	*/
+
+	/*
+	exitHook(function () {
+        console.log('exitong (exitHook)')
+    });
+    */
+    
+    process.on('SIGINT', function () {
+        console.log('process.on SIGINT');
+    });
+
+    process.on('exit', function () {
+        console.log('process.on exit ');
+    });
 
 }
 

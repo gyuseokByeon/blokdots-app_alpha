@@ -50,45 +50,24 @@ function projectInfo(){
 }
 
 
-const randomVarForDisplay = "Yay";
-
 function runProject(){
 
-	//parseIFTTTDB();
+	parseIFTTTDB();
 
-
-	ipcRenderer.send('closeBoard');
-
-	var cp = childProcess.fork("./builtProjects/test.js");
-	cp.on("exit", function (code, signal) {
-	    console.log("Exited", {code: code, signal: signal});
-	});
-	cp.on("error", console.error.bind(console));
-
-
-	/*
-	cp.stdout.on('data', (data) => {
-	  console.log(`child stdout:\n${data}`);
-	});
-	*/
+	ipcRenderer.send('startProject');
 
 }
 
 function stopProject(){
 
-	// ipcRenderer.send('initBoard');
+	ipcRenderer.send('stopProject');
 
 }
-
-
-
-
 
 
 
 $(document).ready(function(){
 
 	projectInfo();
-
 
 });

@@ -79,13 +79,17 @@ module.exports = {
       case 'pressed':
       case 'released':
 
+        code+= '\t\ti++;\n';
+
         code+= '\t\tif( i == '+iftttObj.if.parameters[0].value+' ){\n';
 
           code+= '\t\t\t' + parseThen( iftttObj );
 
+          code+= '\t\t\t// Reset counter\n';
+          code+= '\t\t\ti = 0;\n';
+
         code+= '\t\t}\n';
 
-        code+= '\t\ti++;\n';
 
       break;
 

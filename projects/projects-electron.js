@@ -2,7 +2,7 @@
 // Node modules
 const {remote, ipcRenderer} = require('electron');
 const fs = require('fs');
-const childProcess = require("child_process");
+// const childProcess = require("child_process");
 
 
 // If Component is connected to LV

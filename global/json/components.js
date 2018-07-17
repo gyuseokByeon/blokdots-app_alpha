@@ -2,7 +2,7 @@
 
 var componentList = [];
 
-import { component_setup } from '../global/components/button.js';
+// import { component_setup } from '../global/components/button.js';
 
 let componentFolder = './global/components/'
 

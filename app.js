@@ -203,6 +203,14 @@ function ipcCommunicationInit(){
 	});
 
 
+	ipcMain.on('startProject', function() {
+	    lvWindow.webContents.send('startProject');
+	});
+	ipcMain.on('stopProject', function() {
+	    lvWindow.webContents.send('stopProject');
+	});
+
+
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate);

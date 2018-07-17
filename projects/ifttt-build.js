@@ -425,7 +425,7 @@ function IFTTTCardDone( iftttDOM ){
 	parseIFTTTCard( iftttDOM );
 
 	// parse json to js
-	parseIFTTTDB();
+	// parseIFTTTDB();
 
 	// add new card
 	if( $('.add-ifttt').length <= 0 ){
