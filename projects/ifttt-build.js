@@ -444,13 +444,23 @@ function parseIFTTTCard( iftttDOM ){
 	var thenDOM = iftttDOM.find('.then').find('.program-part-component')
 
 	var action = ifDOM.attr('action');
-	var ifSlotID = parseInt( ifDOM.attr('slot') );
+
+	var ifSlotID = ifDOM.attr('slot');
+	if ( $.isNumeric( ifSlotID ) ){
+		ifSlotID = parseInt(ifSlotID);
+	}
+
 	var ifComponent = ifDOM.attr('component-type');
 
 	var ifComponentTypeObj = findComponentTypeObj( null , ifComponent );
 
 	var reaction = thenDOM.attr('reaction');
-	var thenSlotID = parseInt( thenDOM.attr('slot') );
+
+	var thenSlotID = thenDOM.attr('slot');
+	if ( $.isNumeric( thenSlotID ) ){
+		thenSlotID = parseInt(thenSlotID);
+	}
+	
 	var thenComponent = thenDOM.attr('component-type');
 
 	var thenComponentTypeObj = findComponentTypeObj( null , thenComponent );

@@ -20,7 +20,6 @@ function findSlotObj( slotDOM ){
 
   var slotObj;
   //  find the equivalent slot object
-
   var type = typeof slotDOM;
 
   if( type === 'string' || type === 'number' ){
@@ -42,8 +41,10 @@ function findSlotObj( slotDOM ){
     }
 
   }
-
+  
   return slotObj;
+
+
 }
 
 

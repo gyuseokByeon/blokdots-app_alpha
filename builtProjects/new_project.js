@@ -5,45 +5,41 @@ const board = new five.Board();
 
 // Build vars for components --------- 
 
-var button;
 var led;
+var potentiometer;
 
 // Functions -------------------------------------------
 
  // New Card
 function iftttCard_0(){
-	// counter for times pressed / released
-	var i = 0;
-	button.on("down", function(){
-		i++;
-		if( i == 2 ){
-			led.on();			// Reset counter
-			i = 0;
-			console.log("undefined");
-		}
+		// set new variable for the selected unit (degrees)
+		var sensorValue = 0;
+
+	potentiometer.on("change", function(){
+		sensorValue = 100 * ( this.value / 1023 );
+		if( sensorValue > 50 ){
+			led.on();		}
 	});
 }
 
 // New Card
 function iftttCard_1(){
-	// counter for times pressed / released
-	var i = 0;
-	button.on("down", function(){
-		i++;
-		if( i == 3 ){
-			led.off();			// Reset counter
-			i = 0;
-			console.log("undefined");
-		}
+		// set new variable for the selected unit (degrees)
+		var sensorValue = 0;
+
+	potentiometer.on("change", function(){
+		sensorValue = 100 * ( this.value / 1023 );
+		if( sensorValue < 60 ){
+			led.off();		}
 	});
 }
 
 board.on("ready", function() {
 
-	// Button;
-	button = new five.Button(2);
 	// LED;
-	led = new five.Led(3);
+	led = new five.Led(5);
+	// Potentiometer;
+	potentiometer = new five.Sensor("A0");
 
 	// Run the functions ----------------------
 

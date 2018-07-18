@@ -83,7 +83,7 @@ module.exports = {
 
         code+= '\t\tif( i == '+iftttObj.if.parameters[0].value+' ){\n';
 
-          code+= '\t\t\t' + parseThen( iftttObj );
+          code+= '\t\t\t' + parseThen( iftttObj ) +'\n';
 
           code+= '\t\t\t// Reset counter\n';
           code+= '\t\t\ti = 0;\n';

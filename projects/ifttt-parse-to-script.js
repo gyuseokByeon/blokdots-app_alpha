@@ -24,7 +24,7 @@ function parseIFTTTDB(){
 
 
 	// demo init
-	moduleCode+= 'module.exports = {\n\trun: function(){';
+	moduleCode+= 'module.exports = {\n\trun: function(){\n';
 	
 
 	runFunctions+= 'board.on("ready", function() {\n\n';
@@ -103,12 +103,12 @@ function parseIFTTTDB(){
 
 		// append call to board.ready
 		runFunctions+= '\tiftttCard_'+iftttDB[i].id+'();\n';
-		moduleCode+= '\tiftttCard_'+iftttDB[i].id+'();\n';
+		moduleCode+= '\t\tiftttCard_'+iftttDB[i].id+'();\n';
 	}
 
 	// end board ready
 	runFunctions+= '});'
-	moduleCode+= '}\n}'
+	moduleCode+= '\t}\n}'
 
 	// combine snippets 
 	var completeCode = setupCode + code + runFunctions;

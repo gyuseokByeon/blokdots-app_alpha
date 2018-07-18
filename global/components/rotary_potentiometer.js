@@ -2,10 +2,10 @@
 // Setup DB for component
 
 const component_setup = {
- "component": "Potentiometer",
+  "component": "Potentiometer",
   "type": "analog",
   "dir": "in",
-  "image_url": "rotary-potentiometer",
+  "image_url": "rotary_potentiometer",
   "presets": ["Data", "Percentage", "Angle"],
   "pwm": 0,
   "ifttt": { 
@@ -70,11 +70,11 @@ module.exports = {
           
           default:
           case 'over':
-            operator = '>';
+            operator = '<';
           break;
           
           case 'below':
-            operator = '<';
+            operator = '>';
           break;
         }
 

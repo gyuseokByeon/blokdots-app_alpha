@@ -68,11 +68,11 @@ module.exports = {
           
           default:
           case 'over':
-            operator = '>';
+            operator = '<';
           break;
           
           case 'below':
-            operator = '<';
+            operator = '>';
           break;
         }
 

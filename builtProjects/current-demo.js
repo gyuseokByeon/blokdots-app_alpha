@@ -1,33 +1,30 @@
 // New Card
 function iftttCard_0(){
-	// counter for times pressed / released
-	var i = 0;
-	slot2.on("down", function(){
-		i++;
-		if( i == 2 ){
-			slot3.on();			// Reset counter
-			i = 0;
-			console.log("undefined");
-		}
+		// set new variable for the selected unit (degrees)
+		var sensorValue = 0;
+
+	slotA0.on("change", function(){
+		sensorValue = 100 * ( this.value / 1023 );
+		if( sensorValue > 50 ){
+			slot5.on();		}
 	});
 }
 
 // New Card
 function iftttCard_1(){
-	// counter for times pressed / released
-	var i = 0;
-	slot2.on("down", function(){
-		i++;
-		if( i == 3 ){
-			slot3.off();			// Reset counter
-			i = 0;
-			console.log("undefined");
-		}
+		// set new variable for the selected unit (degrees)
+		var sensorValue = 0;
+
+	slotA0.on("change", function(){
+		sensorValue = 100 * ( this.value / 1023 );
+		if( sensorValue < 60 ){
+			slot5.off();		}
 	});
 }
 
 module.exports = {
-	run: function(){	iftttCard_0();
-	iftttCard_1();
-}
+	run: function(){
+		iftttCard_0();
+		iftttCard_1();
+	}
 }
