@@ -47,20 +47,36 @@ function projectInfo(){
 	});
 
 
+	headerDOM.on('click','.show-live-view.btn',function(){
+
+		ipcRenderer.send('showLiveView');
+
+	});
+
+
 }
 
 
 function runProject(){
 
-	parseIFTTTDB();
+	parseIFTTTDB(function(){
 
-	ipcRenderer.send('startProject');
+		// callback
+		console.log('Project runs 🏃‍♂️');
+
+		ipcRenderer.send('startProject');
+
+	});
+
+	
 
 }
 
 function stopProject(){
 
 	ipcRenderer.send('stopProject');
+
+	
 
 }
 

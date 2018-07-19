@@ -18,8 +18,9 @@ function startIFTTT(){
 
 	ipcRenderer.on('stopProject', function() {
 
-		console.log('stop')
-		delete require.cache[require.resolve(IFTTTmodulePath)]
+		console.log('stop project');
+		IFTTTmodule.stop();
+		delete require.cache[require.resolve(IFTTTmodulePath)];
 
 	});
 

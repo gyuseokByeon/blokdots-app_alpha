@@ -1,6 +1,6 @@
 
 
-function parseIFTTTDB(){
+function parseIFTTTDB( callback ){
 
 	console.log('Do some fancy code parsing 🤖');
 
@@ -93,9 +93,11 @@ function parseIFTTTDB(){
 		// only one ifttt atm -----------------------------------------------------------------
 		//for(var x = 0; x < iftttDB[i].ifttt.length; x++){
 
-			code+= parseComponent( iftttDB[i].ifttt );
+			code+= parseComponent( iftttDB[i] );
 
-		//}
+		//}	
+			code+= '\n\t// to trigger events\n';
+			code+= '\n\tiftttCard_'+iftttDB[i].id+'.action_'+iftttDB[i].id+' = action_'+iftttDB[i].id+';\n\n';
 
 
 		// close function
@@ -107,8 +109,16 @@ function parseIFTTTDB(){
 	}
 
 	// end board ready
-	runFunctions+= '});'
-	moduleCode+= '\t}\n}'
+	runFunctions+= '});';
+
+
+	// add fn to stop code from running
+
+	moduleCode+= '\t},\n'; // end of run fn
+
+	moduleCode+= parseIFTTTStop();
+
+	moduleCode+='}';
 
 	// combine snippets 
 	var completeCode = setupCode + code + runFunctions;
@@ -119,8 +129,8 @@ function parseIFTTTDB(){
 	// change var names for demo
 	for(var i = 0; i < allSlotsProject.length; i++){
 
-		let oldVarName = allSlotsProject[i].var+'.';
-		let newVarName = 'slot'+allSlotsProject[i].slot+'.';
+		let oldVarName = allSlotsProject[i].var+'\.';
+		let newVarName = 'slot'+allSlotsProject[i].slot+'\.';
 		let regex = new RegExp(oldVarName, "g");
 
 		fullDemoCode = fullDemoCode.replace(regex, newVarName);
@@ -130,34 +140,36 @@ function parseIFTTTDB(){
 	saveProjectToFile( projectName , completeCode );
 
 	// save code into file -> regular js
-	saveProjectToFile( 'current-demo' , fullDemoCode );
+	saveProjectToFile( 'current-demo' , fullDemoCode , callback );
+
 }
+
 
 
 // need allSlotsProject for var name
 
-function parseComponent( iftttObj ){
+function parseComponent( iftttDBObj ){
 
-	var slotObjIf = findSlotObj( iftttObj.if.slot );
+	var slotObjIf = findSlotObj( iftttDBObj.ifttt.if.slot );
 	
 	var code = '';
 
 	// get if condition
-	code+= parseIf( iftttObj , slotObjIf ); 
+	code+= parseIf( iftttDBObj , slotObjIf ); 
 
 	return code;
 }
 
 
 
-function parseIf( iftttObj , slotObj ){
+function parseIf( iftttDBObj , slotObj ){
 
 	var code = '';
 	var componentType = findComponentTypeObj( slotObj );
 	var actionObj;
 
 	for (var i = 0; i < componentType.ifttt.actions.length ; i++) {
-		if( componentType.ifttt.actions[i].action == iftttObj.if.action ){
+		if( componentType.ifttt.actions[i].action == iftttDBObj.ifttt.if.action ){
 
 			actionObj = componentType.ifttt.actions[i];
 		}
@@ -167,7 +179,7 @@ function parseIf( iftttObj , slotObj ){
 
 	// console.log(componentType.image_url);
 
-	code+= window[ componentType.image_url ].parse( slotObj , actionObj , iftttObj );
+	code+= window[ componentType.image_url ].parse( slotObj , actionObj , iftttDBObj );
 
 	return code;
 
@@ -200,11 +212,45 @@ function parseThen( iftttObj ){
 }
 
 
-function saveProjectToFile( filename , code ){
+
+function parseIFTTTStop(){
+
+	var code = '\tstop: function(){\n';
+
+		for ( var i = 0 ; i < iftttDB.length ; i++ ) {
+
+			var iftttDBObj = iftttDB[i];
+			var slotObj = findSlotObj( iftttDBObj.ifttt.if.slot );
+			var componentType = findComponentTypeObj( slotObj );
+			var actionObj;
+
+			for (var y = 0; y < componentType.ifttt.actions.length ; y++) {
+				if( componentType.ifttt.actions[y].action == iftttDBObj.ifttt.if.action ){
+					actionObj = componentType.ifttt.actions[y];
+				}
+			}
+
+			code+= '\t\t'+slotObj.var+'.removeListener("'+actionObj.jhonny5+'", iftttCard_'+iftttDBObj.id+'.action_'+iftttDBObj.id+');\n';
+		}
+
+	code+= '\t}\n';
+
+	console.log('listener removed')
+
+
+	return code;
+}
+
+
+function saveProjectToFile( filename , code , callback ){
 	fs.writeFile('./builtProjects/'+filename+'.js', code, function(err) {
 	    if (err) {
 	        console.log(err);
-	    }
+	    }else{
+	    	if (callback && typeof(callback) === "function") {
+				callback();
+			}
+  		}
 	});
 }
 

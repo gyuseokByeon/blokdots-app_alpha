@@ -67,6 +67,24 @@
 			color: $color-font-med;
 			width: calc( 100% - 90px );
 		}
+		.close {
+			position: absolute;
+			background: url('../img/icons/close.svg');
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 10px 10px;
+			top: 4px;
+			right: 4px;
+			width: 14px;
+			height: 14px;
+			border-radius: 2px;
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1;
+				background-color: $color-gray-6;
+			}
+		}
 	}
 
 	.program {

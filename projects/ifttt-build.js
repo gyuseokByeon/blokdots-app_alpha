@@ -4,7 +4,21 @@
 
 var iftttID = 0;
 var iftttDB = [];
-var projectTitle = 'new_project'
+var projectTitle = 'new_project';
+
+function getIFTTTDBIndex( theID ){
+
+	var index = 0;
+
+	for ( var i = 0; i < iftttDB.length; i++ ) {
+		if( iftttDB[i].id == theID){
+			index = i;
+		}
+	}
+
+	return index;
+}
+
 
 function initIFTTT(){
 
@@ -34,6 +48,7 @@ function buildIFTTTCard(){
 
 			title+= '<div class="id">'+iftttID+'</div>';
 			title+= '<input type="text" class="name" value="New Card '+iftttID+'"">';
+			title+= '<div class="close"></div>';
 
 		title+= '</div>';
 
@@ -242,8 +257,15 @@ function addChoiceListeners( iftttDOM ){
 			value = 'Card '+currIftttID;
 		}
 
-		iftttDB[ currIftttID ].title = value;
+		var dbIndex = getIFTTTDBIndex( currIftttID )
 
+		iftttDB[ dbIndex ].title = value;
+
+	});
+
+	// Change Name within iftttDB
+	iftttDOM.on('click','.title .close',function(){
+		deleteIFTTT( iftttDOM );
 	});
 
 }
@@ -411,7 +433,7 @@ function addFiller( filler ){
 
 function addIFTTTDBEntry(){
 
-	iftttDB[ iftttID ] = {
+	iftttDB[ iftttDB.length ] = {
       'id'  	: iftttID,
       'title'	: 'New Card'
     }
@@ -419,8 +441,35 @@ function addIFTTTDBEntry(){
 	iftttID++;
 }
 
-function IFTTTCardDone( iftttDOM ){
+Array.prototype.clean = function(deleteValue) {
+	for (var i = 0; i < this.length; i++) {
+		if (this[i] == deleteValue) {         
+			this.splice(i, 1);
+			i--;
+		}
+	}
+	return this;
+};
 
+function deleteIFTTT( iftttDOM ){
+
+	var thisID = parseInt( iftttDOM.attr('ifttt-id') ); 
+
+	var dbIndex = getIFTTTDBIndex( thisID );
+
+	iftttDB.splice(dbIndex, 1);
+
+	iftttDB.clean(null);
+	iftttDOM.remove();
+
+	if( $('.add-ifttt').length <= 0 ){
+		initIFTTT();
+	}
+
+}
+
+
+function IFTTTCardDone( iftttDOM ){
 	// parse html to json
 	parseIFTTTCard( iftttDOM );
 

@@ -23,7 +23,7 @@ $height-project-slot:				80px;
 $margin-project-slot-from-left:		130px;
 $margin-project-slot-from-right: 	55px;
 
-$height-project-searchbar:			120px;
+$height-project-searchbar:			0px;//120px;
 $padding-project-main-side:			50px;
 
 
@@ -57,7 +57,7 @@ body {
 	#searchbar {
 
 		height: $height-project-searchbar;
-		padding: $padding-project-main-side;
+		//padding: $padding-project-main-side;
 
 	}
 	

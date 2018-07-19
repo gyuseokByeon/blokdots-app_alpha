@@ -39,6 +39,10 @@ const component_setup = {
         ]  
       },
       {
+        "reaction" : "toggle",
+        "parameters" : []  
+      },
+      {
         "reaction" : "blink",
         "parameters" : [
           {
@@ -91,8 +95,13 @@ module.exports = {
 
         break;
 
-        case 'blink':
+        case 'toggle':
 
+            code+= slotObj.var + '.toggle();';
+
+        break;
+
+        case 'blink':
 
 
         break;

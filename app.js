@@ -7,9 +7,8 @@ const path = require('path');
 const url = require('url');
 
 
-
-let lvWindow;
-let projWindow;
+var lvWindow;
+var projWindow;
 
 // init electron windows
 function createLiveViewWindow(){
@@ -30,11 +29,9 @@ function createLiveViewWindow(){
 
 
 	lvWindow.on('close', function (event) {
-
-		// console.log(event);
-	    // event.preventDefault();
-	    // lvWindow.hide();
-		//lvWindow = null
+	    event.preventDefault();
+	    lvWindow.hide();
+		// lvWindow = null
 	})
 
 }
@@ -53,44 +50,11 @@ function createProjectWindow(){
   	projWindow.openDevTools();
   	
 	projWindow.on('close', function () {
-
-		projWindow = null
+		//event.preventDefault();
+	    // projWindow.hide();
 	})
 
 	projWindow.setPosition(530, 200 );
-
-  	// init communication between windows
-
-/*
-	ipcMain.on('library_toggle', function () {
-
-		if(libraryVisible){
-			projWindow.setSize(1150,860,true);
-			libraryVisible = false;
-		}else{
-			projWindow.setSize(1450,860,true);	
-			libraryVisible = true;
-		}
-		
-	});
-
-	ipcMain.on('resize', (event, arg) => {
-	    lvWindow.setSize(400,arg,true);
-	});
-
-	ipcMain.on('playPause', function() {
-	    lvWindow.webContents.send('runProject');
-	    projWindow.webContents.send('runProject');
-	});
-
-	ipcMain.on('stripSetUp', function() {
-	    projWindow.webContents.send('stripSetUp');
-	});
-
-	ipcMain.on('showProject', function() {
-	    projWindow.show();
-	});
-*/
 	
 };
 
@@ -208,6 +172,11 @@ function ipcCommunicationInit(){
 	});
 	ipcMain.on('stopProject', function() {
 	    lvWindow.webContents.send('stopProject');
+	});
+
+
+	ipcMain.on('showLiveView', function() {
+	    lvWindow.show();
 	});
 
 

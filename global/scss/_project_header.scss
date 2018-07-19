@@ -17,23 +17,19 @@ $margin-header-left: 	18px;
 		width: 24px;
 		height: 24px;
 
-		background: #f00;
-
 		position: absolute;
 		top: calc( 50% - 12px );
 		left: $margin-header-left;
-
+		
+		background-image: url(../img/misc/play.svg);
 		background-repeat: no-repeat;
 		background-size: contain;
 
 		transition: opacity $time-reg;
-
-		&:hover {
-			opacity: 0.8;
-		}
+		opacity: 0.8;
 
 		&.running {
-			background: #0f0;
+			background-image: url(../img/misc/stop.svg);
 		}
 
 	}
@@ -85,6 +81,15 @@ $margin-header-left: 	18px;
 
 	}
 
+}
 
+
+
+.function-buttons {
+
+	left: $margin-header-left;
+	right: $margin-header-right;	
+	position: absolute;
+	top: 100px;	
 
 }

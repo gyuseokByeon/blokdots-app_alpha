@@ -44,15 +44,19 @@ module.exports = {
   setup: component_setup,
 
   // Parse function for IFTTT
-  parse: function( slotObj , actionObj , iftttObj ){
+  parse: function( slotObj , actionObj , iftttDBObj ){
 
     var code = '';
+
+    var iftttObj = iftttDBObj.ifttt;
 
     code+= '\t\t// set new variable for the selected unit (degrees)\n';
     code+= '\t\tvar sensorValue = 0;\n\n';
 
     // append var name and action init handler
-    code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", function(){\n';
+    code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", action_'+iftttDBObj.id+' );\n\n';
+
+    code+= '\tfunction action_'+iftttDBObj.id+'(){\n';
 
     switch( iftttObj.if.action ){
 
@@ -108,7 +112,7 @@ module.exports = {
     }
 
     // close .on of if
-    code+= '\t});\n';
+    code+= '\t}\n';
 
     return code;
   }
