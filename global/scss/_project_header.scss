@@ -71,6 +71,33 @@ $margin-header-left: 	18px;
 				background-image: url(../img/misc/warn.svg);
 			}
 		}
+		
+		&.medium-alert {
+			
+			color: $color-alert-medium;
+
+			&:after {
+				background-image: url(../img/misc/warn.svg);
+			}
+		}
+
+		&.low-alert {
+			
+			color: $color-alert-low;
+
+			&:after {
+				background-image: url(../img/misc/warn.svg);
+			}
+		}
+
+		&.success-alert {
+			
+			color: $color-alert-success;
+
+			&:after {
+				background-image: url(../img/misc/warn.svg);
+			}
+		}
 	}
 
 	.icon-btn {

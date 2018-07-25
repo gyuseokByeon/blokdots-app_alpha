@@ -11,7 +11,7 @@ const component_setup = {
   "ifttt": { 
     "actions" : [
       {
-        "action" : "pressed",
+        "action" : "touched",
         "jhonny5" :  "down",
         "parameters" : [
           {
@@ -62,47 +62,57 @@ module.exports = {
   setup: component_setup,
 
   // Parse function for IFTTT
-  parse: function( slotObj , actionObj , iftttObj ){
+  parse: function( slotObj , actionObj , iftttDBObj ){
 
     var code = '';
 
-
     code+= '\t// counter for times pressed / released\n';
-    code+= '\tvar i = 0;\n\n';
+    code+= '\tvar i = 0;\n';
 
     // append var name and action init handler
-    code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", function(){\n';
+    code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", action_'+iftttDBObj.id+' );\n\n';
 
+    code+= '\tfunction action_'+iftttDBObj.id+'(){\n';
 
-    switch( iftttObj.if.action ){
+    switch( iftttDBObj.ifttt.if.action ){
 
-      case 'pressed':
+      case 'touched':
       case 'released':
 
-        code+= '\t\tif( i == '+iftttObj.if.parameters[0].value+' ){\n';
+        code+= '\t\ti++;\n';
 
-          code+= '\t\t\t' + parseThen( iftttObj );
+
+        code+= '\t\tif( i == '+iftttDBObj.ifttt.if.parameters[0].value+' ){\n';
+
+          code+= '\t\t\t' + parseThen( iftttDBObj.ifttt ) +'\n';
+
+          code+= '\t\t\t// Reset counter\n';
+          code+= '\t\t\ti = 0;\n';
 
         code+= '\t\t}\n';
 
-        code+= '\t\ti++;\n';
 
       break;
 
       case 'held':
 
-
+        code+= '\t\t' + parseThen( iftttDBObj.ifttt ) +'\n';
 
       break;
 
     }
 
     // close .on
-    code+= '\t});\n';
+    code+= '\t}\n';
 
     return code;
   }
 }
+
+
+
+
+
 
 
 

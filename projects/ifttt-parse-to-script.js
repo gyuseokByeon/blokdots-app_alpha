@@ -96,7 +96,7 @@ function parseIFTTTDB( callback ){
 			code+= parseComponent( iftttDB[i] );
 
 		//}	
-			code+= '\n\t// to trigger events\n';
+			code+= '\n\t// to trigger events';
 			code+= '\n\tiftttCard_'+iftttDB[i].id+'.action_'+iftttDB[i].id+' = action_'+iftttDB[i].id+';\n\n';
 
 
@@ -187,7 +187,7 @@ function parseIf( iftttDBObj , slotObj ){
 
 
 // Will be parsed within the parseIf Fns
-function parseThen( iftttObj ){
+function parseThen( iftttObj , ifSlotVar ){
 
 	var slotObj = findSlotObj( iftttObj.then.slot );
 	var componentType = findComponentTypeObj( slotObj );
@@ -205,7 +205,7 @@ function parseThen( iftttObj ){
 
 	// code+= eval( 'parse_'+componentType.image_url+'( slotObj , reactionObj , iftttObj , true )' );
 
-	code+= window[ componentType.image_url ].parse( slotObj , reactionObj , iftttObj , true );
+	code+= window[ componentType.image_url ].parse( slotObj , reactionObj , iftttObj , true , ifSlotVar );
 
 	return code;
 

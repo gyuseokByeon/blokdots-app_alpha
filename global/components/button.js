@@ -96,7 +96,7 @@ module.exports = {
 
       case 'held':
 
-
+        code+= '\t\t' + parseThen( iftttDBObj.ifttt ) +'\n';
 
       break;
 

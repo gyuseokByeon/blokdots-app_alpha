@@ -29,6 +29,7 @@ header {
 #setup #components #slots {
 	height: calc( 100vh - #{$height-project-header} - 30px );
 	overflow-y: scroll;
+	// background: $color-gray-6;
 }
 
 
@@ -44,10 +45,20 @@ header {
 		}
 	}
 
+	&:hover {
+		
+		.controls {
+			.close {
+				opacity: 0.3;
+			}
+		}
+	}
+
 	.controls {
 
 		height: $height-project-slot;
 		border-bottom: solid 1px $color-gray-6;
+		// background: $color-gray-2;
 
 		.indicator {
 			position: absolute;
@@ -100,26 +111,16 @@ header {
 
 		.close {
 			position: absolute;
-			top: 5px;
-			right: 5px;
-			width: 10px;
-			height: 10px;
 			background: url('../img/icons/close.svg');
-			background-size: contain;
 			background-position: center center;
-			background-repeat: no-repeat;
-			opacity: 0.3;
-
-			// v2
-			
+			background-repeat: no-repeat;			
 			top: 3px;
 			right: 3px;
 			width: 14px;
 			height: 14px;
 			border-radius: 2px;
 			background-size: 10px 10px;
-			opacity: 0.5;
-
+			opacity: 0;
 
 			&:hover {
 				opacity: 1;

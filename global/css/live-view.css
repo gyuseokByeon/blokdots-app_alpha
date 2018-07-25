@@ -43,6 +43,8 @@ header {
   transition: height 0.3s; }
   .slot:first-child .controls {
     border-top: none; }
+  .slot:hover .controls .close {
+    opacity: 0.3; }
   .slot .controls {
     height: 80px;
     border-top: solid 1px #dcdcdc; }
@@ -83,22 +85,16 @@ header {
       top: calc( 50% - 35px ); }
     .slot .controls .close {
       position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 10px;
-      height: 10px;
       background: url("../img/icons/close.svg");
-      background-size: contain;
       background-position: center center;
       background-repeat: no-repeat;
-      opacity: 0.3;
       top: 3px;
       right: 3px;
       width: 14px;
       height: 14px;
       border-radius: 2px;
       background-size: 10px 10px;
-      opacity: 0.5; }
+      opacity: 0; }
       .slot .controls .close:hover {
         opacity: 1;
         background-color: #f0f0f0; }

@@ -62,7 +62,7 @@ module.exports = {
 
       case 'changing':
 
-        code+= '\t\t\t' + parseThen( iftttObj );
+        code+= '\t\t\t' + parseThen( iftttObj , slotObj.var );
   
       break;
 
@@ -102,7 +102,7 @@ module.exports = {
 
         code+= '\t\tif( sensorValue '+operator+' '+iftttObj.if.parameters[1].value+' ){\n';
 
-          code+= '\t\t\t' + parseThen( iftttObj );
+          code+= '\t\t\t' + parseThen( iftttObj , slotObj.var );
 
         code+= '\t\t}\n';
 

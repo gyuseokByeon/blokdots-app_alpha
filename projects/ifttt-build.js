@@ -119,6 +119,8 @@ function addChoiceListeners( iftttDOM ){
 	// setup element when selected
 	iftttDOM.on('change','.choose',function(){
 
+		checkRunning();
+
 		var choiceDOM = $(this);
 
 		choiceDOM.find('.dummy').remove();
@@ -225,6 +227,10 @@ function addChoiceListeners( iftttDOM ){
 			if( step <= allSteps ){
 				programPartComponentDOM.append( addFiller( parameter.filler ) );
 				programPartComponentDOM.append( buildNewChoice( parameter.option ) );
+
+				if( parameter.option == 'integer' ){
+					programPartComponentDOM.find('.integer').trigger('change').val(1);
+				}
 			}else{
 				programPartComponentDOM.attr('progress','done')
 				console.log('new init')
@@ -324,7 +330,20 @@ function buildNewChoice( type , componentTypeObj ){
 		case 'reactions':
 
 			for(var i = 0; i < componentTypeObj.ifttt.reactions.length; i++){
-				choiceMarkup+= '<option>'+componentTypeObj.ifttt.reactions[i].reaction+'</option>';
+
+				console.log( componentTypeObj.ifttt.reactions[i].pwm )
+
+				/*
+				// Only allow pwm values if sensor is also pwm
+				if( componentTypeObj.ifttt.reactions[i].pwm == true ){
+
+
+
+				}else{
+					*/
+
+					choiceMarkup+= '<option>'+componentTypeObj.ifttt.reactions[i].reaction+'</option>';
+				//}
 			}
 
 		break;
@@ -514,8 +533,9 @@ function parseIFTTTCard( iftttDOM ){
 
 	var thenComponentTypeObj = findComponentTypeObj( null , thenComponent );
 
-	
-	var db = iftttDB[iftttID];
+	var dbIndex = getIFTTTDBIndex( iftttID );
+
+	var db = iftttDB[dbIndex];
 
 	db.ifttt = {
 		'if' 	: {

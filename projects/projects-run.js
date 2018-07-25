@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 function projectInfo(){
 
 	const headerDOM = $('header');
@@ -66,20 +60,53 @@ function runProject(){
 
 		ipcRenderer.send('startProject');
 
+		projectIsRunningFlag = true;
+
 	});
 
 	
 
 }
 
+var projectIsRunningFlag = false;
+
 function stopProject(){
 
 	ipcRenderer.send('stopProject');
 
-	
+	projectIsRunningFlag = false;
+
+	checkRunning();
 
 }
 
+// Display Error when running
+function checkRunning(){
+
+	if( projectIsRunningFlag ){
+		showError( 'medium' , 'Old Project' );
+	}else{
+		showError( 'none' );
+	}
+
+}
+
+
+function showError( level , text ){
+
+	var errorField = $('.error_warnings');
+
+	if( level == null || level == 'none' ){
+
+		errorField.attr('class', 'error_warnings');
+		errorField.text('');
+
+	}else{
+		errorField.text(text);
+		errorField.addClass(level+'-alert');
+	}
+
+}
 
 
 $(document).ready(function(){
@@ -87,3 +114,7 @@ $(document).ready(function(){
 	projectInfo();
 
 });
+
+
+
+
