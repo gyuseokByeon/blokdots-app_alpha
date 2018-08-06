@@ -33,10 +33,17 @@ ipcRenderer.on('use', function(evt,slotObj) {
 
 });
 
-
-// if use button is hit on liveview -> insert component also in project
 ipcRenderer.on('disconnectSlotLV', function(evt,slotNum) {
     
 	slotGotDetached( slotNum );
+
+});
+
+
+
+// Display Alert
+ipcRenderer.on('showAlert', function( evt , level , message ) {
+    
+	showError( level , message );
 
 });

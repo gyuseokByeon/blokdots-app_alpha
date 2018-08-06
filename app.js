@@ -10,6 +10,9 @@ const url = require('url');
 var lvWindow;
 var projWindow;
 
+var quitFlag = false;
+
+
 // init electron windows
 function createLiveViewWindow(){
 
@@ -29,10 +32,11 @@ function createLiveViewWindow(){
 
 
 	lvWindow.on('close', function (event) {
-	    event.preventDefault();
-	    lvWindow.hide();
-		// lvWindow = null
-	})
+		if( !quitFlag ){
+			event.preventDefault();
+	    	lvWindow.hide();
+		}
+	});
 
 }
 function createProjectWindow(){
@@ -180,6 +184,11 @@ function ipcCommunicationInit(){
 	});
 
 
+	ipcMain.on('showAlert', function( evt , level , message ) {
+	    projWindow.webContents.send('showAlert',level,message);
+	});
+
+
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate);
@@ -199,14 +208,29 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
   }
-})
+});
 
 app.on('activate', function () {
   if (projWindow === null) {
     // createProjectWindow();
   }
   lvWindow.show();
-})
+});
+
+
+// Quit Process
+app.on('quit', function () {
+
+});
+
+app.on('will-quit', function () {
+   
+});
+
+app.on('before-quit', function() {
+	// Set flag true to allow lvWindow to be closed
+	quitFlag = true;
+});
 
 app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 

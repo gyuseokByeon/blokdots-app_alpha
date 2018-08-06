@@ -127,11 +127,11 @@ function blokdotsConnectionIndicator( bool ){
   if( bool ){
 
     conn.addClass('connected');
-    conn.text('board connected')
+    conn.text('board connected');
   }else{
 
     conn.removeClass('connected');
-    conn.text('device not found')
+    conn.text('device not found');
   }
 
   toggleLiveViewControls( bool );
@@ -453,11 +453,12 @@ function disconnectComponent( slotNum ){
 
   if( window[ slotObj.var ] ){
 
-    /*
+    
     if( slotObj.dir == 'in' ){
-      window[ slotObj.var ].disable()
+
+      // Stop emmitting events
+      window[ slotObj.var ].disable();
     }
-    */
     delete window[ slotObj.var ];
 
   }
@@ -626,7 +627,10 @@ function buildLiveViewDisplayListener( slotObj ){
     case 'Button':
     case 'Touch Sensor':
     
-      window[ slotObj.var ] = new five.Button( slotObj.slot );
+      window[ slotObj.var ] = new five.Button({
+        pin   : slotObj.slot,
+        board : board 
+      });
 
       button_LiveViewDisplayListener( 0 , slotObj.slot );
 
@@ -641,7 +645,10 @@ function buildLiveViewDisplayListener( slotObj ){
 
     case 'Potentiometer':
 
-      window[ slotObj.var ] = new five.Sensor( slotObj.slot );
+      window[ slotObj.var ] = new five.Sensor({
+        pin   : slotObj.slot,
+        board : board 
+      });
 
       window[ slotObj.var ].on("change", function(val) {
         potentiometer_LiveViewDisplayListener( val , slotObj.slot );
@@ -653,7 +660,10 @@ function buildLiveViewDisplayListener( slotObj ){
 
     case 'LED':
 
-      window[ slotObj.var ] = new five.Led( slotObj.slot );
+      window[ slotObj.var ] = new five.Led({
+        pin   : slotObj.slot,
+        board : board 
+      });
 
       var slotDOM = findSlotDOM( slotObj.slot );
 
@@ -663,7 +673,10 @@ function buildLiveViewDisplayListener( slotObj ){
 
     case 'Servo Motor':
 
-      window[ slotObj.var ] = new five.Servo( slotObj.slot );
+      window[ slotObj.var ] = new five.Servo({
+        pin   : slotObj.slot,
+        board : board 
+      });
 
       servo_LiveViewDisplayControl( slotObj );
 
@@ -671,7 +684,10 @@ function buildLiveViewDisplayListener( slotObj ){
 
     case 'Buzzer':
 
-      window[ slotObj.var ] = new five.Piezo( slotObj.slot );
+      window[ slotObj.var ] = new five.Piezo({
+        pin   : slotObj.slot,
+        board : board 
+      });
       buzzer_LiveViewDisplayControl( slotObj );
 
     break;
@@ -952,6 +968,50 @@ function initRangeSlider( sliderDOM ){
 
   });
 
+}
+
+
+
+
+function removeAllSlotListeners(){
+
+  console.log('remove all listeners and vars')
+
+  for ( var i = 0; i < allSlots.length; i++) {
+    
+    var slotObj = allSlots[i];
+
+    if( slotObj.var ){
+      delete window[ slotObj.var ];
+    }
+  }
+
+
+}
+
+function reattachAllSlots(){
+
+  var inUseCounter = 0;
+
+  for ( var i = 0; i < allSlots.length; i++) {
+    var slotObj = allSlots[i];
+    if( slotObj.state == 'inUse' ){
+      inUseCounter++;
+    }
+  }
+
+  if( inUseCounter != 0 ){
+
+    console.log('set up previous connections');
+
+    for ( var i = 0; i < allSlots.length; i++) {
+      var slotObj = allSlots[i];
+      
+      if( slotObj.var ){
+        buildLiveViewDisplayListener( slotObj );
+      }
+    }
+  }
 }
 
 

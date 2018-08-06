@@ -1,11 +1,13 @@
 {
-  "name": "blokdots-app",
+  "name": "blokdots",
   "version": "0.0.1",
   "description": "A software to programm hardware using the IFTTT principle",
   "main": "app.js",
   "scripts": {
     "test": "test",
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "build",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -27,9 +29,6 @@
   },
   "homepage": "http://blokdots.com",
   "dependencies": {
-    "electron": "^2.0.4",
-    "electron-compile": "^6.4.3",
-    "electron-ipc": "^0.3.0",
     "johnny-five": "^0.15.0",
     "jquery": "^3.3.1",
     "node-pre-gyp": "^0.10.3",
@@ -37,7 +36,39 @@
     "usb": "git+https://git@github.com/tessel/node-usb.git"
   },
   "devDependencies": {
+    "electron": "^2.0.4",
+    "electron-compile": "^6.4.3",
+    "electron-ipc": "^0.3.0",
+    "electron-builder": "latest",
+    "electron-packager": "^12.1.0",
     "electron-prebuilt-compile": "^2.0.4",
     "electron-rebuild": "^1.8.1"
+  },
+  "build": {
+    "appId": "yourappid",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "build/icon.ico"
+    }
   }
 }

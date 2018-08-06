@@ -43,12 +43,18 @@ $margin-header-left: 	18px;
 	.error_warnings {
 		
 		font-size: $font-size-small;
+
+		color: $color-font-light;
 		
 		position: absolute;
-		top: calc( 50% - 0.7em );
-		right: 56px;
-
+		top: calc( 50% - 0.7em - 2px );
+		right: 52px;
+		
+		padding: 2px 3px;
+		border-radius: $border-radius-reg;
 		padding-right: 14px;
+
+		box-shadow: -5px 0px 10px $project-setup-color-bg;
 
 		&:after {
 			content: '';
@@ -58,44 +64,44 @@ $margin-header-left: 	18px;
 			width: 9px;
 			height: 9px;
 			position: absolute;
-			right: 0;
-			top: 2px;
+			right: 2px;
+			top: 3px;
 
 		}
 
 		&.high-alert {
 			
-			color: $color-alert-high;
+			background-color: $color-alert-high;
 
 			&:after {
-				background-image: url(../img/misc/warn.svg);
+				background-image: url(../img/misc/warn_white.svg);
 			}
 		}
 		
 		&.medium-alert {
 			
-			color: $color-alert-medium;
+			background-color: $color-alert-medium;
 
 			&:after {
-				background-image: url(../img/misc/warn.svg);
+				background-image: url(../img/misc/warn_white.svg);
 			}
 		}
 
 		&.low-alert {
 			
-			color: $color-alert-low;
+			background-color: $color-alert-low;
 
 			&:after {
-				background-image: url(../img/misc/warn.svg);
+				background-image: url(../img/misc/warn_white.svg);
 			}
 		}
 
 		&.success-alert {
 			
-			color: $color-alert-success;
+			background-color: $color-alert-success;
 
 			&:after {
-				background-image: url(../img/misc/warn.svg);
+				background-image: url(../img/misc/warn_white.svg);
 			}
 		}
 	}

@@ -83,11 +83,14 @@ usb.on('detach', function( device ) {
 	if ( device == blokdots ){
 		console.log('%cblokdots Disconnected 🔌','color: '+consoleColors.alert+';');
 		// io.emit('blokdotsDisconnect');
-	}
-	ipcRenderer.send('detached');
-	connected = false;
-	blokdotsConnectionIndicator( connected );
 
+		closeBoard();
+		ipcRenderer.send('detached');
+		connected = false;
+		blokdotsConnectionIndicator( connected );
+
+		ipcRenderer.send('showAlert', 'high' , 'board not connected' );
+	}
 });
 
 function initPort(){
@@ -128,6 +131,7 @@ function initBoard(){
 	}else{
 		// setup board
 		board = new five.Board({
+		  // id: "A",
 		  repl: false, // does not work with browser console
 		  port: MYport,
 		  sigint: true
@@ -141,6 +145,11 @@ function initBoard(){
 		connected = true;
 		blokdotsConnectionIndicator( connected );
 		console.log('%cBoard is ready to go 🚀','color: '+consoleColors.good+';');
+
+		reattachAllSlots();
+
+		ipcRenderer.send('showAlert');
+
 	});
 
 	board.on("close", function () {
@@ -151,6 +160,11 @@ function initBoard(){
 
 function closeBoard(){
 
+
+	removeAllSlotListeners();
+
+	board = null;
+	
 	console.log('board closing')
 
 	/*
@@ -163,7 +177,7 @@ function closeBoard(){
 	exitHook(function () {
         console.log('exitong (exitHook)')
     });
-    */
+   
     
     process.on('SIGINT', function () {
         console.log('process.on SIGINT');
@@ -172,6 +186,11 @@ function closeBoard(){
     process.on('exit', function () {
         console.log('process.on exit ');
     });
+
+    */
+
+
+    // ipcRenderer.send('stopProject');
 
 }
 

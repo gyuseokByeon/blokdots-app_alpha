@@ -1,0 +1,1 @@
+This folder is needed for distributing necessary files when compiling into a standalone app.

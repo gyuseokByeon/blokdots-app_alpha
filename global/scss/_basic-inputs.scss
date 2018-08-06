@@ -61,24 +61,24 @@ input[type=range]::-webkit-slider-runnable-track {
 .btn {
 
 	border-radius: $border-radius-reg;
-	background: $color-white;
+	background-color: $color-white;
 	border: solid 1px $color-gray-3;
 	padding: 2px 4px;
 	text-align: center;
 
 	&:hover {
-		background: $color-gray-1;
+		background-color: $color-gray-1;
 	}
 	&:active {
-		background: $color-gray-3;
+		background-color: $color-gray-3;
 	}
 
 
 	&.ghost {
-		background: none;
+		background-color: none;
 
 		&:hover {
-			background: $color-gray-1;
+			background-color: $color-gray-1;
 		}
 	}
 	&.ghost-dark {
@@ -87,10 +87,10 @@ input[type=range]::-webkit-slider-runnable-track {
 		color: $color-gray-7;
 
 		&:hover {
-			background: $color-gray-4;
+			background-color: $color-gray-4;
 		}
 		&:active {
-			background: $color-gray-1;
+			background-color: $color-gray-1;
 		}
 	}
 	&.ghost-light {
@@ -99,11 +99,11 @@ input[type=range]::-webkit-slider-runnable-track {
 		color: $color-white;
 
 		&:hover {
-			background: $color-white;
+			background-color: $color-white;
 			color: $color-brand-interactive;
 		}
 		&:active {
-			background: rgba( $color-white , 0.9 );
+			background-color: rgba( $color-white , 0.9 );
 		}
 	}
 
@@ -118,6 +118,17 @@ input[type=range]::-webkit-slider-runnable-track {
 		background-repeat: no-repeat;
 		background-size: 16px 16px;
 
+	}
+
+	&.darker {
+		background-color: $color-gray-3;
+
+		&:hover {
+			background-color: $color-gray-5;
+		}
+		&:active {
+			background-color: $color-gray-4;
+		}
 	}
 }
 
