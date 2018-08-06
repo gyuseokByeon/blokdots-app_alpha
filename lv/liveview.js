@@ -962,6 +962,7 @@ $(document).ready(function(){
   // Layout Functions
   initSeparators();
   initBlokdotsConnectionIndicator();
+  fillBtnIcons();
 
   // Slots
   initSlots();
