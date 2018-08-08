@@ -47,6 +47,14 @@ function projectInfo(){
 
 	});
 
+	headerDOM.on('click','.save-project.btn',function(){
+		saveProject();
+	});
+
+	headerDOM.on('click','.open-project.btn',function(){
+		openFile();
+	});
+
 
 }
 

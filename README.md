@@ -16,6 +16,6 @@ Currently blokdots is running with the powerful [Johnny-Five](http://johnny-five
 Visit the [documentation](http://docs.blokdots.com) for the software or its [repository](https://github.com/olivierbrcknr/blokdots-docs).
 
 #### Together With
-[Christoph Labacher](https://www.christophlabacher.com)
+[Christoph Labacher](https://www.christophlabacher.com)  
 [Nikolas Klein](http://nikolasklein.de)  
 [Manuel Hollfelder](https://github.com/mhollfelder)

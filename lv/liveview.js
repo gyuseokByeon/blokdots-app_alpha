@@ -453,12 +453,13 @@ function disconnectComponent( slotNum ){
 
   if( window[ slotObj.var ] ){
 
-    
+    /*
     if( slotObj.dir == 'in' ){
 
       // Stop emmitting events
       window[ slotObj.var ].disable();
     }
+    */
     delete window[ slotObj.var ];
 
   }

@@ -47,6 +47,7 @@ function createProjectWindow(){
 		height: 806,
 		minHeight: 566,
 		minWidth: 650,
+		maxHeight: 1046,
 		show: true,
 		titleBarStyle: 'hidden'
   	});

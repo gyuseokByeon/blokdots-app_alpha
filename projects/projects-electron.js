@@ -1,6 +1,7 @@
 
 // Node modules
 const {remote, ipcRenderer} = require('electron');
+const {dialog} = require('electron').remote;
 const fs = require('fs');
 // const childProcess = require("child_process");
 

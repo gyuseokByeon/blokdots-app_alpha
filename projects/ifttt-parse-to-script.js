@@ -137,10 +137,10 @@ function parseIFTTTDB( callback ){
 	}
 
 	// save code into file -> regular js
-	saveProjectToFile( projectName , completeCode );
+	saveProjectToCode( projectName , completeCode , projectPath ); // projectPath is the path of the correct files
 
-	// save code into file -> regular js
-	saveProjectToFile( 'current-demo' , fullDemoCode , callback );
+	// save code into file -> demo js
+	saveProjectToCode( 'current-demo' , fullDemoCode , './builtProjects' , callback );
 
 }
 
@@ -242,16 +242,20 @@ function parseIFTTTStop(){
 }
 
 
-function saveProjectToFile( filename , code , callback ){
-	fs.writeFile('./builtProjects/'+filename+'.js', code, function(err) {
-	    if (err) {
-	        console.log(err);
-	    }else{
-	    	if (callback && typeof(callback) === "function") {
-				callback();
-			}
-  		}
-	});
+function saveProjectToCode( filename , code , path , callback ){
+
+	if(path){
+
+		fs.writeFile( path+'/'+filename+'.js', code, function(err) {
+		    if (err) {
+		        console.log(err);
+		    }else{
+		    	if (callback && typeof(callback) === "function") {
+					callback();
+				}
+	  		}
+		});
+	}
 }
 
 
