@@ -34,11 +34,7 @@ const fs = require('fs');
 
 var connected = false;
 
-var consoleColors = {
-  'system'    : '#c1c1c1',
-  'alert'     : '#E74C3C',
-  'good'      : '#1abc9c'
-}
+
 
 
 // board setup ------------------------------------------- 

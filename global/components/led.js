@@ -7,7 +7,7 @@ const component_setup = {
   "dir": "out",
   "image_url": "led",
   "presets": ["Data","Brightness"],
-  "pwm": 1,
+  "pwm": 0,
   "ifttt": { 
     "actions" : [
       {
@@ -168,7 +168,7 @@ module.exports = {
 
         case 'adjust brightness':
 
-          code+= 'var brightness = ( parseInt('+ifSlotVar+'.value) - 1 ) / -4; \n';
+          code+= 'var brightness = ( ( parseInt('+ifSlotVar+'.value) - 1 ) / -4 ) - 1; \n';
           code+= slotObj.var + '.brightness(brightness);\n';
 
         break;

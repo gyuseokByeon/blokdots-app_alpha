@@ -313,7 +313,6 @@ function appendSetupComponentList( slotObj , slotNum ){
          ( slotType == component.type  && component.pwm === 0 )  
       || ( component.pwm === slotPwm   && slotPwm  === 1 )  
       || ( slotType === component.type && component.type == 'digital' && component.pwm == 1 )
-    
     ){
 
       m+= '<li comp="'+component.component+'">';

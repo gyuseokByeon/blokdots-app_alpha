@@ -13,10 +13,28 @@ function getIFTTTDBIndex( theID ){
 	for ( var i = 0; i < iftttDB.length; i++ ) {
 		if( iftttDB[i].id == theID){
 			index = i;
+
+			return index;
 		}
 	}
+}
 
-	return index;
+
+function findIftttDOM( theID ){
+
+	var iftttDOM;
+
+	$('.ifttt').each(function(){
+
+		var DOMid = parseInt( $(this).attr('ifttt-id') );
+
+		if( DOMid == theID ){
+			iftttDOM = $(this);
+			
+		}
+	});
+
+	return iftttDOM;
 }
 
 
@@ -49,6 +67,10 @@ function buildIFTTTCard(){
 			title+= '<div class="id">'+iftttID+'</div>';
 			title+= '<input type="text" class="name" value="New Card '+iftttID+'"">';
 			title+= '<div class="close"></div>';
+
+			title+= '<div class="toggler">';
+				title+= '<div class="knob"></div>';
+			title+= '</div>';
 
 		title+= '</div>';
 
@@ -167,9 +189,9 @@ function addChoiceListeners( iftttDOM ){
 
 			var newChoice;
 			if( ifFlag ){
-				newChoice = buildNewChoice( 'actions' , findComponentTypeObj(slotObj) );
+				newChoice = buildNewChoice( 'actions' , findComponentTypeObj(slotObj) , slotObj.slot );
 			}else{
-				newChoice = buildNewChoice( 'reactions' , findComponentTypeObj(slotObj) );
+				newChoice = buildNewChoice( 'reactions' , findComponentTypeObj(slotObj) , slotObj.slot );
 			}
 			programPartComponentDOM.append(newChoice);
 
@@ -274,10 +296,23 @@ function addChoiceListeners( iftttDOM ){
 		deleteIFTTT( iftttDOM );
 	});
 
+	// Change Name within iftttDB
+	iftttDOM.on('click','.title .toggler',function(){
+		
+		if( $(this).hasClass('off') ){
+			toggleCard( iftttDOM , 'on' );
+			$(this).removeClass('off');
+		}else{
+			toggleCard( iftttDOM , 'off' );
+			$(this).addClass('off');
+		}
+
+	});
+
 }
 
 
-function buildNewChoice( type , componentTypeObj ){
+function buildNewChoice( type , componentTypeObj , slotNum ){
 
 	var choiceType = type;
 	var options = type;
@@ -295,7 +330,6 @@ function buildNewChoice( type , componentTypeObj ){
 			type = 'component';
 		break;
 	}
-
 
 	if( Array.isArray(options) ){
 		choiceType = 'string';
@@ -331,19 +365,14 @@ function buildNewChoice( type , componentTypeObj ){
 
 			for(var i = 0; i < componentTypeObj.ifttt.reactions.length; i++){
 
-				console.log( componentTypeObj.ifttt.reactions[i].pwm )
-
-				/*
+				var slotObj = findSlotObj( slotNum );
 				// Only allow pwm values if sensor is also pwm
-				if( componentTypeObj.ifttt.reactions[i].pwm == true ){
-
-
-
-				}else{
-					*/
-
+				if( 
+						( componentTypeObj.ifttt.reactions[i].pwm && slotObj.pwm )  
+					||	( !componentTypeObj.ifttt.reactions[i].pwm )
+				){
 					choiceMarkup+= '<option>'+componentTypeObj.ifttt.reactions[i].reaction+'</option>';
-				//}
+				}
 			}
 
 		break;
@@ -371,7 +400,7 @@ function buildNewChoice( type , componentTypeObj ){
 
 	// Build different Markup for integer Values
 	if( type == 'integer' ){
-		choiceMarkup = '<input class="choose '+choiceType+' '+type+'" type="number" value="1" min="1" step="1">';
+		choiceMarkup = '<input class="choose '+choiceType+' '+type+'" type="number" value="1" min="1" max="1024" step="1">';
 	}
 
 	return choiceMarkup;
@@ -454,7 +483,8 @@ function addIFTTTDBEntry(){
 
 	iftttDB[ iftttDB.length ] = {
       'id'  	: iftttID,
-      'title'	: 'New Card'
+      'title'	: 'New Card',
+      'active'	: true
     }
 
 	iftttID++;
@@ -593,6 +623,24 @@ function parseIFTTTCard( iftttDOM ){
 	}
 }
 
+function toggleCard( iftttDOM , state ){
+
+	var thisID = parseInt( iftttDOM.attr('ifttt-id') );
+	var dbObj;
+
+	for( var i = 0; i < iftttDB.length ; i++ ){
+		if ( iftttDB[i].id == thisID ){
+			dbObj = iftttDB[i];
+		}
+	}
+	if( state == 'off' ){
+		iftttDOM.addClass('inactive');
+		dbObj.active = false;
+	}else{
+		iftttDOM.removeClass('inactive');
+		dbObj.active = true;
+	}
+}
 
 
 $(document).ready(function(){

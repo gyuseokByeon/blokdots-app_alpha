@@ -44,6 +44,8 @@
 	width: 100%;
 	margin-bottom: $column-gap-ifttt - 2px;
 
+	transition: background $time-input;
+
 	.title {
 
 		height: 24px;
@@ -83,6 +85,46 @@
 			&:hover {
 				opacity: 1;
 				background-color: $color-gray-6;
+			}
+		}
+
+		.toggler {
+
+			height: 14px;
+			width: 24px;
+			background: $color-brand-interactive;
+			border: solid 1px $color-gray-6;
+
+			position: absolute;
+			top: 5px;
+			right: 20px;
+
+			border-radius: 100px;
+
+			transition: all $time-input;
+
+			.knob {
+				
+				position: absolute;
+				top: 0px;
+				left: 0px;
+
+				width: 12px;
+				height: 12px;
+				border-radius: 100px;
+
+				background: $color-white;
+
+				transition: all $time-input;
+
+			}
+			&.off {
+				
+				background: $color-gray-5;
+
+				.knob {
+					left: 10px;
+				}
 			}
 		}
 	}
@@ -125,6 +167,49 @@
 			display: inline;
 		}
 	}
+
+
+
+
+	&.inactive {
+		
+		// background: $color-gray-1;
+
+		.choose {
+			background: $color-ifttt-inactive !important;
+			color: $color-font-med;
+		}
+
+	}
+
+	&.error {
+		.title {
+			background: $color-alert-high;
+		}
+		.id {
+			color: $color-font-light;
+		}
+		.name {
+			color: $color-font-light;
+		}
+	}
+
+	&.missing-component {
+		.title {
+			background: $color-alert-high;
+
+			.toggler {
+				border-color: darken( $color-alert-high , 20% );
+			}
+		}
+		.id {
+			color: $color-font-light;
+		}
+		.name {
+			color: $color-font-light;
+		}
+	}
+
 }
 
 
@@ -142,7 +227,7 @@
 
 	height: 22px;
 
-	transition: opacity $time-reg;
+	transition: opacity $time-reg, background $time-input, color $time-input;
 
 	&.string {
 		background: $color-ifttt-string;

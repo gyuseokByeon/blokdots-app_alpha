@@ -12,13 +12,14 @@ ipcRenderer.on('componentConnected', function(evt,slotObj) {
 	const slotDOM = findSlotDOM( slotObj.slot );
 
     if ( slotDOM.hasClass('connected') == false ) {
+	
 		showQuicksetupSlot( slotObj );
+	
 	}else if( slotDOM.hasClass('missing') ){
 
 		if( slotObj.comp == slotDOM.attr('component-type') ){
 
 			slotState( slotDOM , 'connected' );
-
 		}else{
 
 			slotState( slotDOM , 'wrong' );
@@ -45,6 +46,6 @@ ipcRenderer.on('disconnectSlotLV', function(evt,slotNum) {
 // Display Alert
 ipcRenderer.on('showAlert', function( evt , level , message ) {
     
-	showError( level , message );
+	addError( level , message );
 
 });

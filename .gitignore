@@ -1,3 +1,4 @@
 /node_modules
 /global/.sass-cache
 /global/css/*
+/builtProjects/current-demo.js

@@ -104,6 +104,13 @@ function parseIFTTTDB( callback ){
 		code+= '}\n\n';
 
 		// append call to board.ready
+
+		// if card inactive disable function
+		if( iftttDB[i].active == false ){
+			runFunctions+= '//';
+			moduleCode+= '//';
+		}
+
 		runFunctions+= '\tiftttCard_'+iftttDB[i].id+'();\n';
 		moduleCode+= '\t\tiftttCard_'+iftttDB[i].id+'();\n';
 	}

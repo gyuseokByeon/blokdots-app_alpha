@@ -45,3 +45,49 @@ function updateProject(){
 	}
 
 }
+
+
+
+
+
+function checkCardStates( slotNum , state ){
+
+	for( var i = 0; i < iftttDB.length ; i++ ){
+	
+		if ( 
+				 ( iftttDB[i].ifttt.if.slot   == slotNum )
+			  || ( iftttDB[i].ifttt.then.slot == slotNum )
+			){
+		
+				var iftttDOM = findIftttDOM( iftttDB[i].id );
+
+				iftttDOM.addClass(state);
+		
+			}
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -83,6 +83,11 @@ function initSlots(){
 
   Slots.forEach(function(slot){
 
+    var pwm = 0;
+    if( $.inArray( slot , pwmSlots) != -1 ){
+      pwm = 1;
+    }
+
     // insert a JSON object for each slot
     allSlotsProject[ i ] = {
       'slot'      : slot,
@@ -92,17 +97,13 @@ function initSlots(){
       'name'      : null,
       'type'      : null,
       'dir'       : null,
+      'pwm'       : pwm,
       'ifttt_ids' : []
     }
 
     var displaySlot = slot;
     if ( $.isNumeric( displaySlot ) ){
       displaySlot = 'D'+displaySlot;
-    }
-
-    var pwm = 0;
-    if( $.inArray( slot , pwmSlots) != -1 ){
-      pwm = 1;
     }
 
     var m = '<div class="slot" slot="'+slot+'" pwm="'+pwm+'">';
@@ -304,6 +305,7 @@ function slotGotDetached( slotNum ){
   }else if(slotDOM.hasClass( 'connected' )){
 
     slotState( slotDOM , 'missing' );
+    checkCardStates( slotNum , 'missing-component' );
 
   }
 

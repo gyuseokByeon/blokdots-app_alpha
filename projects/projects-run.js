@@ -19,6 +19,7 @@ function projectInfo(){
 	headerDOM.on('click','.play_btn',function(){
 
 		var playBtnDOM = $(this);
+		var hasErrors = checkErrors();
 
 		if( playBtnDOM.hasClass('running') ){
 
@@ -30,11 +31,16 @@ function projectInfo(){
 
 		}else{
 
-			runProject();
+			// if no errors
+			if( !hasErrors ){
 
-			playBtnDOM.siblings('.run_desc').text('Stop Project');
+				runProject();
 
-			playBtnDOM.addClass('running');
+				playBtnDOM.siblings('.run_desc').text('Stop Project');
+
+				playBtnDOM.addClass('running');
+		
+			}
 		}
 
 
@@ -53,6 +59,18 @@ function projectInfo(){
 
 	headerDOM.on('click','.open-project.btn',function(){
 		openFile();
+	});
+
+
+
+	headerDOM.on('click','.error_warnings',function(){
+
+		if( $(this).hasClass('show') ){
+			$(this).removeClass('show');
+		}else{
+			$(this).addClass('show');
+		}
+
 	});
 
 
@@ -88,20 +106,29 @@ function stopProject(){
 
 }
 
+
+var runningErrorFired = false;
+
 // Display Error when running
 function checkRunning(){
 
-	if( projectIsRunningFlag ){
-		showError( 'medium' , 'Old Project' );
+	if( projectIsRunningFlag && runningErrorFired == false ){
+		addError( 'medium' , 'project edited' , 100 );
+		runningErrorFired = true;
 	}else{
-		showError( 'none' );
+		removeError( 'project edited' , 100 );
+		runningErrorFired = false;
 	}
 
+	checkErrors();
 }
 
 
-function showError( level , text ){
+var errorList = [];
 
+function addError( level , text , code ){
+
+/*
 	var errorField = $('.error_warnings');
 
 	if( level == null || level == 'none' ){
@@ -113,8 +140,66 @@ function showError( level , text ){
 		errorField.text(text);
 		errorField.addClass(level+'-alert');
 	}
+*/
+	if( level == null || text == null || code == null ){
+		return;
+	}
+
+	var error = {
+		'text'	: text,
+		'level'	: level,
+		'code'	: code
+	};
+	
+	errorList.push( error );
+
+	checkErrors();
+
+	console.log( '%cError '+code + ': ' + text , 'color: '+consoleColors.alert+';' )
 
 }
+
+function removeError( text , code ){
+
+	for( var i = 0 ; i < errorList.length ; i++ ){
+
+		if( errorList[i].text == text && errorList[i].code == code ){
+
+			errorList.splice(i, i+1);
+
+			return;
+		}
+	}
+
+}
+
+function checkErrors(){
+
+	var errorField = $('.error_warnings');
+
+	if( errorList.length <= 0 ){
+
+		errorField.attr('class', 'error_warnings');
+		errorField.text('');
+
+		return false;
+
+	}else{
+
+		if( errorList.length == 1 ){
+			errorField.text( errorList.length + ' error' );
+		}else{
+			errorField.text( errorList.length + ' errors' );
+		}
+		
+		errorField.addClass('high-alert');
+
+		return true;
+	}
+
+}
+
+
 
 
 $(document).ready(function(){
