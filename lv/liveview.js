@@ -60,6 +60,8 @@ function initSlots(){
     slotState( $(this) , 'empty' );
   });
 
+  updateSlotDBforProject();
+
 }
 
 
@@ -248,6 +250,7 @@ function slotState( slotDOM , state ){
 
 
       slotDOM.addClass('inUse');
+      updateSlotDBforProject();
 
     break;
 
@@ -440,6 +443,8 @@ function setupComponent( slot , comp ){
 
     }
   }
+
+  updateSlotDBforProject();
 }
 
 function disconnectComponent( slotNum ){
@@ -466,6 +471,8 @@ function disconnectComponent( slotNum ){
   console.log('%cdisconnected slot '+slotNum,'color: '+consoleColors.system+';');
 
   disconnectSlot( slotDOM );
+
+  updateSlotDBforProject();
 
 }
 
@@ -1012,6 +1019,15 @@ function reattachAllSlots(){
       }
     }
   }
+}
+
+
+
+
+function updateSlotDBforProject(){
+
+  ipcRenderer.send('updateAllSlotsLV', allSlots );
+
 }
 
 

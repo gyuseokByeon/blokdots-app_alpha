@@ -49,3 +49,11 @@ ipcRenderer.on('showAlert', function( evt , level , message ) {
 	addError( level , message );
 
 });
+
+
+// update allSlotsLV
+ipcRenderer.on('updateAllSlotsLV', function( evt , arr ) {
+    
+	allSlotsLV = arr;
+
+});

@@ -92,11 +92,11 @@ module.exports = {
           
           case 'deg':
 
-            code+= '\t\tsensorValue = 270 * ( this.value / 1023 );\n';   
+            code+= '\t\tsensorValue = this.fsscaleTo(0, 270);\n';   
           break;
           case 'percent':
 
-            code+= '\t\tsensorValue = 100 * ( this.value / 1023 );\n';
+            code+= '\t\tsensorValue = this.fsscaleTo(0, 100);\n';
           break;
         }
 

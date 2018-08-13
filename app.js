@@ -164,6 +164,13 @@ function ipcCommunicationInit(){
 	});
 
 
+	// update slotDB live view
+	ipcMain.on('updateAllSlotsLV', function( evt , arr ) {
+	    projWindow.webContents.send('updateAllSlotsLV', arr );
+	});
+
+
+
 	ipcMain.on('closeBoard', function() {
 	    lvWindow.webContents.send('closeBoard');
 	});

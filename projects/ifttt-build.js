@@ -312,10 +312,12 @@ function addChoiceListeners( iftttDOM ){
 }
 
 
-function buildNewChoice( type , componentTypeObj , slotNum ){
+function buildNewChoice( type , componentTypeObj , slotNum , selection ){
 
 	var choiceType = type;
 	var options = type;
+
+	var selected = null;
 
 	switch( type ){
 		case 'actions':
@@ -337,7 +339,10 @@ function buildNewChoice( type , componentTypeObj , slotNum ){
 	}
 
 	var choiceMarkup = '<select class="choose '+choiceType+' '+type+'" type="'+choiceType+'">'; // 
+
+	if( !selection ){
 		choiceMarkup+= '<option disabled selected="selected" class="dummy">...</option>';
+	}
 
 	switch( type ){
 		case 'component':
@@ -357,7 +362,13 @@ function buildNewChoice( type , componentTypeObj , slotNum ){
 		case 'actions':
 
 			for(var i = 0; i < componentTypeObj.ifttt.actions.length; i++){
-				choiceMarkup+= '<option>'+componentTypeObj.ifttt.actions[i].action+'</option>';
+
+				if( componentTypeObj.ifttt.actions[i].action == selection ){
+					selected = 'selected="selected"';
+				}else{
+					selected = null;
+				}
+				choiceMarkup+= '<option '+selected+'>'+componentTypeObj.ifttt.actions[i].action+'</option>';
 			}
 
 		break;
@@ -371,7 +382,13 @@ function buildNewChoice( type , componentTypeObj , slotNum ){
 						( componentTypeObj.ifttt.reactions[i].pwm && slotObj.pwm )  
 					||	( !componentTypeObj.ifttt.reactions[i].pwm )
 				){
-					choiceMarkup+= '<option>'+componentTypeObj.ifttt.reactions[i].reaction+'</option>';
+
+					if( componentTypeObj.ifttt.reactions[i].reaction == selection ){
+						selected = 'selected="selected"';
+					}else{
+						selected = null;
+					}
+					choiceMarkup+= '<option '+selected+'>'+componentTypeObj.ifttt.reactions[i].reaction+'</option>';
 				}
 			}
 
@@ -379,7 +396,13 @@ function buildNewChoice( type , componentTypeObj , slotNum ){
 		case 'string':
 
 			for(var i = 0; i < options.length; i++){
-				choiceMarkup+= '<option>'+options[i]+'</option>';
+
+				if( options[i] == selection ){
+					selected = 'selected="selected"';
+				}else{
+					selected = null;
+				}
+				choiceMarkup+= '<option '+selected+'>'+options[i]+'</option>';
 			}
 
 		break;
@@ -400,7 +423,13 @@ function buildNewChoice( type , componentTypeObj , slotNum ){
 
 	// Build different Markup for integer Values
 	if( type == 'integer' ){
-		choiceMarkup = '<input class="choose '+choiceType+' '+type+'" type="number" value="1" min="1" max="1024" step="1">';
+
+		let startVal = 1;
+		if( selection ){
+			startVal = parseInt(selection);
+		}
+
+		choiceMarkup = '<input class="choose '+choiceType+' '+type+'" type="number" value="'+startVal+'" min="1" max="1024" step="1">';
 	}
 
 	return choiceMarkup;
@@ -475,6 +504,8 @@ function addFiller( filler ){
 
 		return fillerMarkup;
 	
+	}else{
+		return;
 	}
 }
 
