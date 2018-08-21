@@ -29,6 +29,8 @@ const usb = require('usb');
 
 const fs = require('fs');
 
+const Avrgirl = require('avrgirl-arduino');
+
 
 
 
@@ -99,7 +101,10 @@ function initPort(){
 
 		ports.forEach(function(sPort) {
 			if(sPort.vendorId == vID){
-				
+
+
+				port = sPort;
+
 				MYport = sPort.comName.toString();
 				console.log('%cFound it -> '+MYport,'color: '+consoleColors.system+';');
 								
@@ -110,7 +115,9 @@ function initPort(){
 				*/
 				console.log('%cSerialPort is set ✔️','color: '+consoleColors.system+';');
 				
-				initBoard();
+				startAVR();
+
+				//initBoard();
 				return;
 			}
 		});
@@ -127,13 +134,26 @@ function initBoard(){
 	}else{
 		// setup board
 		board = new five.Board({
-		  // id: "A",
-		  repl: false, // does not work with browser console
-		  port: MYport,
-		  sigint: true
+			// id: "A",
+			repl: false, // does not work with browser console
+			port: MYport,
+			sigint: true
 		});
 	}
 
+	board.on('error',function(err){
+
+		console.log(err)
+
+		if( err.class == "Device or Firmware Error" ){
+			
+			setTimeout(function(){
+				startAVR();
+				return;
+			},1000);
+		}
+
+	});
 
 	board.on("ready", function() {
 
@@ -149,44 +169,18 @@ function initBoard(){
 	});
 
 	board.on("close", function () {
-		console.log('Board closed')
-	})
+		console.log('Board closed (real)')
+	});
 	
 }
 
 function closeBoard(){
 
-
 	removeAllSlotListeners();
 
 	board = null;
 	
-	console.log('board closing')
-
-	/*
-	board.exit(function (err) {
-	    console.log('port closed', err);
-	});
-	*/
-
-	/*
-	exitHook(function () {
-        console.log('exitong (exitHook)')
-    });
-   
-    
-    process.on('SIGINT', function () {
-        console.log('process.on SIGINT');
-    });
-
-    process.on('exit', function () {
-        console.log('process.on exit ');
-    });
-
-    */
-
-
-    // ipcRenderer.send('stopProject');
+	console.log('board closing (fake)');
 
 }
 
@@ -217,13 +211,57 @@ function ipcCommunicationInitLV(){
 
 
 
+function startAVR(){
+
+	closeBoard();
+
+
+	console.log("start uploading firmata");
+
+	var avrgirl = new Avrgirl({
+	  board: 'uno',
+	  port: MYport
+	});
+
+
+	//Blink.cpp.hex
+	//StandardFirmataPlus.ino.with_bootloader.standard.hex
+
+
+	// start displaying uploading bar
+	$('header').find('.info').remove();
+	var m = '<div class="uploading info">Firmata is uploading</div>';
+
+	$('header').append(m);
+
+	avrgirl.flash('./firmata/arduino_uno/StandardFirmataPlus.ino.with_bootloader.standard.hex', function (error) {
+	  if (error) {
+	    console.error(error);
+
+	    // display Error
+
+	    $('header').find('.info').removeClass('uploading').addClass('error').text('Upload failed. Try replugging the Board');
+
+	  } else {
+	    console.info('done.');
 
 
 
+	    $('header').find('.info').text('Done uploading');
 
+	    setTimeout(function(){
+	    	$('header').find('.info').remove();
+	    }, 500);
 
+	   
+	    initBoard();
+	  }
+	});
 
+	// end uploading bar
 
+	
+}
 
 
 

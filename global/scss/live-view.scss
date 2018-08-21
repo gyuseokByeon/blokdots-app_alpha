@@ -71,6 +71,77 @@ header {
 	
 	}
 
+
+	.info {
+		
+		border-radius: $border-radius-reg;
+	    position: absolute;
+	    background: $color-gray-6;
+	    top: 40px;
+	    left: 10px;
+		padding: 3px 5px;
+		
+		max-width: calc( 100% - 20px );
+
+			
+		&.uploading {
+
+			background: $color-brand-interactive;
+	    	color: $color-font-light;
+
+			&:before {
+				content: '';
+
+				display: inline-block;
+				width: 0.8em;
+				height: 0.8em;
+
+				margin-right: 0.3em;
+				margin-top: 0.2em;
+
+				
+				background-image: url('../img/misc/uploading.svg');
+
+				background-size: contain;
+				background-repeat: no-repeat;
+
+				animation-name: turning;
+	   			animation-duration: 3s;
+	   			animation-iteration-count: infinite;
+	   			animation-timing-function: linear;
+
+			}
+		}
+
+		&.error {
+
+			background: $color-alert-high;
+			color: $color-font-light;
+			
+			&:before {
+				content: '';
+
+				display: inline-block;
+				width: 0.8em;
+				height: 0.8em;
+
+				margin-right: 0.3em;
+				margin-top: 0.2em;
+
+				
+				background-image: url('../img/misc/warn_white.svg');
+
+				background-size: contain;
+				background-repeat: no-repeat;
+
+			}
+		}
+	}
+}
+
+@keyframes turning {
+    0%   { transform: rotate( 0deg ) }
+    100% { transform: rotate( 360deg ) }
 }
 
 

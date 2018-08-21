@@ -1,4 +1,8 @@
+# dependencies
 /node_modules
+
+# dev
 /global/.sass-cache
-/global/css/*
-/builtProjects/current-demo.js
+
+# testing
+/builtProjects/*

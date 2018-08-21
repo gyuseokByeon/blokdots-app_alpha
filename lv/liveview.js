@@ -889,7 +889,6 @@ function servo_LiveViewDisplayControl( slotObj , pwm ){
       break;
 
     }
-
   }
 
 
