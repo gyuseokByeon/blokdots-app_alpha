@@ -57,3 +57,11 @@ ipcRenderer.on('updateAllSlotsLV', function( evt , arr ) {
 	allSlotsLV = arr;
 
 });
+
+
+ipcRenderer.on('save', function( evt  ) {
+	saveProject();
+});
+ipcRenderer.on('open', function( evt  ) {
+	openFile();
+});

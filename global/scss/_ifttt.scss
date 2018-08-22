@@ -168,8 +168,66 @@
 		}
 	}
 
+	
+	.components {
 
 
+		$height-components-icon : 120px;
+		$size-components-icon 	: 90px;
+
+		background: $color-gray-2;
+		color: $color-font-disabled;
+		font-size: $font-size-small;
+		border-top: solid 1px $color-gray-6;
+		height: $height-components-icon;
+		overflow: hidden;
+
+		display: flex;
+
+		transition: all $time-reg;
+
+		.input, .output {
+			width: 50%;
+			height: 100%;
+		}
+		.output {
+			border-left: solid 1px $color-gray-6;
+		}
+
+		.slot {
+			position: absolute;
+			top: 4px;
+			right: 4px;
+		}
+
+		.comp-name {
+			position: absolute;
+			top: 4px;
+			left: 4px;
+		}
+
+		.icon {
+			width: $size-components-icon;
+			height: $size-components-icon;
+			position: absolute;
+			top: calc( #{$height-components-icon/2} - #{$size-components-icon/2} );
+			left: calc( 50% - #{$size-components-icon/2} );
+			opacity: 0.5;
+
+			background-position: center center;
+			background-size: contain;
+			background-repeat: no-repeat;
+
+			transition: opacity $time-reg;
+		}
+	}
+
+	&.hide-icons {
+		.components {
+			border-color: transparent;
+			height: 0;
+		}
+	}
 
 	&.inactive {
 		
@@ -178,6 +236,12 @@
 		.choose {
 			background: $color-ifttt-inactive !important;
 			color: $color-font-med;
+		}
+
+		.components {
+			.icon {
+				opacity: 0.2;
+			}
 		}
 
 	}
@@ -195,6 +259,9 @@
 	}
 
 	&.missing-component {
+
+		border-color: darken( $color-alert-high , 10% );
+
 		.title {
 			background: $color-alert-high;
 

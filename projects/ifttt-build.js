@@ -62,7 +62,7 @@ function buildIFTTTCard(){
 
 	card.attr( 'ifttt-id' , iftttID );
 
-	var title = '<div class="title">';
+	let title = '<div class="title">';
 
 			title+= '<div class="id">'+iftttID+'</div>';
 			title+= '<input type="text" class="name" value="New Card '+iftttID+'"">';
@@ -74,7 +74,7 @@ function buildIFTTTCard(){
 
 		title+= '</div>';
 
-	var m = '<div class="program">';
+	let m = '<div class="program">';
 			m+= '<div class="if program-part">';
 
 				//m+= '<select class="choose comp" type="component"><option>default</option></select>';
@@ -92,9 +92,38 @@ function buildIFTTTCard(){
 			m+= '</div>';
 		m+= '</div>';
 
-	card.append( title ).append(m);
 
-	var iftttDOM = card;//.eq(iftttID);
+	let ico = '<div class="components">';
+
+			ico+= '<div class="input">';
+
+				ico+= '<div class="slot"></div>';
+
+				ico+= '<div class="comp-name"></div>';
+
+				ico+= '<div class="icon"></div>';
+				// ico+= '<img class="icon" />';
+
+			ico+= '</div>';
+
+			ico+= '<div class="output">';
+
+				ico+= '<div class="slot"></div>';
+
+				ico+= '<div class="comp-name"></div>';
+
+				ico+= '<div class="icon"></div>';
+
+				//ico+= '<img class="icon" />';
+
+			ico+= '</div>';
+
+		ico+= '</div>';
+
+
+	card.append( title ).append(m).append(ico);
+
+	let iftttDOM = card;//.eq(iftttID);
 
 	addChoiceListeners( iftttDOM );
 
@@ -186,6 +215,9 @@ function addChoiceListeners( iftttDOM ){
 			}
 
 			programPartComponentDOM.attr('component-type',slotObj.comp).attr('slot',slotObj.slot);
+
+			// Add the Icons for the new component
+			changeCardIcons( iftttDOM , slotObj , ifFlag );
 
 			var newChoice;
 			if( ifFlag ){
@@ -305,6 +337,18 @@ function addChoiceListeners( iftttDOM ){
 		}else{
 			toggleCard( iftttDOM , 'off' );
 			$(this).addClass('off');
+		}
+
+	});
+
+
+	// Show / Hide Icons
+	iftttDOM.on('click','.title .id',function(){
+		
+		if( iftttDOM.hasClass('hide-icons') ){
+			iftttDOM.removeClass('hide-icons');
+		}else{
+			iftttDOM.addClass('hide-icons');
 		}
 
 	});
@@ -674,8 +718,51 @@ function toggleCard( iftttDOM , state ){
 }
 
 
+function changeCardIcons( iftttDOM , slotObj , ifFlag ){
+
+
+	let componentTypeObject = findComponentTypeObj( slotObj );
+
+	let container = iftttDOM.find('.components .output');
+
+	if( ifFlag ){
+		container = iftttDOM.find('.components .input');
+	}
+
+	var displaySlot = slotObj.slot;
+	if ( $.isNumeric( displaySlot ) ){
+		displaySlot = 'D'+displaySlot;
+	}
+
+
+	container.find('.slot').text( displaySlot );
+	container.find('.comp-name').text( slotObj.name );
+	container.find('.icon').css({
+		'background-image' : 'url(../global/img/comp/'+componentTypeObject.image_url+'.svg)'
+	});
+
+}
+
+
 $(document).ready(function(){
 
 	initIFTTT();
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -75,13 +75,6 @@ const menuTemplate = [
 				type: 'separator'
 			},
 			{
-				role: 'services',
-				submenu: []
-			},
-			{
-				type: 'separator'
-			},
-			{
 				role: 'hide'
 			},
 			{
@@ -98,27 +91,19 @@ const menuTemplate = [
 			}
 		]
 	},
-	/*
 	{
-		label: 'blokdots',
+		label: 'File',
 		submenu: [
 			{
-				label: 'Hide LiveView',
-				accelerator: 'Shift+CmdOrCtrl+H',
-				click() {
-					lvWindow.hide();
-				}
+				label: 'save',
+				click () { projWindow.webContents.send('save' ); }
 			},
 			{
-				label: 'Show LiveView',
-				accelerator: 'Shift+CmdOrCtrl+H',
-				click() {
-					lvWindow.show();
-				}
+				label: 'open…',
+				click () { projWindow.webContents.send('open' ); }
 			}
 		]
 	},
-	*/
 	{
 		role: 'window',
 		submenu: [
@@ -203,7 +188,7 @@ const menu = Menu.buildFromTemplate(menuTemplate);
 
 app.on('ready', function(){
 
-	// Menu.setApplicationMenu(menu);
+	Menu.setApplicationMenu(menu);
 
 	createLiveViewWindow();
 	createProjectWindow();
