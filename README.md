@@ -15,6 +15,15 @@ Currently blokdots is running with the powerful [Johnny-Five](http://johnny-five
 ## Docs
 Visit the [documentation](http://docs.blokdots.com) for the software or its [repository](https://github.com/olivierbrcknr/blokdots-docs).
 
+## Building App
+Run this line to build a functioning Mac App:  
+```shell  
+$ npm run dist  
+```
+
+*Note:* because of some errors regarding the serialport package issue, ```buildDependenciesFromSource``` is set to ```true```.  
+It will be saved in the "dist" folder within the main directory of blokdots.
+
 #### Together With
 [Christoph Labacher](https://www.christophlabacher.com)  
 [Nikolas Klein](http://nikolasklein.de)  

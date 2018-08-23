@@ -3,7 +3,10 @@
 const {remote, ipcRenderer} = require('electron');
 const {dialog} = require('electron').remote;
 const fs = require('fs');
-// const childProcess = require("child_process");
+const path = require('path');
+const appRootPath = path.join(__dirname, '../');
+
+
 
 
 // If Component is connected to LV

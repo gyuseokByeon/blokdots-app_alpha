@@ -2,6 +2,7 @@ directories:
   output: dist
   buildResources: build
 appId: yourappid
+buildDependenciesFromSource: true
 dmg:
   contents:
     - x: 110
@@ -15,6 +16,6 @@ linux:
     - AppImage
     - deb
 win:
-  target: squirrel
+  target: NSIS
   icon: build/icon.ico
 electronVersion: 2.0.4

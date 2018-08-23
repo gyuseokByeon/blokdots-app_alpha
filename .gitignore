@@ -6,3 +6,7 @@
 
 # testing
 /builtProjects/*
+
+# built apps
+/release-builds
+/dist

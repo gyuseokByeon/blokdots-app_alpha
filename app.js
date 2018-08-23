@@ -188,7 +188,7 @@ const menu = Menu.buildFromTemplate(menuTemplate);
 
 app.on('ready', function(){
 
-	Menu.setApplicationMenu(menu);
+	// Menu.setApplicationMenu(menu);
 
 	createLiveViewWindow();
 	createProjectWindow();
