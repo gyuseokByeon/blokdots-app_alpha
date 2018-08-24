@@ -26,6 +26,8 @@ const five = require('johnny-five');
 const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
 const usb = require('usb');
+const path = require('path');
+const appRootPath = require('electron').remote.app.getAppPath();
 
 const fs = require('fs');
 
@@ -42,7 +44,7 @@ var connected = false;
 // board setup ------------------------------------------- 
 
 var vID = '2a03'; 	// Vendor ID of Arduino -> USB
-var pID = '0043'; 	// Product ID of blokdots 	-> USB (Micro)
+var pID = '0043'; 	// Product ID of blokdots 	-> USB (Micro / Uno)
  // pID = 8036; 	// (Leonardo)
 
 var MYport; 		// String of TTY Port
@@ -234,7 +236,7 @@ function startAVR(){
 
 	$('header').append(m);
 
-	avrgirl.flash('./firmata/arduino_uno/StandardFirmataPlus.ino.with_bootloader.standard.hex', function (error) {
+	avrgirl.flash( appRootPath+'/firmata/arduino_uno/StandardFirmataPlus.ino.with_bootloader.standard.hex', function (error) {
 	  if (error) {
 	    console.error(error);
 

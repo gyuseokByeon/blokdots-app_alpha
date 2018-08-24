@@ -3,19 +3,8 @@ directories:
   buildResources: build
 appId: yourappid
 buildDependenciesFromSource: true
-dmg:
-  contents:
-    - x: 110
-      'y': 150
-    - x: 240
-      'y': 150
-      type: link
-      path: /Applications
-linux:
-  target:
-    - AppImage
-    - deb
-win:
-  target: NSIS
-  icon: build/icon.ico
-electronVersion: 2.0.4
+asar: false
+icon: icon.ico
+mac:
+  category: test.jo
+electronVersion: 2.0.7

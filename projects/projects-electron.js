@@ -4,8 +4,7 @@ const {remote, ipcRenderer} = require('electron');
 const {dialog} = require('electron').remote;
 const fs = require('fs');
 const path = require('path');
-const appRootPath = path.join(__dirname, '../');
-
+const appRootPath = require('electron').remote.app.getAppPath();
 
 
 

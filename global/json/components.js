@@ -2,14 +2,11 @@
 var componentList = [];
 
 // import { component_setup } from '../global/components/button.js';
-let componentFolder = appRootPath+'/global/components/';
+let componentFolder = path.join( appRootPath+'/global/components/' );
 
-console.log( appRootPath )
 
 // get all components from folder and append to list
 fs.readdir(componentFolder, (err, files) => {
-
-	console.log( files )
 
   files.forEach(file => {
     

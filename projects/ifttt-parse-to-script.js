@@ -147,7 +147,7 @@ function parseIFTTTDB( callback ){
 	saveProjectToCode( projectName , completeCode , projectPath ); // projectPath is the path of the correct files
 
 	// save code into file -> demo js
-	saveProjectToCode( 'current-demo' , fullDemoCode , './builtProjects' , callback );
+	saveProjectToCode( 'current-demo' , fullDemoCode , appRootPath+'/builtProjects' , callback );
 
 }
 
@@ -255,7 +255,7 @@ function saveProjectToCode( filename , code , path , callback ){
 
 		fs.writeFile( path+'/'+filename+'.js', code, function(err) {
 		    if (err) {
-		        console.log(err);
+		        console.error(err);
 		    }else{
 		    	if (callback && typeof(callback) === "function") {
 					callback();

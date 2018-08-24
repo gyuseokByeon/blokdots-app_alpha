@@ -1,7 +1,7 @@
 
 
 var IFTTTmodule;
-var IFTTTmodulePath = '../builtProjects/current-demo';
+var IFTTTmodulePath = appRootPath+'/builtProjects/current-demo';
 
 
 function startIFTTT(){

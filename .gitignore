@@ -3,6 +3,7 @@
 
 # dev
 /global/.sass-cache
+/global/css
 
 # testing
 /builtProjects/*

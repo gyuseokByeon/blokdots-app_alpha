@@ -6,6 +6,10 @@ const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const path = require('path');
 const url = require('url');
 
+// init compile process
+// var appRoot = path.join(__dirname);
+// require('electron-compile').init(appRoot, require.resolve('./app'));
+
 
 var lvWindow;
 var projWindow;
@@ -26,7 +30,8 @@ function createLiveViewWindow(){
   		maxHeight: 1000,
 		titleBarStyle: 'hidden'
 	});
-	lvWindow.loadURL('file://' + __dirname + '/lv/liveview.html')
+	lvWindow.loadURL('file://' + __dirname + '/lv/liveview.html');
+	lvWindow.openDevTools();
 
 	lvWindow.setPosition(100, 200 );
 
@@ -51,7 +56,7 @@ function createProjectWindow(){
 		show: true,
 		titleBarStyle: 'hidden'
   	});
-  	projWindow.loadURL('file://' + __dirname + '/projects/projects.html')
+  	projWindow.loadURL('file://' + __dirname + '/projects/projects.html');
   	projWindow.openDevTools();
   	
 	projWindow.on('close', function () {
@@ -188,7 +193,7 @@ const menu = Menu.buildFromTemplate(menuTemplate);
 
 app.on('ready', function(){
 
-	// Menu.setApplicationMenu(menu);
+	Menu.setApplicationMenu(menu);
 
 	createLiveViewWindow();
 	createProjectWindow();
