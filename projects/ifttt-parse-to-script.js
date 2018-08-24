@@ -194,7 +194,7 @@ function parseIf( iftttDBObj , slotObj ){
 
 
 // Will be parsed within the parseIf Fns
-function parseThen( iftttObj , ifSlotVar ){
+function parseThen( iftttObj , ifSlotVar , callback ){
 
 	var slotObj = findSlotObj( iftttObj.then.slot );
 	var componentType = findComponentTypeObj( slotObj );
@@ -215,7 +215,6 @@ function parseThen( iftttObj , ifSlotVar ){
 	code+= window[ componentType.image_url ].parse( slotObj , reactionObj , iftttObj , true , ifSlotVar );
 
 	return code;
-
 }
 
 
@@ -250,6 +249,12 @@ function parseIFTTTStop(){
 
 
 function saveProjectToCode( filename , code , path , callback ){
+
+	// beautify the code to make it more readable
+	code = beautify( code, { 
+		"indent_size"			: 4,
+		"max_preserve_newlines"	: 3
+	});
 
 	if(path){
 

@@ -4,7 +4,7 @@ var projectPath = "";
 var projectFileName = "";
 
 
-function saveProject(){
+function saveProject( saveAsFlag ){
 
 	// let content = "Some text to save into the file";
 	let content = {
@@ -16,7 +16,7 @@ function saveProject(){
 	content = JSON.stringify(content);
 
 	// create new folder and file
-	if( !projectPath || fs.existsSync(projectPath) == false ){
+	if( !projectPath || fs.existsSync(projectPath) == false || saveAsFlag ){
 
 		createNew();
 	
@@ -26,8 +26,6 @@ function saveProject(){
 		save();
 	
 	}
-
-
 
 	function createNew(){
 		// Create directory
@@ -79,7 +77,7 @@ function openFile(){
 	    let filepath = fileNames[0];
 
 	    // get path from file
-		// projectPath = filepath;
+		projectPath = filepath.substring(0, filepath.lastIndexOf("/"));
 
 	    fs.readFile(filepath, 'utf-8', (err, data) => {
 	        if(err){
@@ -94,7 +92,6 @@ function openFile(){
 			iftttDB = file.iftttDB;
 
 			updateProject();
-
 	    });
 	});
 }

@@ -5,8 +5,8 @@ const {dialog} = require('electron').remote;
 const fs = require('fs');
 const path = require('path');
 const appRootPath = require('electron').remote.app.getAppPath();
-
-
+const beautify = require('js-beautify').js_beautify;
+  
 
 // If Component is connected to LV
 ipcRenderer.on('componentConnected', function(evt,slotObj) {
@@ -63,6 +63,9 @@ ipcRenderer.on('updateAllSlotsLV', function( evt , arr ) {
 
 ipcRenderer.on('save', function( evt  ) {
 	saveProject();
+});
+ipcRenderer.on('save_as', function( evt  ) {
+	saveProject( true );
 });
 ipcRenderer.on('open', function( evt  ) {
 	openFile();

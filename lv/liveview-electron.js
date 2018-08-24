@@ -28,7 +28,7 @@ const Readline = SerialPort.parsers.Readline;
 const usb = require('usb');
 const path = require('path');
 const appRootPath = require('electron').remote.app.getAppPath();
-
+const isDev = require('electron-is-dev');
 const fs = require('fs');
 
 const Avrgirl = require('avrgirl-arduino');
@@ -117,9 +117,13 @@ function initPort(){
 				*/
 				console.log('%cSerialPort is set ✔️','color: '+consoleColors.system+';');
 				
-				startAVR();
 
-				//initBoard();
+				if( isDev ){
+					initBoard();
+				}else{
+					startAVR();
+				}				
+
 				return;
 			}
 		});

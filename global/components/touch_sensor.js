@@ -56,6 +56,8 @@ const component_setup = {
 };
 
 
+
+
 // Export function and vars
 
 module.exports = {
@@ -76,7 +78,7 @@ module.exports = {
 
     switch( iftttDBObj.ifttt.if.action ){
 
-      case 'touched':
+      case 'pressed':
       case 'released':
 
         code+= '\t\ti++;\n';
@@ -96,7 +98,32 @@ module.exports = {
 
       case 'held':
 
+        var multiplier;
+
+        if( iftttDBObj.ifttt.if.parameters[1].value == 'minutes' ){
+
+          multiplier = 120;
+
+        }else if( iftttDBObj.ifttt.if.parameters[1].value == 'seconds' ){
+
+          multiplier = 2;
+
+        }
+
+        var maxTimeVal = iftttDBObj.ifttt.if.parameters[0].value * multiplier;
+
+        code+= '// Time equals 500ms times maxTime\n';
+        code+= 'var maxTime = '+maxTimeVal+';\n';
+
+        code+= 'i++;\n';
+
+        code+= 'if( i == '+maxTimeVal+' ){\n';
+
         code+= '\t\t' + parseThen( iftttDBObj.ifttt ) +'\n';
+
+        code+= 'i = 0;\n';
+
+        code+= '}\n';
 
       break;
 
@@ -108,7 +135,6 @@ module.exports = {
     return code;
   }
 }
-
 
 
 

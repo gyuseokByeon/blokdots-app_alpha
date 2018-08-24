@@ -6,6 +6,14 @@ const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const path = require('path');
 const url = require('url');
 
+const isDev = require('electron-is-dev');
+
+if (isDev) {
+	console.log('Running in development');
+} else {
+	console.log('Running in production');
+}
+
 // init compile process
 // var appRoot = path.join(__dirname);
 // require('electron-compile').init(appRoot, require.resolve('./app'));
@@ -31,7 +39,10 @@ function createLiveViewWindow(){
 		titleBarStyle: 'hidden'
 	});
 	lvWindow.loadURL('file://' + __dirname + '/lv/liveview.html');
-	lvWindow.openDevTools();
+
+	if (isDev) {
+		lvWindow.openDevTools();
+	}
 
 	lvWindow.setPosition(100, 200 );
 
@@ -57,8 +68,11 @@ function createProjectWindow(){
 		titleBarStyle: 'hidden'
   	});
   	projWindow.loadURL('file://' + __dirname + '/projects/projects.html');
-  	projWindow.openDevTools();
-  	
+
+  	if (isDev) {
+	  	projWindow.openDevTools();
+  	}
+
 	projWindow.on('close', function () {
 		//event.preventDefault();
 	    // projWindow.hide();
@@ -102,6 +116,10 @@ const menuTemplate = [
 			{
 				label: 'save',
 				click () { projWindow.webContents.send('save' ); }
+			},
+			{
+				label: 'save as…',
+				click () { projWindow.webContents.send('save_as' ); }
 			},
 			{
 				label: 'open…',
@@ -193,7 +211,9 @@ const menu = Menu.buildFromTemplate(menuTemplate);
 
 app.on('ready', function(){
 
-	Menu.setApplicationMenu(menu);
+	if ( isDev == false ) {
+		Menu.setApplicationMenu(menu);
+	}
 
 	createLiveViewWindow();
 	createProjectWindow();

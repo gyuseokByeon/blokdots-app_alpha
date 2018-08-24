@@ -32,8 +32,10 @@
   "homepage": "http://blokdots.com",
   "dependencies": {
     "avrgirl-arduino": "github:ajfisher/avrgirl-arduino#update-sp-6",
+    "electron-is-dev": "^0.3.0",
     "johnny-five": "^1.0.0",
     "jquery": "^3.3.1",
+    "js-beautify": "^1.7.5",
     "node-pre-gyp": "^0.10.3",
     "serialport": "^6.2.1",
     "usb": "git+https://git@github.com/tessel/node-usb.git"

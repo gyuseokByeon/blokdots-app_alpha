@@ -498,8 +498,21 @@ function updateComponentChoice( choiceDOM ){
 			if( allSlotsProject[i].dir == 'in' ){
 				componentName = null;
 			}
+		}else{
+
+			// to preserve errors
+			if( componentName ){
+
+				// don't list outputs that don't have actions
+				var componentTypeObject = findComponentTypeObj( allSlotsProject[i] );
+
+				if( componentTypeObject.ifttt.actions.length <= 0 ){
+					componentName = null;
+				} 
+			}
 		}
 
+	
 		if( componentName ){
 
 			var alreadyInFlag = false;

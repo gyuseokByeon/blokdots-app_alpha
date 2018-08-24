@@ -2,11 +2,11 @@
 // Setup DB for component
 
 const component_setup = {
-  "component": "Potentiometer",
+  "component": "Temperature Sensor",
   "type": "analog",
   "dir": "in",
-  "image_url": "rotary_potentiometer",
-  "presets": ["Data", "Percentage", "Angle"],
+  "image_url": "temperature_sensor",
+  "presets": ["Data", "Percentage", "Degrees C"],
   "pwm": 0,
   "ifttt": { 
     "actions" : [
@@ -29,7 +29,7 @@ const component_setup = {
           },
           {
             "filler"  : null,
-            "option"  : ["units","deg","percent"]
+            "option"  : ["units","deg Celsius","percent"]
           }
         ]  
       }
@@ -90,9 +90,10 @@ module.exports = {
             code+= '\t\tsensorValue = this.value;\n';
           break;
           
-          case 'deg':
+          case 'deg Celsius':
 
-            code+= '\t\tsensorValue = Math.round( val/1024 * 270*10 )/10;';//this.fsscaleTo(0, 270);\n';   
+            code*= '\t\tsensorValue = parseFloat( ( Math.round( ( 1.0/(Math.log(R/R0)/B+1/298.15)-273.15 ) * 10 ) / 10 ).toFixed(1) ); // convert to temperature via datasheet';
+
           break;
           case 'percent':
 
@@ -116,6 +117,7 @@ module.exports = {
 
     return code;
   }
+
 }
 
 
