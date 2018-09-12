@@ -1,7 +1,7 @@
 
 // include node modules
 
-const {app, BrowserWindow, ipcMain, Menu} = require('electron');
+const {app, BrowserWindow, ipcMain, Menu, autoUpdater} = require('electron');
 
 const path = require('path');
 const url = require('url');
@@ -211,7 +211,7 @@ const menu = Menu.buildFromTemplate(menuTemplate);
 
 app.on('ready', function(){
 
-	if ( isDev == false ) {
+	if ( !isDev ) {
 		Menu.setApplicationMenu(menu);
 	}
 
@@ -251,6 +251,64 @@ app.on('before-quit', function() {
 });
 
 app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
+
+
+
+
+
+// https://electronjs.org/docs/tutorial/updates
+// Add updater
+require('update-electron-app')();
+
+if ( !isDev ) {
+
+	const server = 'https://github.com/olivierbrcknr/blokdots-app';
+	const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+
+	autoUpdater.setFeedURL(feed);
+
+	// check once when the app is started
+	setInterval(() => {
+		autoUpdater.checkForUpdates();
+	}, 60000*10 );
+
+	autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+
+		const dialogOpts = {
+			type: 'info',
+			buttons: ['Restart', 'Later'],
+			title: 'Application Update',
+			message: process.platform === 'win32' ? releaseNotes : releaseName,
+			detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+		};
+
+		// Dialog must be sent to project window !!!!!!
+
+		/*
+		dialog.showMessageBox(dialogOpts, (response) => {
+			if (response === 0){ 
+				autoUpdater.quitAndInstall()
+			}
+		});
+		*/
+	});
+
+	autoUpdater.on('error', message => {
+		console.error('There was a problem updating the application');
+		console.error(message);
+	});
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -176,12 +176,16 @@ function disconnectSlot( slotDOM ){
 
   slotState( slotDOM , 'empty' );
 
-  // clear database again
+  
   for(var i = 0; i < allSlots.length; i++){
 
     var curr = allSlots[i];
     if(curr.slot == slotDOM.attr('slot')){
       
+      // remove var for listners
+      delete window[ slotObj.var ];
+
+      // clear database again
       curr.state  = 'empty';
       curr.var    = null;
       curr.comp   = null;

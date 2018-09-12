@@ -27,6 +27,9 @@ function startIFTTT(){
 }
 
 
+// pin.removeListener('high', pinHighCallback);
+
+
 
 
 $(document).ready(function(){

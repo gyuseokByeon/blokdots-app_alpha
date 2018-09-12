@@ -9,25 +9,6 @@ const component_setup = {
   "presets": ["Data", "Angle"],
   "pwm": 1,
   "ifttt": { 
-    "actions" : [
-      {
-        "action" : "switches",
-        "parameters" : [
-          {
-            "filler"  : null,
-            "option"  : ["on","off"]
-          },
-          {
-            "filler"  : null,
-            "option"  : "integer"
-          },
-          {
-            "filler"  : null,
-            "option"  : ["times"]
-          }
-        ]  
-      }
-    ],
     "reactions" : [
       {
         "reaction" : "adjust position",
