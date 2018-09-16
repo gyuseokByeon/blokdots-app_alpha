@@ -6,8 +6,9 @@
 /global/css
 
 # testing
-/builtProjects/*
+/builtProjects
 
 # built apps
 /release-builds
 /dist
+.DS_Store

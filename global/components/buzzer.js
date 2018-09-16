@@ -9,33 +9,10 @@ const component_setup = {
   "presets": ["Data", "Note"],
   "pwm": 0,
   "ifttt": { 
-    "actions" : [
-      {
-        "action" : "switches",
-        "parameters" : [
-          {
-            "filler"  : null,
-            "option"  : ["on","off"]
-          },
-          {
-            "filler"  : null,
-            "option"  : "integer"
-          },
-          {
-            "filler"  : null,
-            "option"  : ["times"]
-          }
-        ]  
-      }
-    ],
     "reactions" : [
       {
-        "reaction" : "switch",
+        "reaction" : "beep",
         "parameters" : [
-          {
-            "filler"  : null,
-            "option"  : ["on","off"]
-          }
         ]  
       }
     ]
@@ -55,6 +32,16 @@ module.exports = {
 
     // if is reaction
     if( reactionFlag ){
+
+       switch( iftttObj.then.action ){
+
+        case 'beep':
+
+
+          code+= slotObj.var + '.frequency(587, 300);';
+
+        break;
+      }
 
     // if is action
     }else{

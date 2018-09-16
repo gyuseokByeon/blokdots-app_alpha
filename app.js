@@ -2,10 +2,9 @@
 // include node modules
 
 const {app, BrowserWindow, ipcMain, Menu, autoUpdater} = require('electron');
-
+const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const url = require('url');
-
 const isDev = require('electron-is-dev');
 
 if (isDev) {
@@ -19,23 +18,37 @@ if (isDev) {
 // require('electron-compile').init(appRoot, require.resolve('./app'));
 
 
-var lvWindow;
-var projWindow;
+let lvWindow;
+let projWindow;
 
-var quitFlag = false;
+let quitFlag = false;
 
 
 // init electron windows
 function createLiveViewWindow(){
 
+	let lvWindowState = windowStateKeeper({
+		file: 'lvWinState.json',
+		defaultWidth: 400,
+		defaultHeight: 680
+	});
+
+	let centerBool = false;
+
+	if( !lvWindowState.x && !lvWindowState.y ){
+		lvWindowState.x = 40;
+		lvWindowState.x = 40;
+	}
 
 	// init Live View window
 	lvWindow = new BrowserWindow({
-		width: 400,
-		height: 680,
+		'x': lvWindowState.x,
+		'y': lvWindowState.y,
+		'width': lvWindowState.width,
+		'height': lvWindowState.height,
 		minHeight: 500,
-  		minWidth: 400,
-  		maxHeight: 1000,
+		minWidth: 400,
+		maxHeight: 1000,
 		titleBarStyle: 'hidden'
 	});
 	lvWindow.loadURL('file://' + __dirname + '/lv/liveview.html');
@@ -44,9 +57,6 @@ function createLiveViewWindow(){
 		lvWindow.openDevTools();
 	}
 
-	lvWindow.setPosition(100, 200 );
-
-
 	lvWindow.on('close', function (event) {
 		if( !quitFlag ){
 			event.preventDefault();
@@ -54,18 +64,35 @@ function createLiveViewWindow(){
 		}
 	});
 
+	lvWindowState.manage(lvWindow);
+
 }
 function createProjectWindow(){
 
+	let projWindowState = windowStateKeeper({
+		file: 'projWinState.json',
+		defaultWidth: 1150,
+		defaultHeight: 806
+	});
+
+	let centerBool = false;
+
+	if( !projWindowState.x && !projWindowState.y ){
+		centerBool = true;
+	}
+
 	// init main window
 	projWindow = new BrowserWindow({
-		width: 1150,
-		height: 806,
+		'x': projWindowState.x,
+		'y': projWindowState.y,
+		'width': projWindowState.width,
+		'height': projWindowState.height,
 		minHeight: 566,
 		minWidth: 650,
 		maxHeight: 1046,
 		show: true,
-		titleBarStyle: 'hidden'
+		titleBarStyle: 'hidden',
+		center: centerBool
   	});
   	projWindow.loadURL('file://' + __dirname + '/projects/projects.html');
 
@@ -78,7 +105,7 @@ function createProjectWindow(){
 	    // projWindow.hide();
 	})
 
-	projWindow.setPosition(530, 200 );
+	projWindowState.manage(projWindow);
 	
 };
 
@@ -258,7 +285,7 @@ app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 
 // https://electronjs.org/docs/tutorial/updates
 // Add updater
-require('update-electron-app')();
+// require('update-electron-app')();
 
 if ( !isDev ) {
 

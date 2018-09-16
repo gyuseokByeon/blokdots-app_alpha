@@ -9,7 +9,7 @@ const component_setup = {
   "presets": ["Data","Brightness"],
   "pwm": 0,
   "ifttt": { 
-    "actions" : [
+   /* "actions" : [
       {
         "action" : "switches",
         "parameters" : [
@@ -27,7 +27,7 @@ const component_setup = {
           }
         ]  
       }
-    ],
+    ],*/
     "reactions" : [
       {
         "reaction" : "switch",
