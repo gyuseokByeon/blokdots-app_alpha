@@ -7,7 +7,13 @@ function iftttCard_0() {
     function action_0() {
         i++;
         if (i == 1) {
-            slot4.frequency(587, 300);
+            var beepTime = 300;
+            slot5.frequency(392, beepTime);
+            setTimeout(function() {
+                // Make sure slot5.stops again
+                slot5.noTone();
+            }, beepTime);
+
             // Reset counter
             i = 0;
         }

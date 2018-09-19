@@ -73,7 +73,7 @@ function setupSlotControls( slotDOM , comp ){
 
       }else{
 
-        m+= 'no PWM';
+        m+= '<div class="value-button btn brand">Light Up LED</div>';
 
       }
 
@@ -83,19 +83,13 @@ function setupSlotControls( slotDOM , comp ){
 
     case 'Buzzer':
 
-      m+= '<div class="value-container">';
-        m+= '<div class="value">10</div>'
-      m+= '</div>';
-
-      m+= '<div class="button">Sound</div>'
-
-      m+= '<div class="real-value"></div>';
+       m+= '<div class="value-button btn brand">Play Sound</div>';
 
     break;
 
     default:
 
-      m+= 'not ready yet…';
+      m+= '<div class="not-ready">not ready yet…</div>';
 
     break;
   }
@@ -420,6 +414,16 @@ function led_LiveViewDisplayControl( slotObj , pwm ){
 
     window[ slotObj.var ].on();
 
+    slotDOM.on('mousedown', '.value-button' , function() {
+
+      window[ slotObj.var ].on();
+      
+    }).on('mouseup', '.value-button' , function() {
+
+      window[ slotObj.var ].off();
+      
+    });
+
   }
 
 
@@ -456,20 +460,18 @@ function buzzer_LiveViewDisplayControl( slotObj  ){
     }
   });
 
-  $(document).on('click', '.button' , function() {
+  window[ slotObj.var ].noTone();
+  window[ slotObj.var ].frequency(392, 200);
 
-    window[ slotObj.var ].play({
-      tempo: 150, // Beats per minute, default 150
-      song: [ // An array of notes that comprise the tune
-        [ "c4", 1 ], // Each element is an array in which 
-                     // [0] is the note to play and 
-                     // [1] is the duration in "beats" (tempo, above)
-        [ "e4", 2 ],
-        [ "g4", 3 ],
-        [ null, 4 ] // null indicates "no tone" for the beats indicated
-      ]
-    });
 
+  slotDOM.on('mousedown', '.value-button' , function() {
+
+    window[ slotObj.var ].frequency(392, 200);
+    
+  }).on('mouseup', '.value-button' , function() {
+
+    window[ slotObj.var ].noTone();
+    
   });
   
 }

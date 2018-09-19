@@ -9,6 +9,7 @@ const component_setup = {
   "presets": ["Data", "Angle"],
   "pwm": 1,
   "ifttt": { 
+    "actions" : undefined,
     "reactions" : [
       {
         "reaction" : "adjust position",

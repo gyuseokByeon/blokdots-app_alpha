@@ -106,6 +106,20 @@ input[type=range]::-webkit-slider-runnable-track {
 			background-color: rgba( $color-white , 0.9 );
 		}
 	}
+	&.brand {
+		background: none;
+		border-color: $color-gray-7;
+		// color: $color-brand-interactive;
+
+		&:hover {
+			background-color: $color-gray-4;
+		}
+		&:active {
+			background-color: $color-brand-interactive;
+			border-color: $color-brand-interactive;
+			color: $color-white;
+		}
+	}
 
 	&.icon-btn {
 

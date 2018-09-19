@@ -506,7 +506,7 @@ function updateComponentChoice( choiceDOM ){
 				// don't list outputs that don't have actions
 				var componentTypeObject = findComponentTypeObj( allSlotsProject[i] );
 
-				if( componentTypeObject.ifttt.actions.length <= 0 ){
+				if( componentTypeObject.ifttt.actions.length <= 0 || componentTypeObject.ifttt.actions == undefined ){
 					componentName = null;
 				} 
 			}

@@ -9,25 +9,8 @@ const component_setup = {
   "presets": ["Data","Brightness"],
   "pwm": 0,
   "ifttt": { 
-   /* "actions" : [
-      {
-        "action" : "switches",
-        "parameters" : [
-          {
-            "filler"  : null,
-            "option"  : ["on","off"]
-          },
-          {
-            "filler"  : null,
-            "option"  : "integer"
-          },
-          {
-            "filler"  : null,
-            "option"  : ["times"]
-          }
-        ]  
-      }
-    ],*/
+    "actions" : [
+    ],
     "reactions" : [
       {
         "reaction" : "switch",

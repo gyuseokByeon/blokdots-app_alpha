@@ -513,6 +513,24 @@ header {
 			content: 'current value: ';
 		}
 	}
+
+	.value-button {
+
+		position: absolute;
+		top: calc( 50% - 11px );
+		width: 80%;
+		left: 10%;
+
+	}
+	.not-ready {
+
+		width: 100%;
+		height: 100%;
+
+		display: flex;
+		align-items: center;
+
+	}
 }
 // Overall fixes ----------------------
 

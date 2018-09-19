@@ -6,8 +6,21 @@ var allSlots = [];
 function initSlots(){
 
 
-  const Slots = boardList['Grove Arduino Uno'].Slots;
-  const pwmSlots = boardList['Grove Arduino Uno'].pwm;
+  let initSlotsObj = boardList[0];
+
+/*
+  console.log( currentBoardObj )
+
+  if( currentBoardObj == undefined ){
+    // set board to uno, if no list
+    currentBoardObj = boardList[0];
+
+    console.log( currentBoardObj )
+  }
+*/
+
+  let Slots = initSlotsObj.param.Slots;//boardList['Grove Arduino Uno'].Slots;
+  let pwmSlots = initSlotsObj.param.pwm;//boardList['Grove Arduino Uno'].pwm;
 
   var conMark = '<div class="slot-container"></div>';
   $('#slot-wrapper section').append(conMark);
@@ -177,22 +190,19 @@ function disconnectSlot( slotDOM ){
   slotState( slotDOM , 'empty' );
 
   
-  for(var i = 0; i < allSlots.length; i++){
-
-    var curr = allSlots[i];
-    if(curr.slot == slotDOM.attr('slot')){
       
-      // remove var for listners
-      delete window[ slotObj.var ];
+  let slotObj = findSlotObj( slotDOM );
 
-      // clear database again
-      curr.state  = 'empty';
-      curr.var    = null;
-      curr.comp   = null;
-      curr.type   = null;
-      curr.dir    = null;
-    }
-  }
+  // remove var for listners
+  delete window[ slotObj.var ];
+
+  // clear database again
+  slotObj.state  = 'empty';
+  slotObj.var    = null;
+  slotObj.comp   = null;
+  slotObj.type   = null;
+  slotObj.dir    = null;
+  
 
   ipcRenderer.send('disconnectSlotLV', slotDOM.attr('slot') );
 

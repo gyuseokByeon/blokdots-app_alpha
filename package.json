@@ -1,7 +1,7 @@
 {
   "name": "blokdots",
   "version": "0.0.1",
-  "description": "A software to programm hardware using the IFTTT principle",
+  "description": "A software to programm hardware using the If-This-Then-That principle",
   "main": "app.js",
   "scripts": {
     "test": "test",
@@ -25,11 +25,11 @@
     "electron"
   ],
   "author": "Olivier Brückner",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/olivierbrcknr/blokdots-app/issues"
   },
-  "homepage": "http://blokdots.com",
+  "homepage": "https://blokdots.com",
   "dependencies": {
     "avrgirl-arduino": "github:ajfisher/avrgirl-arduino#update-sp-6",
     "electron-is-dev": "^0.3.0",

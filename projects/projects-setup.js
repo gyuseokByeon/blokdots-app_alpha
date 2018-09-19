@@ -74,9 +74,10 @@ function findComponentTypeObj( slotObj , type ){
 
 function initSlots(){
 
+  let initSlotsObj = boardList[0];
 
-  const Slots = boardList['Grove Arduino Uno'].Slots;
-  const pwmSlots = boardList['Grove Arduino Uno'].pwm;
+  let Slots = initSlotsObj.param.Slots;//boardList['Grove Arduino Uno'].Slots;
+  let pwmSlots = initSlotsObj.param.pwm;//boardList['Grove Arduino Uno'].pwm;
   const Container = $('#setup #components #slots');
 
   var i = 0;
