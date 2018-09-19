@@ -8,28 +8,20 @@ function initSlots(){
 
   let initSlotsObj = boardList[0];
 
-/*
-  console.log( currentBoardObj )
+  let Slots = initSlotsObj.param.Slots;
+  let pwmSlots = initSlotsObj.param.pwm;
 
-  if( currentBoardObj == undefined ){
-    // set board to uno, if no list
-    currentBoardObj = boardList[0];
-
-    console.log( currentBoardObj )
-  }
-*/
-
-  let Slots = initSlotsObj.param.Slots;//boardList['Grove Arduino Uno'].Slots;
-  let pwmSlots = initSlotsObj.param.pwm;//boardList['Grove Arduino Uno'].pwm;
-
-  var conMark = '<div class="slot-container"></div>';
+  let conMark = '<div class="slot-container"></div>';
   $('#slot-wrapper section').append(conMark);
 
   const Container = $('#slot-wrapper section .slot-container');
 
 
-  var i = 0;
+  let sepName = '<div class="board-name">'+initSlotsObj.board+'</div>';
 
+  $('#grove_1 .separator .name').append(sepName);
+
+  let i = 0;
 
   Slots.forEach(function(slot){
 
@@ -43,17 +35,17 @@ function initSlots(){
       'dir'   : null
     }
 
-    var displaySlot = slot;
+    let displaySlot = slot;
     if ( $.isNumeric( displaySlot ) ){
       displaySlot = 'D'+displaySlot;
     }
 
-    var pwm = 0;
+    let pwm = 0;
     if( $.inArray( slot , pwmSlots) != -1 ){
       pwm = 1;
     }
 
-    var m = '<div class="slot" slot="'+slot+'" pwm="'+pwm+'">';
+    let m = '<div class="slot" slot="'+slot+'" pwm="'+pwm+'">';
           m+= '<div class="controls">';
             m+= '<div class="indicator"></div>';
             if(pwm){ m+= '<div class="pwm-indicator">pwm</div>'; }
@@ -74,6 +66,12 @@ function initSlots(){
   });
 
   updateSlotDBforProject();
+
+}
+
+function rebuildSlots(){
+
+  $('#grove_1 .separator .board-name').text(currentBoardObj.board);
 
 }
 
@@ -249,6 +247,8 @@ function slotState( slotDOM , state ){
     case 'inUse':
 
       var slotObj = findSlotObj( slotDOM );
+
+      slotDOM.addClass('dir-'+slotObj.dir);
 
       slotDOM.find('.info').empty();
       slotDOM.find('.use_btn').removeClass('ghost-light').text('Use');

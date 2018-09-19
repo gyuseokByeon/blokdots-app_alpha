@@ -56,7 +56,9 @@ module.exports = {
     // append var name and action init handler
     code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", action_'+iftttDBObj.id+' );\n\n';
 
-    code+= '\tfunction action_'+iftttDBObj.id+'(){\n';
+    code+= '\tfunction action_'+iftttDBObj.id+'(){\n\n';
+
+    code+= 'var val = '+slotObj.var+'.value;\n\n';
 
     switch( iftttObj.if.action ){
 
@@ -82,12 +84,14 @@ module.exports = {
           break;
         }
 
+        code+= '// set new variable for the selected unit ('+iftttObj.if.parameters[2].value+')\n';
+
         switch( iftttObj.if.parameters[2].value ){
-          
+
           default:
           case 'units':
             
-            code+= '\t\tsensorValue = this.value;\n';
+            code+= '\t\tsensorValue = val;\n';
           break;
           
           case 'lumen':

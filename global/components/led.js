@@ -86,13 +86,13 @@ module.exports = {
           switch( iftttObj.then.parameters[0].value ){
 
             case 'on':
-
-              code+= slotObj.var + '.on();';
+              
+              code+= slotObj.var + '.on();\n';
 
             break;
             case 'off':
 
-              code+= slotObj.var + '.off();';
+              code+= slotObj.var + '.off();\n';
 
             break;
 
@@ -102,7 +102,7 @@ module.exports = {
 
         case 'toggle':
 
-            code+= slotObj.var + '.toggle();';
+            code+= slotObj.var + '.toggle();\n';
 
         break;
 

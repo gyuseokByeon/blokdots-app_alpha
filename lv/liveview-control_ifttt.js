@@ -13,6 +13,8 @@ function startIFTTT(){
 		IFTTTmodule = require(IFTTTmodulePath);
 		IFTTTmodule.run();
 
+		$('#slot-wrapper').addClass('project-is-running');
+
 	});
 
 
@@ -21,6 +23,8 @@ function startIFTTT(){
 		console.log('stop project');
 		IFTTTmodule.stop();
 		delete require.cache[require.resolve(IFTTTmodulePath)];
+
+		$('#slot-wrapper').removeClass('project-is-running');
 
 	});
 

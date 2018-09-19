@@ -160,6 +160,13 @@ header {
 
 	}
 
+	&.project-is-running {
+		.dir-out .controls .info {
+			pointer-events: none !important;
+			opacity: 0.5;
+		}
+	}
+
 }
 
 

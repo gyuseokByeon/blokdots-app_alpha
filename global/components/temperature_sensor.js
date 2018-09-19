@@ -5,7 +5,7 @@ const component_setup = {
   "component": "Temperature Sensor",
   "type": "analog",
   "dir": "in",
-  "image_url": "temperature_sensor",
+  "image_url": "temperature",
   "presets": ["Data", "Percentage", "Degrees C"],
   "pwm": 0,
   "ifttt": { 
@@ -56,7 +56,9 @@ module.exports = {
     // append var name and action init handler
     code+= '\t'+slotObj.var + '.on("'+ actionObj.jhonny5 +'", action_'+iftttDBObj.id+' );\n\n';
 
-    code+= '\tfunction action_'+iftttDBObj.id+'(){\n';
+    code+= '\tfunction action_'+iftttDBObj.id+'(){\n\n';
+
+    code+= 'var val = '+slotObj.var+'.value;\n\n';
 
     switch( iftttObj.if.action ){
 
@@ -82,22 +84,24 @@ module.exports = {
           break;
         }
 
+        code+= '// set new variable for the selected unit ('+iftttObj.if.parameters[2].value+')\n';
+
         switch( iftttObj.if.parameters[2].value ){
           
           default:
           case 'units':
             
-            code+= '\t\tsensorValue = this.value;\n';
+            code+= 'sensorValue = this.value;\n';
           break;
           
           case 'deg Celsius':
 
-            code*= '\t\tsensorValue = parseFloat( ( Math.round( ( 1.0/(Math.log(R/R0)/B+1/298.15)-273.15 ) * 10 ) / 10 ).toFixed(1) ); // convert to temperature via datasheet';
+            code*= 'sensorValue = parseFloat( ( Math.round( ( 1.0/(Math.log(R/R0)/B+1/298.15)-273.15 ) * 10 ) / 10 ).toFixed(1) ); // convert to temperature via datasheet\n';
 
           break;
           case 'percent':
 
-            code+= '\t\tsensorValue = Math.round( val/1024 * 100*10 )/10;';//this.fsscaleTo(0, 100);\n';
+            code+= 'sensorValue = Math.round( val/1024 * 100 );\n';//this.fsscaleTo(0, 100);\n';
           break;
         }
 

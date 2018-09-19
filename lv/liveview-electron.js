@@ -39,8 +39,6 @@ const Avrgirl = require('avrgirl-arduino');
 var connected = false;
 
 
-
-
 // board setup ------------------------------------------- 
 
 let blokdots;		// the current blokdots board
@@ -51,27 +49,61 @@ let board;			// five.board object
 let currentBoardObj;
 
 
-initBoardListeners();
+// check once at the beginning
+for( let i = 0 ; i < boardList.length ; i++ ){
 
+	if( !blokdots ){
 
-function initBoardListeners(){
+		let boardObj = boardList[i];
 
-	for( let i = 0 ; i < boardList.length ; i++ ){
+		// remove Leonardo from distributed version (for now)
+		if( !isDev && boardObj.avr == 'leonardo' ){
+			boardObj = null;
+		}
 
-		const boardObj = boardList[i];
-
-		const vID = boardObj.param.vid; 	// Vendor ID of Arduino -> USB
+		const vID = boardObj.param.vid;
 		const pID = boardObj.param.pid; 
 
-		// Do sth when blokdots gets attached
-		usb.on('attach', function( device ) { 
+		// check if is blokdots
+		let tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
+
+		if ( tempDevice ){
+			blokdots = tempDevice;
+			// set currentBoardObj for avrGirl
+			currentBoardObj = boardObj;
+
+			console.log('blokdots was already connected');
+			initPort();
+		}
+	}
+}
+
+
+if( !blokdots ){
+	console.log('blokdots is not connected yet');
+}
+
+
+// Do sth when blokdots gets attached
+usb.on('attach', function( device ) { 
+
+	if( blokdots ){
+		console.log('already one board connected');
+		
+	}else{
+		for( let i = 0 ; i < boardList.length ; i++ ){
+
+			const boardObj = boardList[i];
+
+			const vID = boardObj.param.vid;
+			const pID = boardObj.param.pid; 
 
 			// check if is blokdots
-			window[ 'board_'+i ] = usb.findByIds('0x'+vID, '0x'+pID);
+			const tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
 
-			if ( device == window[ 'board_'+i ] && blokdots == undefined  ){
+			if ( device == tempDevice ){
 				
-				blokdots = window[ 'board_'+i ];
+				blokdots = tempDevice;
 
 				// set currentBoardObj for avrGirl
 				currentBoardObj = boardObj;
@@ -81,58 +113,37 @@ function initBoardListeners(){
 				//if ( MYport == null ) { 
 					initPort(); 
 				//}
+
+				return;
 			}
-
-		});
-
-		// Do sth when blokdots gets detached
-		usb.on('detach', function( device ) { 
-			if ( device == window[ 'board_'+i ] && blokdots ){
-			
-				console.log('%cblokdots Disconnected 🔌','color: '+consoleColors.alert+';');
-				// io.emit('blokdotsDisconnect');
-
-				closeBoard();
-				ipcRenderer.send('detached');
-				connected = false;
-				blokdotsConnectionIndicator( connected );
-
-				ipcRenderer.send('showAlert', 'high' , 'board not connected' );
-			}
-		});
-
-
-		// Check if already attached
-		window[ 'board_'+i ] = usb.findByIds('0x'+vID, '0x'+pID); 
-		if ( window[ 'board_'+i ] && blokdots == undefined  ){
-			
-			blokdots = window[ 'board_'+i ];
-
-			// set currentBoardObj for avrGirl
-			currentBoardObj = boardObj;
 		}
-
 	}
+	
+});
 
-	// Log if blokdots has already been connected
-	if( blokdots ){
-		console.log('blokdots was already connected');
+// Do sth when blokdots gets detached
+usb.on('detach', function( device ) { 
+	if ( device == blokdots ){
+	
+		console.log('%cblokdots Disconnected 🔌','color: '+consoleColors.alert+';');
+		// io.emit('blokdotsDisconnect');
 
-		initPort();
-	}else{
-		console.log('blokdots is not connected yet');
+		closeBoard();
+		ipcRenderer.send('detached');
+		connected = false;
+		blokdotsConnectionIndicator( connected );
+
+		ipcRenderer.send('showAlert', 'high' , 'board not connected' );
 	}
-
-}
-
+});
 
 
 
 function initPort(){
 
-	console.log( 'Connected to an ' + currentBoardObj.board );
+	console.log( '%cConnected to an ' + currentBoardObj.board ,'color: '+consoleColors.good+';');
 
-	console.log('Searching SerialPort 🔎');
+	console.log('%cSearching SerialPort 🔎','color: '+consoleColors.system+';');
 
 	SerialPort.list(function (err, ports) {
 
@@ -206,6 +217,9 @@ function initBoard(){
 		ipcRenderer.send('attached');
 		connected = true;
 		blokdotsConnectionIndicator( connected );
+		// Rebuild Board List on LV to match slot structure 
+		rebuildSlots();
+		
 		console.log('%cBoard is ready to go 🚀','color: '+consoleColors.good+';');
 
 		reattachAllSlots();
@@ -217,9 +231,6 @@ function initBoard(){
 	board.on("close", function () {
 		console.log('Board closed (real)')
 	});
-
-	// Setup Board List on LV to match slot structure 
-	// initSlots();
 	
 }
 
@@ -227,6 +238,7 @@ function closeBoard(){
 
 	removeAllSlotListeners();
 
+	blokdots = null;
 	board = null;
 	currentBoardObj = null;
 	
@@ -262,8 +274,7 @@ function ipcCommunicationInitLV(){
 
 function startAVR(){
 
-	// closeBoard();
-
+	closeBoard();
 
 	console.log("start uploading firmata");
 
@@ -272,25 +283,17 @@ function startAVR(){
 	  port: MYport
 	});
 
-	console.log( avrgirl );
-
-
-	//Blink.cpp.hex
-	//StandardFirmataPlus.ino.with_bootloader.standard.hex
-
-
 	// start displaying uploading bar
 	$('header').find('.info').remove();
 	var m = '<div class="uploading info">Firmata is uploading</div>';
 
 	$('header').append(m);
 
-	let hexPath = appRootPath+'/firmata/'+currentBoardObj.avr+'/StandardFirmataPlus.ino.with_bootloader.hex';//Blink.ccp.hex';
+	let hexPath = appRootPath+'/firmata/'+currentBoardObj.avr+'/StandardFirmataPlus.ino.with_bootloader.hex';
 
 	console.log( hexPath )
 
 	avrgirl.flash( hexPath , function (error) {
-		// StandardFirmataPlus.ino.with_bootloader.standard.hex', function (error) {
 	  
 	  if (error) {
 	    console.error(error);
@@ -300,12 +303,12 @@ function startAVR(){
 	    $('header').find('.info').removeClass('uploading').addClass('error').text('Upload failed. Try replugging the Board');
 
 	  } else {
-	    console.info('done.');
 
-
+	    console.info('done uploading.');
 
 	    $('header').find('.info').text('Done uploading');
 
+	    // end uploading bar
 	    setTimeout(function(){
 	    	$('header').find('.info').remove();
 	    }, 500);
@@ -314,9 +317,6 @@ function startAVR(){
 	    initBoard();
 	  }
 	});
-
-	// end uploading bar
-
 	
 }
 

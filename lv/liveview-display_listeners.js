@@ -73,7 +73,7 @@ function setupSlotControls( slotDOM , comp ){
 
       }else{
 
-        m+= '<div class="value-button btn brand">Light Up LED</div>';
+        m+= '<div class="value-button btn brand">Light Up</div>';
 
       }
 

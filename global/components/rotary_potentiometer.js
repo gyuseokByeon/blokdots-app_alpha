@@ -49,8 +49,6 @@ module.exports = {
     var code = '';
 
     var iftttObj = iftttDBObj.ifttt;
-
-    code+= '\t\t// set new variable for the selected unit (degrees)\n';
     code+= '\t\tvar sensorValue = 0;\n\n';
 
     // append var name and action init handler
@@ -58,6 +56,9 @@ module.exports = {
 
     code+= '\tfunction action_'+iftttDBObj.id+'(){\n';
 
+    code+= '// reverse value for more natural feeling (clockwise\n';
+    code+= 'var val = 1023 - '+slotObj.var+'.value;\n\n';
+    
     switch( iftttObj.if.action ){
 
       case 'changing':
@@ -74,11 +75,11 @@ module.exports = {
           
           default:
           case 'over':
-            operator = '<';
+            operator = '>';
           break;
           
           case 'below':
-            operator = '>';
+            operator = '<';
           break;
         }
 
@@ -87,16 +88,16 @@ module.exports = {
           default:
           case 'units':
             
-            code+= '\t\tsensorValue = this.value;\n';
+            code+= '\t\tsensorValue = val;\n';
           break;
           
           case 'deg':
-
-            code+= '\t\tsensorValue = Math.round( val/1024 * 270*10 )/10;';//this.fsscaleTo(0, 270);\n';   
+            code+= '// set new variable for the selected unit (degrees)\n';
+            code+= '\t\tsensorValue = Math.round( val/1023 * 270 );';//this.fsscaleTo(0, 270);\n';   
           break;
           case 'percent':
-
-            code+= '\t\tsensorValue = Math.round( val/1024 * 100*10 )/10;';//this.fsscaleTo(0, 100);\n';
+            code+= '// set new variable for the selected unit (percent)\n';
+            code+= '\t\tsensorValue = Math.round( val/1023 * 100 )\n;';//this.fsscaleTo(0, 100);\n';
           break;
         }
 

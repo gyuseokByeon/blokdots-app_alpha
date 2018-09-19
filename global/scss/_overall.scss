@@ -36,6 +36,12 @@ section .separator {
 		left: 10px;
 		top: calc( 50% - 0.7em );
 
+		.board-name {
+			display: inline;
+			opacity: 0.5;
+			margin-left: 0.5em;
+		}
+
 	}
 
 
