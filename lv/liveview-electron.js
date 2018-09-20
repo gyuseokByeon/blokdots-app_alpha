@@ -1,7 +1,7 @@
+/* global boardList */
 
 // johnny five w/ electron bugfix
-
-var Readable = require("stream").Readable;  
+const Readable = require("stream").Readable;  
 const util = require("util");  
 util.inherits(MyStream, Readable);  
 function MyStream(opt) {  
@@ -18,10 +18,8 @@ process.__defineGetter__("stdin", function() {
 
 
 // -------------------------------------------------------
-
 // Node modules
 const {remote, ipcRenderer} = require('electron');
-
 const five = require('johnny-five');
 const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
@@ -30,98 +28,52 @@ const path = require('path');
 const appRootPath = require('electron').remote.app.getAppPath();
 const isDev = require('electron-is-dev');
 const fs = require('fs');
-
 const Avrgirl = require('avrgirl-arduino');
 
-
-
-
-var connected = false;
-
-
 // board setup ------------------------------------------- 
+let connected = false;
 
-let blokdots;		// the current blokdots board
+let blokdots = null;		// the current blokdots board
 
-let MYport; 		// String of TTY Port
-let port;			// serialport object
-let board;			// five.board object
-let currentBoardObj;
-
-
-// check once at the beginning
-for( let i = 0 ; i < boardList.length ; i++ ){
-
-	if( !blokdots ){
-
-		let boardObj = boardList[i];
-
-		// remove Leonardo from distributed version (for now)
-		if( !isDev && boardObj.avr == 'leonardo' ){
-			boardObj = null;
-		}
-
-		const vID = boardObj.param.vid;
-		const pID = boardObj.param.pid; 
-
-		// check if is blokdots
-		let tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
-
-		if ( tempDevice ){
-			blokdots = tempDevice;
-			// set currentBoardObj for avrGirl
-			currentBoardObj = boardObj;
-
-			console.log('blokdots was already connected');
-			initPort();
-		}
-	}
-}
+let port = null;			// SerialPort object
+let portName = null; 		// String of TTY port name/address, i.e. /dev/cu.usbmodem...
+let board = null;			// five.board object
+let currentBoardDefinition = null; // avrGirl board object
 
 
+// Check if we already have a supported board attached at launch
 if( !blokdots ){
-	console.log('blokdots is not connected yet');
+	const { device, boardDefinition } = detectUSBDevice();
+	if(device && boardDefinition) {
+		blokdots = device;
+		currentBoardDefinition = boardDefinition;
+
+		console.log('%cblokdots Connected 🎛','color: '+consoleColors.good+';');
+		initPort(); 
+	} else {
+		console.log('blokdots board is not connected yet');
+	}
 }
 
 
-// Do sth when blokdots gets attached
-usb.on('attach', function( device ) { 
+// When new USB devices are attached, check if they are blokdots compatible boards
+usb.on('attach', function( device ) {
+	// Do not connect to more than one board
+	if( blokdots ) return console.log('already one board connected'); 
 
-	if( blokdots ){
-		console.log('already one board connected');
-		
-	}else{
-		for( let i = 0 ; i < boardList.length ; i++ ){
+	// Check if the attached board matches our supported boards
+	const { boardDefinition } = detectUSBDevice(device);
+	if(boardDefinition) {
+		blokdots = device;
+		currentBoardDefinition = boardDefinition;
 
-			const boardObj = boardList[i];
-
-			const vID = boardObj.param.vid;
-			const pID = boardObj.param.pid; 
-
-			// check if is blokdots
-			const tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
-
-			if ( device == tempDevice ){
-				
-				blokdots = tempDevice;
-
-				// set currentBoardObj for avrGirl
-				currentBoardObj = boardObj;
-
-				console.log('%cblokdots Connected 🎛','color: '+consoleColors.good+';');
-
-				//if ( MYport == null ) { 
-					initPort(); 
-				//}
-
-				return;
-			}
-		}
+		console.log('%cblokdots Connected 🎛','color: '+consoleColors.good+';');
+		initPort(); 
 	}
-	
+
 });
 
-// Do sth when blokdots gets detached
+// Clean up when the blokdots is detached
 usb.on('detach', function( device ) { 
 	if ( device == blokdots ){
 	
@@ -137,43 +89,49 @@ usb.on('detach', function( device ) {
 	}
 });
 
+function detectUSBDevice(device = null) {
+	for( let i = 0 ; i < boardList.length ; i++ ){
+
+		const boardDefinition = boardList[i];
+		const vID = boardDefinition.param.vid;
+		const pID = boardDefinition.param.pid; 
+
+		// check if is blokdots
+		const tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
+		if ( tempDevice != null ){
+			if(device == null || device == tempDevice) {
+				return { device: tempDevice, boardDefinition };
+			}
+		}
+	}
+	return {};
+}
 
 
 function initPort(){
+	console.log("Board Definition", currentBoardDefinition);
 
-	console.log( '%cConnected to an ' + currentBoardObj.board ,'color: '+consoleColors.good+';');
-
+	console.log('%cConnected to an ' + currentBoardDefinition.board ,'color: '+consoleColors.good+';');
 	console.log('%cSearching SerialPort 🔎','color: '+consoleColors.system+';');
 
 	SerialPort.list(function (err, ports) {
 
-		// console.log('\x1b[2m',ports,'\x1b[0m');
-
 		ports.forEach(function(sPort) {
-			if(sPort.vendorId == currentBoardObj.param.vid ){
-
+			if(sPort.vendorId == currentBoardDefinition.param.vid ){
 
 				port = sPort;
+				portName = sPort.comName.toString();
 
-				MYport = sPort.comName.toString();
-				console.log('%cFound it -> '+MYport,'color: '+consoleColors.system+';');
-								
-				/*
-				port = new SerialPort( MYport, {
-					baudRate: 9600
-				});
-				*/
+				console.log('%cFound it -> '+portName,'color: '+consoleColors.system+';');
 				console.log('%cSerialPort is set ✔️','color: '+consoleColors.system+';');
 				
-
-				//startAVR();
-				
-				if( isDev ){
+				// @todo: Find a way to detect if the Firmate firmware is flashed and flash/initialise accordingly				
+				/*if( isDev ){
 					initBoard();
-				}else{
+				} else {
 					startAVR();
-				}
-								
+				}*/
+				startAVR();
 
 				return;
 			}
@@ -185,15 +143,13 @@ function initPort(){
 function initBoard(){
 
 	if( board ){
-
 		// board.io.reset();
-
-	}else{
+	} else {
 		// setup board
 		board = new five.Board({
 			// id: "A",
 			repl: false, // does not work with browser console
-			port: MYport,
+			port: portName,
 			sigint: true
 		});
 	}
@@ -207,9 +163,8 @@ function initBoard(){
 			setTimeout(function(){
 				startAVR();
 				return;
-			},1000);
+			}, 1000);
 		}
-
 	});
 
 	board.on("ready", function() {
@@ -231,7 +186,6 @@ function initBoard(){
 	board.on("close", function () {
 		console.log('Board closed (real)')
 	});
-	
 }
 
 function closeBoard(){
@@ -240,7 +194,7 @@ function closeBoard(){
 
 	blokdots = null;
 	board = null;
-	currentBoardObj = null;
+	currentBoardDefinition = null;
 	
 	console.log('board closing (fake)');
 }
@@ -270,54 +224,56 @@ function ipcCommunicationInitLV(){
 
 }
 
-
-
 function startAVR(){
-
+	
+	const avrBoardName = currentBoardDefinition.avr;
 	closeBoard();
 
 	console.log("start uploading firmata");
 
 	var avrgirl = new Avrgirl({
-	  board: currentBoardObj.avr,
-	  port: MYport
+	  board: avrBoardName,
+	  port: portName
 	});
 
 	// start displaying uploading bar
 	$('header').find('.info').remove();
 	var m = '<div class="uploading info">Firmata is uploading</div>';
-
 	$('header').append(m);
 
-	let hexPath = appRootPath+'/firmata/'+currentBoardObj.avr+'/StandardFirmataPlus.ino.with_bootloader.hex';
-
-	console.log( hexPath )
+	const hexPath = `${appRootPath}/firmata/${avrBoardName}/StandardFirmataPlus.ino.with_bootloader.hex`;
+	console.log( "Firmware file path:", hexPath );
 
 	avrgirl.flash( hexPath , function (error) {
-	  
-	  if (error) {
-	    console.error(error);
+		if (error) {
+			console.error(error);
+			// display Error
+			$('header').find('.info').removeClass('uploading').addClass('error').text('Upload failed. Try replugging the Board');
 
-	    // display Error
+		} else {
+			console.info('done uploading.');
 
-	    $('header').find('.info').removeClass('uploading').addClass('error').text('Upload failed. Try replugging the Board');
+			$('header').find('.info').text('Done uploading');
 
-	  } else {
 
-	    console.info('done uploading.');
+			if(avrBoardName == "leonardo") {
 
-	    $('header').find('.info').text('Done uploading');
-
-	    // end uploading bar
-	    setTimeout(function(){
-	    	$('header').find('.info').remove();
-	    }, 500);
-
-	   
-	    initBoard();
-	  }
-	});
+				// end uploading bar
+				setTimeout(function(){
+					$('header').find('.info').remove();
+					initBoard();
 	
+				}, 11500);
+
+			} else {
+
+				// end uploading bar
+				setTimeout(function(){
+					$('header').find('.info').remove();
+				}, 500);			
+			}
+		}
+	});
 }
 
 

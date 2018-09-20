@@ -19,4 +19,4 @@ const boardList = [
 	      "pid"   : "8036" 
 	    }
 	}
-]
+];

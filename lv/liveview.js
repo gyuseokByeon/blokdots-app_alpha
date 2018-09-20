@@ -1,4 +1,4 @@
-
+/* global currentBoardDefinition */
 
 // a json object to always know about all slots
 var allSlots = [];
@@ -71,7 +71,7 @@ function initSlots(){
 
 function rebuildSlots(){
 
-  $('#grove_1 .separator .board-name').text(currentBoardObj.board);
+  $('#grove_1 .separator .board-name').text(currentBoardDefinition.board);
 
 }
 
