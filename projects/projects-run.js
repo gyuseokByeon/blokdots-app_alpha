@@ -18,29 +18,41 @@ function projectInfo(){
 
 	headerDOM.on('click','.play_btn',function(){
 
-		var playBtnDOM = $(this);
-		var hasErrors = checkErrors();
+		if( iftttDB.length > 0 ){
 
-		if( playBtnDOM.hasClass('running') ){
+			var playBtnDOM = $(this);
+			var hasErrors = checkErrors();
 
-			stopProject();
+			if( playBtnDOM.hasClass('running') ){
 
-			playBtnDOM.siblings('.run_desc').text('Run Project');
+				stopProject();
 
-			playBtnDOM.removeClass('running');
+				playBtnDOM.siblings('.run_desc').text('Run Project');
+
+				playBtnDOM.removeClass('running');
+
+			}else{
+
+				// if no errors
+				if( !hasErrors ){
+
+					runProject();
+
+					playBtnDOM.siblings('.run_desc').text('Stop Project');
+
+					playBtnDOM.addClass('running');
+			
+				}
+			}
 
 		}else{
+			console.log('No code to run 🤷‍♀️');
 
-			// if no errors
-			if( !hasErrors ){
-
-				runProject();
-
-				playBtnDOM.siblings('.run_desc').text('Stop Project');
-
-				playBtnDOM.addClass('running');
-		
-			}
+			dialog.showMessageBox({
+				type: 'info',
+				title: 'No Code to Run',
+				detail: 'You did not set up any connection yet. Build one by clicking on the big plus.'
+			});
 		}
 
 
@@ -79,6 +91,8 @@ function projectInfo(){
 
 function runProject(){
 
+	
+
 	parseIFTTTDB(function(){
 
 		// callback
@@ -89,8 +103,6 @@ function runProject(){
 		projectIsRunningFlag = true;
 
 	});
-
-	
 
 }
 

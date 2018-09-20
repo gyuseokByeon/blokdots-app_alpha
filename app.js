@@ -97,11 +97,16 @@ function createProjectWindow(){
 
 	projWindow.on('close', function () {
 		//event.preventDefault();
-	    // projWindow.hide();
-	})
+	    //projWindow.hide();
+
+	   	/* 
+	   	console.log("Projecgt closed");
+		projWindow = null;
+		*/
+	});
 
 	projWindowState.manage(projWindow);
-	
+
 };
 
 
@@ -136,6 +141,10 @@ const menuTemplate = [
 		label: 'File',
 		submenu: [
 			{
+				label: 'new',
+				click () { createProjectWindow(); }
+			},
+			{
 				label: 'save',
 				click () { projWindow.webContents.send('save' ); }
 			},
@@ -157,6 +166,17 @@ const menuTemplate = [
 			},
 			{
 				role: 'close'
+			},
+			{
+				type: 'separator'
+			},
+			{
+				label: 'show Project',
+				click () { projWindow.show(); }
+			},
+			{
+				label: 'show Live View',
+				click () { lvWindow.show(); }
 			}
 		]
 	},
@@ -226,8 +246,9 @@ function ipcCommunicationInit(){
 	    projWindow.webContents.send('showAlert',level,message);
 	});
 
-
 }
+
+
 
 const menu = Menu.buildFromTemplate(menuTemplate);
 
@@ -296,23 +317,9 @@ if ( !isDev ) {
 
 	autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 
-		const dialogOpts = {
-			type: 'info',
-			buttons: ['Restart', 'Later'],
-			title: 'Application Update',
-			message: process.platform === 'win32' ? releaseNotes : releaseName,
-			detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-		};
+		// show dialog in project window
+		projWindow.webContents.send('softwareUpdateAvailable', releaseNotes, releaseName);
 
-		// Dialog must be sent to project window !!!!!!
-
-		/*
-		dialog.showMessageBox(dialogOpts, (response) => {
-			if (response === 0){ 
-				autoUpdater.quitAndInstall()
-			}
-		});
-		*/
 	});
 
 	autoUpdater.on('error', message => {
@@ -320,20 +327,12 @@ if ( !isDev ) {
 		console.error(message);
 	});
 
+	// Run Update after Dialog (project window) has been hit
+	ipcMain.on('installUpdate', function() {
+		autoUpdater.quitAndInstall()
+	});
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

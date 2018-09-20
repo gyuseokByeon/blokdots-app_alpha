@@ -6,6 +6,8 @@ const fs = require('fs');
 const path = require('path');
 const appRootPath = require('electron').remote.app.getAppPath();
 const beautify = require('js-beautify').js_beautify;
+
+// require('typeface-roboto-mono');
   
 
 // If Component is connected to LV
@@ -70,3 +72,31 @@ ipcRenderer.on('save_as', function( evt  ) {
 ipcRenderer.on('open', function( evt  ) {
 	openFile();
 });
+
+
+
+// Software Update available (from autoUpdater -> app.js)
+ipcRenderer.on('softwareUpdateAvailable', function( evt , releaseNotes , releaseName ) {
+    
+	console.log('Update?');
+
+	const dialogOpts = {
+		type: 'info',
+		buttons: ['Restart', 'Later'],
+		title: 'Application Update',
+		message: process.platform === 'win32' ? releaseNotes : releaseName,
+		detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+	};
+
+	// Dialog must be sent to project window !!!!!!
+
+	dialog.showMessageBox(dialogOpts, (response) => {
+		if (response === 0){ 
+			ipcRenderer.send('installUpdate');
+		}
+	});
+});
+
+
+
+

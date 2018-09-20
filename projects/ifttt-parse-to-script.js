@@ -5,16 +5,16 @@ function parseIFTTTDB( callback ){
 	console.log('Do some fancy code parsing 🤖');
 
 	// get projectname to save file
-	var projectName = buildVarNameString( projectTitle );
+	let projectName = buildVarNameString( projectTitle );
 
 	// Setup vars to save code
-	var code = '';
-	var runFunctions = '';
-	var setupCode = '';
-	var initBoardCode = '';
+	let code = '';
+	let runFunctions = '';
+	let setupCode = '';
+	let initBoardCode = '';
 
 	// code for demo
-	var moduleCode = '';
+	let moduleCode = '';
 
 	// Include johnny 5
 	setupCode+= '// Include node components\n';
@@ -30,9 +30,11 @@ function parseIFTTTDB( callback ){
 	runFunctions+= 'board.on("ready", function() {\n\n';
 
 	// setup all variables
-	for(var i = 0; i < allSlotsProject.length; i++){
+	for(let i = 0; i < allSlotsProject.length; i++){
 
-		var slotObj = allSlotsProject[i];
+		let slotObj = allSlotsProject[i];
+
+		let isSensor = false;
 
 		if( slotObj.state != 'empty' ){
 
@@ -44,16 +46,6 @@ function parseIFTTTDB( callback ){
 
 			switch( slotObj.comp ){
 
-				// Inputs
-				case 'Button':
-				case 'Touch Sensor':
-					initBoardCode+= 'Button';
-				break;
-				case 'Potentiometer':
-				case 'Brightness Sensor':
-					initBoardCode+= 'Sensor';
-				break;
-
 				// Outputs
 				case 'LED':
 					initBoardCode+= 'Led';
@@ -64,15 +56,43 @@ function parseIFTTTDB( callback ){
 				case 'Buzzer':
 					initBoardCode+= 'Piezo';
 				break;
+
+				// Inputs
+				case 'Button':
+				case 'Touch Sensor':
+					initBoardCode+= 'Button';
+				break;
+
+				default: // because most elements are sensors
+				case 'Potentiometer':
+				case 'Brightness Sensor':
+
+					isSensor = true; 
+					initBoardCode+= 'Sensor';
+
+				break;
 			}
 
-			//check if integer
-			if( slotObj.slot === parseInt(slotObj.slot, 10) ){
-				initBoardCode+= '('+slotObj.slot+');\n';
+			// if is sensor, threshold needs to be applied 
+			// to not trigger change fn that often
+			if( isSensor ){
+
+				initBoardCode+= '({\n';
+					initBoardCode+= 'pin: "'+slotObj.slot+'",\n'; // sensors are always analog
+					initBoardCode+= 'threshold: 5 // this value is added so the sensor does not trigger its action constantly\n';
+				initBoardCode+= '});\n';
+
+			// if no sensor, no threshold needs to be added
 			}else{
-				initBoardCode+= '("'+slotObj.slot+'");\n';
-			}
 
+				//check if integer
+				if( slotObj.slot === parseInt(slotObj.slot, 10) ){
+					initBoardCode+= '('+slotObj.slot+');\n';
+				}else{
+					initBoardCode+= '("'+slotObj.slot+'");\n';
+				}
+
+			}
 		}
 	}
 

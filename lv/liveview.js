@@ -17,7 +17,7 @@ function initSlots(){
   const Container = $('#slot-wrapper section .slot-container');
 
 
-  let sepName = '<div class="board-name">'+initSlotsObj.board+'</div>';
+  let sepName = '<div class="board-name"></div>';
 
   $('#grove_1 .separator .name').append(sepName);
 

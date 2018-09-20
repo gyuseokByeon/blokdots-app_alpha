@@ -9,7 +9,7 @@ const component_setup = {
   "presets": ["Data", "Note"],
   "pwm": 0,
   "ifttt": { 
-    "actions" : undefined,
+    "actions" : [],
     "reactions" : [
       {
         "reaction" : "beep",

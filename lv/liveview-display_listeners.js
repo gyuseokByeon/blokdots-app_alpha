@@ -124,6 +124,8 @@ function setupSlotControls( slotDOM , comp ){
 
 function buildLiveViewDisplayListener( slotObj ){
 
+  const sensorThreshold = 5;
+
   switch( slotObj.comp ){
 
     case 'Button':
@@ -148,8 +150,9 @@ function buildLiveViewDisplayListener( slotObj ){
     case 'Potentiometer':
 
       window[ slotObj.var ] = new five.Sensor({
-        pin   : slotObj.slot,
-        board : board 
+        pin       : slotObj.slot,
+        board     : board,
+        threshold : sensorThreshold
       });
 
       window[ slotObj.var ].on("change", function(val) {
@@ -161,8 +164,9 @@ function buildLiveViewDisplayListener( slotObj ){
     case 'Brightness Sensor':
 
       window[ slotObj.var ] = new five.Sensor({
-        pin   : slotObj.slot,
-        board : board 
+        pin       : slotObj.slot,
+        board     : board,
+        threshold : sensorThreshold
       });
 
       window[ slotObj.var ].on("change", function(val) {
@@ -174,8 +178,9 @@ function buildLiveViewDisplayListener( slotObj ){
     case 'Temperature Sensor':
 
       window[ slotObj.var ] = new five.Sensor({
-        pin   : slotObj.slot,
-        board : board 
+        pin       : slotObj.slot,
+        board     : board,
+        threshold : sensorThreshold
       });
 
       window[ slotObj.var ].on("change", function(val) {
