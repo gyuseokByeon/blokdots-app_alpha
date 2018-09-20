@@ -284,8 +284,8 @@ app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 
 if ( !isDev ) {
 
-	const server = 'https://github.com/olivierbrcknr/blokdots-app';
-	const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+	const server = 'https://update.electronjs.org';
+	const feed = `${server}/olivierbrcknr/blokdots-app/${process.platform}/${app.getVersion()}`;
 
 	autoUpdater.setFeedURL(feed);
 
