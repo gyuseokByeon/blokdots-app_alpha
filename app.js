@@ -35,15 +35,10 @@ function createLiveViewWindow(){
 
 	let centerBool = false;
 
-	if( !lvWindowState.x && !lvWindowState.y ){
-		lvWindowState.x = 40;
-		lvWindowState.x = 40;
-	}
-
-	// init Live View window
+	// init Live View window – use last position or set position if opened for the first time
 	lvWindow = new BrowserWindow({
-		'x': lvWindowState.x,
-		'y': lvWindowState.y,
+		'x': lvWindowState.x || 40,
+		'y': lvWindowState.y || 40,
 		'width': lvWindowState.width,
 		'height': lvWindowState.height,
 		minHeight: 500,
@@ -289,8 +284,8 @@ app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 
 if ( !isDev ) {
 
-	const server = 'https://github.com/olivierbrcknr/blokdots-app';
-	const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+	const server = 'https://update.electronjs.org';
+	const feed = `${server}/olivierbrcknr/blokdots-app/${process.platform}/${app.getVersion()}`;
 
 	autoUpdater.setFeedURL(feed);
 
