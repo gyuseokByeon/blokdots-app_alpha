@@ -140,10 +140,10 @@ const menuTemplate = [
 	{
 		label: 'File',
 		submenu: [
-			{
+			/*{
 				label: 'new',
 				click () { createProjectWindow(); }
-			},
+			},*/
 			{
 				label: 'save',
 				click () { projWindow.webContents.send('save' ); }
@@ -302,6 +302,11 @@ app.commandLine.appendSwitch('--enable-viewport-meta', 'true');
 // https://electronjs.org/docs/tutorial/updates
 // Add updater
 // require('update-electron-app')();
+/*
+
+
+#### Updater disabled for now
+
 
 if ( !isDev ) {
 
@@ -334,7 +339,7 @@ if ( !isDev ) {
 
 }
 
-
+*/
 
 
 

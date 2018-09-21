@@ -129,25 +129,48 @@ function initBlokdotsConnectionIndicator(){
   var m = '<div class="connection"></div>';
   $('#grove_1 .separator').append(m);
 
-  // toggleLiveViewControls( false );
+  blokdotsConnectionIndicator( connectionStatus );
+  toggleLiveViewControls( boardConnected );
 
 }
 
-function blokdotsConnectionIndicator( bool ){
+function blokdotsConnectionIndicator( status ){
 
   const conn = $('#grove_1 .connection');
+  const prevConn = boardConnected;
 
-  if( bool ){
+  boardConnected = false;
 
-    conn.addClass('connected');
-    conn.text('board connected');
-  }else{
+  conn.removeClass('connected');
 
-    conn.removeClass('connected');
-    conn.text('device not found');
+  switch(status){
+
+    case 'found':
+      conn.addClass('connected');
+      conn.text('board initialising');
+    break;
+
+    case 'connected':
+      conn.addClass('connected');
+      conn.text('board connected');
+      boardConnected = true;
+    break;
+
+    case 'error':
+      conn.text('device error');
+    break;
+
+    default:
+    case 'disconnected':
+      conn.text('device not found');
+    break;
   }
 
-  toggleLiveViewControls( bool );
+  console.log( boardConnected )
+
+  if( boardConnected != prevConn ){
+    toggleLiveViewControls( boardConnected );
+  }
 }
 
 // en / disable live view wether blokdots is connected
@@ -655,8 +678,8 @@ $(document).ready(function(){
   buttonEventsLiveViewSlots();
   getSlotControlSelection();
 
-  blokdotsConnectionIndicator( connected );
-
   ipcCommunicationInitLV();
+
+  checkIfBoardIsAlreadyConnected();
 
 });

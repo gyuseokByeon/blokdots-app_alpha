@@ -36,53 +36,66 @@ const Avrgirl = require('avrgirl-arduino');
 // require('typeface-roboto-mono');
 
 
-var connected = false;
+let boardConnected = false;
+let connectionStatus = 'disconnected';
 
 
 // board setup ------------------------------------------- 
 
-let blokdots;		// the current blokdots board
+let blokdots = null;		// the current blokdots board
 
-let MYport; 		// String of TTY Port
-let port;			// serialport object
-let board;			// five.board object
-let currentBoardObj;
+let MYport = null; 			// String of TTY Port
+let port = null;			// serialport object
+let board = null;			// five.board object
+
+let currentBoardObj = null;	// currently connected board
+let currentPID = null;		// currently connected pID of board
 
 
-// check once at the beginning
-for( let i = 0 ; i < boardList.length ; i++ ){
+function checkIfBoardIsAlreadyConnected(){
 
-	if( !blokdots ){
+	// check once at the beginning
+	for( let i = 0 ; i < boardList.length ; i++ ){
 
-		let boardObj = boardList[i];
+		if( !blokdots ){
 
-		// remove Leonardo from distributed version (for now)
-		if( !isDev && boardObj.avr == 'leonardo' ){
-			boardObj = null;
-		}
+			let boardObj = boardList[i];
 
-		const vID = boardObj.param.vid;
-		const pID = boardObj.param.pid; 
+			// remove Leonardo from distributed version (for now)
+			if( !isDev && boardObj.avr == 'leonardo' ){
+				boardObj = null;
+			}else{
 
-		// check if is blokdots
-		let tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
+				for( let n = 0 ; n < boardObj.ids.length ; n++ ){
 
-		if ( tempDevice ){
-			blokdots = tempDevice;
-			// set currentBoardObj for avrGirl
-			currentBoardObj = boardObj;
+					const vID = boardObj.ids[n].vid;
+					const pID = boardObj.ids[n].pid; 
 
-			console.log('blokdots was already connected');
-			initPort();
+					// check if is blokdots
+					const tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
+
+					if ( tempDevice ){
+
+						blokdots = tempDevice;
+
+						console.log( blokdots )
+
+						// set currentBoardObj for avrGirl
+						currentBoardObj = boardObj;
+						currentPID = pID;
+
+						console.log('blokdots was already connected');
+						initPort(); 
+					}
+				}
+			}
 		}
 	}
+
+	if( !blokdots ){
+		console.log('blokdots is not connected yet');
+	}
 }
-
-
-if( !blokdots ){
-	console.log('blokdots is not connected yet');
-}
-
 
 // Do sth when blokdots gets attached
 usb.on('attach', function( device ) { 
@@ -95,34 +108,42 @@ usb.on('attach', function( device ) {
 
 			const boardObj = boardList[i];
 
-			const vID = boardObj.param.vid;
-			const pID = boardObj.param.pid; 
+			for( let n = 0 ; n < boardObj.ids.length ; n++ ){
 
-			// check if is blokdots
-			const tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
+				const vID = boardObj.ids[n].vid;
+				const pID = boardObj.ids[n].pid; 
 
-			if ( device == tempDevice ){
-				
-				blokdots = tempDevice;
+				// check if is blokdots
+				const tempDevice = usb.findByIds('0x'+vID, '0x'+pID);
 
-				// set currentBoardObj for avrGirl
-				currentBoardObj = boardObj;
+				if ( device == tempDevice ){
+					
+					blokdots = tempDevice;
 
-				console.log('%cblokdots Connected 🎛','color: '+consoleColors.good+';');
+					console.log( blokdots )
 
-				//if ( MYport == null ) { 
-					initPort(); 
-				//}
+					// set currentBoardObj for avrGirl
+					currentBoardObj = boardObj;
+					currentPID = pID;
 
-				return;
+					console.log('%cblokdots Connected 🎛','color: '+consoleColors.good+';');
+
+					//if ( MYport == null ) { 
+						initPort(); 
+					//}
+
+					return;
+				}
 			}
 		}
 	}
 	
 });
 
+
 // Do sth when blokdots gets detached
 usb.on('detach', function( device ) { 
+
 	if ( device == blokdots ){
 	
 		console.log('%cblokdots Disconnected 🔌','color: '+consoleColors.alert+';');
@@ -130,13 +151,11 @@ usb.on('detach', function( device ) {
 
 		closeBoard();
 		ipcRenderer.send('detached');
-		connected = false;
-		blokdotsConnectionIndicator( connected );
+		blokdotsConnectionIndicator( 'disconnected' );
 
 		ipcRenderer.send('showAlert', 'high' , 'board not connected' );
 	}
 });
-
 
 
 function initPort(){
@@ -150,14 +169,16 @@ function initPort(){
 		// console.log('\x1b[2m',ports,'\x1b[0m');
 
 		ports.forEach(function(sPort) {
-			if(sPort.vendorId == currentBoardObj.param.vid ){
+			if(sPort.productId == currentPID ){
 
 
 				port = sPort;
 
 				MYport = sPort.comName.toString();
 				console.log('%cFound it -> '+MYport,'color: '+consoleColors.system+';');
-								
+					
+				blokdotsConnectionIndicator( 'found' );
+
 				/*
 				port = new SerialPort( MYport, {
 					baudRate: 9600
@@ -166,14 +187,14 @@ function initPort(){
 				console.log('%cSerialPort is set ✔️','color: '+consoleColors.system+';');
 				
 
-				//startAVR();
+
+				// startAVR();
 				
 				if( isDev ){
 					initBoard();
 				}else{
 					startAVR();
 				}
-								
 
 				return;
 			}
@@ -202,6 +223,8 @@ function initBoard(){
 
 		console.log(err)
 
+		blokdotsConnectionIndicator( 'error' );
+
 		if( err.class == "Device or Firmware Error" ){
 			
 			setTimeout(function(){
@@ -215,8 +238,7 @@ function initBoard(){
 	board.on("ready", function() {
 
 		ipcRenderer.send('attached');
-		connected = true;
-		blokdotsConnectionIndicator( connected );
+		blokdotsConnectionIndicator( 'connected' );
 		// Rebuild Board List on LV to match slot structure 
 		rebuildSlots();
 		
@@ -240,7 +262,8 @@ function closeBoard(){
 
 	blokdots = null;
 	board = null;
-	currentBoardObj = null;
+	// currentBoardObj = null;
+	// currentPID = null;	
 	
 	console.log('board closing (fake)');
 }
@@ -274,7 +297,8 @@ function ipcCommunicationInitLV(){
 
 function startAVR(){
 
-	closeBoard();
+	// needs to be set null to run
+	board = null;
 
 	console.log("start uploading firmata");
 
@@ -296,7 +320,9 @@ function startAVR(){
 	avrgirl.flash( hexPath , function (error) {
 	  
 	  if (error) {
+
 	    console.error(error);
+	    blokdotsConnectionIndicator( 'error' );
 
 	    // display Error
 
