@@ -349,6 +349,15 @@ function startAVR(){
 
 
 
+document.addEventListener("keydown", function (e) {
+	if (e.which === 123) { // F12
+		remote.getCurrentWindow().toggleDevTools();
+	} else if (e.which === 116) { // FF 5
+		location.reload();
+	}
+});
+
+
 
 
 

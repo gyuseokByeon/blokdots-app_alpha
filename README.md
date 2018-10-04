@@ -38,11 +38,15 @@ Currently blokdots is using the powerful [Johnny-Five](http://johnny-five.io) fr
 
 Run this line to build a functioning Mac App:  
 ```sh  
-$ npm run dist  
+$ npm run build  
 ```
 
 *Note:* because of some errors regarding the serialport package issue, ```buildDependenciesFromSource``` is set to ```true```.  
 It will be saved in the "dist" folder within the main directory of blokdots.
+
+#### Debugging in packed app
+
+To open the dev tools within the packed app hit **F12**; reloading is supported via **F5**.
 
 ## What are next tasks?
 
@@ -50,8 +54,9 @@ Here is a list of things that are already intended within the concept, which hav
 
 ### Improvements
 - Include LV slot UI within its ```component-setup.js```
-- Add opt-out function for firmata upload
+- Add opt-out function for *firmata* flashing
 - "New Project" function (including save current on and detach components from project so "use" button gets active again)
+- Add Port and Board selection within app menu (similar to Arduino IDE)
 
 ### Features
 - Add new components

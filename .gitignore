@@ -11,6 +11,11 @@
 # built apps
 /release-builds
 /dist
+/build
 
 # system files
 *.DS_Store
+build/all-certs.p12
+embedded.provisionprofile
+electron-builder.yaml
+dist/builder-effective-config.yaml
