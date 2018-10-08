@@ -185,16 +185,8 @@ function initPort(){
 				});
 				*/
 				console.log('%cSerialPort is set ✔️','color: '+consoleColors.system+';');
-				
-
-
-				// startAVR();
-				
-				if( isDev ){
-					initBoard();
-				}else{
-					startAVR();
-				}
+								
+				initBoard();
 
 				return;
 			}
@@ -209,7 +201,7 @@ function initBoard(){
 
 		// board.io.reset();
 
-	}else{
+	} else {
 		// setup board
 		board = new five.Board({
 			// id: "A",
@@ -225,14 +217,23 @@ function initBoard(){
 
 		blokdotsConnectionIndicator( 'error' );
 
-		if( err.class == "Device or Firmware Error" ){
-			
-			setTimeout(function(){
-				startAVR();
-				return;
-			},1000);
-		}
+		if (err.class == "Device or Firmware Error") {
+			if (board && board.io && board.io.transport && board.io.transport.isOpen) {
+				board.io.transport.close(err => {
+					if(err !== null) {
+						//console.log("Port close error", err);
+						$('header').find('.info').removeClass('uploading').addClass('error').text('Upload failed. Try replugging the Board');
+						return console.log("Error closing the serial port, please unplug and reconnect the board.");
+					}
 
+					console.log("Flashing Firmata firmware in 1 sec");
+					setTimeout(function() {
+						startAVR();
+						return;
+					}, 1000);
+				});
+			}
+		}
 	});
 
 	board.on("ready", function() {
@@ -261,11 +262,16 @@ function closeBoard(){
 	removeAllSlotListeners();
 
 	blokdots = null;
-	board = null;
-	// currentBoardObj = null;
-	// currentPID = null;	
+
+	if (board && board.io && board.io.transport && board.io.transport.isOpen) {
+		board.io.transport.close(() => {
+			board = null;
+			// currentBoardObj = null;
+			// currentPID = null;	
 	
-	console.log('board closing (fake)');
+			console.log('board and serial port closed');
+		});
+	}
 }
 
 
