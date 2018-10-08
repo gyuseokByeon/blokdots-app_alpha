@@ -244,6 +244,7 @@ function initBoard(){
 		rebuildSlots();
 		
 		console.log('%cBoard is ready to go 🚀','color: '+consoleColors.good+';');
+		console.log('Firmata Version', `${board.io.firmware.version.major}.${board.io.firmware.version.minor}`);
 
 		reattachAllSlots();
 
