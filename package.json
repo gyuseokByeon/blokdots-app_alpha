@@ -31,7 +31,7 @@
   },
   "homepage": "https://blokdots.com",
   "dependencies": {
-    "avrgirl-arduino": "github:ajfisher/avrgirl-arduino#update-sp-6",
+    "avrgirl-arduino": "^3.0.0",
     "electron-is-dev": "^0.3.0",
     "electron-window-state": "^5.0.1",
     "johnny-five": "^1.0.0",
